@@ -50,15 +50,14 @@ public class PulaAkcji {
      * część może się nie wtasowywac ponownie, jak dynamit).
      * @return wylosowaną z talii kartę
      */
-    public KartaAkcji dobierz() {
+    public Akcja dobierz() {
         moznaDodawac = false;
         if (talia.ileWszystkich() == 0)
             przetasuj();
 
         Akcja wylosowana = wylosujAkcje();
         assert talia.zabierz(wylosowana) == 1;
-
-        return new KartaAkcji(this, wylosowana);
+        return wylosowana;
     }
 
     /**
