@@ -17,10 +17,6 @@ abstract public class Strategia {
             gracz = g;
         }
 
-        public int pz() {
-            return gracz.pz();
-        }
-
         /**
          * Zwraca być może utajnioną tożsamość gracza reprezentowanego przez ten obiekt.
          * Prawdziwa tożsamość gracza może być zwrócona w następujących sytuacjach:
@@ -42,6 +38,10 @@ abstract public class Strategia {
         }
 
     //POCZĄTEK METOD DELEGOWANYCH Z REPREZENTOWANEGO GRAZCZA
+        public int pz() {
+            return gracz.pz();
+        }
+
         public int maksymalnePZ() {
             return gracz.maksymalnePZ();
         }
