@@ -2,9 +2,12 @@ package dzikizachod;
 
 /**
  * Strategia kontrolująca gracza.
- * Zawiera wszystkie metody, których strategie powinny używać do grania.
+ * Zawiera całość implementacji, której konkretne strategie powinny używać do komunikowania się ze wszystkimi
+ * elementami gry.
+ *
+ * Pozwala
  */
-abstract public class Strategia {
+abstract public class Strategia implements IObserwator {
     /**
      * Proxy, przez które podklasy strategii widzą innyuch graczy.
      * Deleguje pewne metody Gracza, do których powinny mieć dostęp strategie kontrolujące innych graczy.
@@ -37,6 +40,22 @@ abstract public class Strategia {
             return TozsamoscGracza.NIEZNANA;
         }
 
+        /**
+         * Sprawdza, czy ta reprezentacja gracza faktycznie odnosi się do jakiegoś gracza.
+         * Na przykład podczas rzucenia dynamitu, reprezentacja gracza-celu powinna być pusta.
+         * @return <code>true</code> gdy reprezentuje gracza; <code>false</code> w przeciwnym przypadku
+         */
+        public boolean czyNieIstnieje() {
+            return gracz == null;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (!(other instanceof ReprezentacjaGracza))
+                return false;
+            return ((ReprezentacjaGracza)other).gracz == gracz;
+        }
+
     //POCZĄTEK METOD DELEGOWANYCH Z REPREZENTOWANEGO GRAZCZA
         public int pz() {
             return gracz.pz();
@@ -53,11 +72,17 @@ abstract public class Strategia {
         public int odlegloscOd(ReprezentacjaGracza repr) {
             return this.gracz.odlegloscOd(repr.gracz);
         }
+
+        public int numer() {
+            return gracz.numer();
+        }
     //KONIEC METOD DELEGOWANYCH Z REPREZENTOWANEGO GRAZCZA
     }
 
     /** Gracz kontrolowany przez tę strategię. */
     private Gracz marionetka;
+
+    protected ReprezentacjaGracza szeryf;
 
     final void przypiszGracza(Gracz gracz) {
         marionetka = gracz;
@@ -93,23 +118,25 @@ abstract public class Strategia {
         return marionetka.odlegloscOd(gracz.gracz);
     }
 
-    final protected void akcjaUlecz(ReprezentacjaGracza cel) throws PozaZasiegiemWyjatek, BrakAkcjiWyjatek {
+    final protected void akcjaUlecz(ReprezentacjaGracza cel)
+            throws PozaZasiegiemWyjatek, BrakAkcjiWyjatek, NieTwojRochWyjatek {
         marionetka.akcjaUlecz(cel.gracz);
     }
 
-    final protected void akcjaStrzel(ReprezentacjaGracza cel) throws PozaZasiegiemWyjatek, BrakAkcjiWyjatek {
+    final protected void akcjaStrzel(ReprezentacjaGracza cel)
+            throws PozaZasiegiemWyjatek, BrakAkcjiWyjatek, NieTwojRochWyjatek {
         marionetka.akcjaStrzel(cel.gracz);
     }
 
-    final protected void akcjaZasiegPlusJeden() throws BrakAkcjiWyjatek {
+    final protected void akcjaZasiegPlusJeden() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
         marionetka.akcjaZasiegPlusJeden();
     }
 
-    final protected void akcjaZasiegPlusDwa() throws BrakAkcjiWyjatek {
+    final protected void akcjaZasiegPlusDwa() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
         marionetka.akcjaZasiegPlusDwa();
     }
 
-    final protected void akcjaDynamit() throws BrakAkcjiWyjatek {
+    final protected void akcjaDynamit() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
         marionetka.akcjaDynamit();
     }
 
@@ -118,5 +145,49 @@ abstract public class Strategia {
     }
 //KONIEC METOD DELEGOWANYCH Z KONTROLOWANEGO GRACZA
 
-    abstract void graj();
+
+//POCZATEK METOD Z IOBSERWATOR
+    @Override
+    final public void patrzPoczatekGry(Gracz[] gracze, Gracz szeryf, int liczbaBandytów, int liczbaPomocników) {
+        this.szeryf = new ReprezentacjaGracza(szeryf);
+        ReprezentacjaGracza reprezentacja[] = new ReprezentacjaGracza[gracze.length];
+        ogarnijPoczatekGry(reprezentacja, this.szeryf, liczbaBandytów, liczbaPomocników);
+    }
+
+    @Override
+    final public void patrzRuchGracza(Gracz ktoGra) {
+        ogarnijRuchGracza(new ReprezentacjaGracza(ktoGra));
+    }
+
+    @Override
+    final public void patrzDobralAkcje(Gracz ktoGra, Akcja a) {}
+
+    @Override
+    final public void patrzNaDynamit(Gracz ktoGra, boolean wybuchl) {}
+
+    @Override
+    final public void patrzWykonalAkcje(Gracz ktoGra, Akcja a, Gracz naKim) {
+        ogarnijWykonalAkcje(new ReprezentacjaGracza(ktoGra), a, new ReprezentacjaGracza(naKim));
+    }
+
+    @Override
+    final public void patrzSkonczylTure(Gracz ktoGra) {}
+
+    @Override
+    final public void patrzZabojstwo(Gracz ofiara, Gracz zabojca) {
+        ogarnijZabojstwo(new ReprezentacjaGracza(ofiara), new ReprezentacjaGracza(zabojca));
+    }
+//KONIEC METOD Z IOBSERWATOR
+
+    abstract void graj() throws BladKonrtoleraWyjatek;
+
+    abstract protected void
+    ogarnijPoczatekGry(ReprezentacjaGracza[] gracze, ReprezentacjaGracza szeryf,
+                       int liczbaBandytów, int liczbaPomocników);
+
+    abstract protected void ogarnijRuchGracza(ReprezentacjaGracza ktoGra);
+
+    abstract protected void ogarnijWykonalAkcje(ReprezentacjaGracza ktoGra, Akcja a, ReprezentacjaGracza naKim);
+
+    abstract protected void ogarnijZabojstwo(ReprezentacjaGracza ofiara, ReprezentacjaGracza zabojca);
 }

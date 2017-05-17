@@ -29,6 +29,12 @@ public abstract class Gracz {
     /** Arsenał gracza */
     private LicznikAkcji akcje = new LicznikAkcji();
 
+    /** Numer gracza w toczonej rozgrywce */
+    private int numer;
+
+    /** Ustawiane na <code>true</code>, gdy gracz wykonuje ruch i na <code>false</code>, gdy już skończy */
+    private boolean wykonujeRuch;
+
     /**
      * W zależności od znaku kierunku zwraca gracza po lewej lub prawej od podanego.
      * Dziki Zachód jest miejscem, w którym panuje orientacja dodatnia, więc naturalnym kierunkiem gry jest kierunek
@@ -108,6 +114,22 @@ public abstract class Gracz {
     }
 
     /**
+     * Zwraca numer gracza w toczącej się rozgrywce lub -1.
+     * @return -1 gdy gracz nie gra, a jego numer w grze w przeciwnym wypadku
+     */
+    public int numer() {
+        return numer;
+    }
+
+    /**
+     * Zwraca odpowiedź na pytanie ,,Czy gracz wykonuje teraz ruch?''
+     * @return <code>true</code> podczas ruchu tego gracza; <code>false</code> poza ruchem
+     */
+    public boolean czyWykonujeRuch() {
+        return wykonujeRuch;
+    }
+
+    /**
      * Zwraca gracza znajdującego się we wskazanej odległości na prawo lub lewo od tego gracza.
      * Dodatnia wartość parametru oznacza gracza znajdującego się <code>odlegloscSkierowana</code> pozycji na prawo.
      * Ujemna wartość tego parametru oznacza gracza <code>-odlegloscSkierowana</code> na lewo. Wartosć bezwzględna
@@ -145,9 +167,11 @@ public abstract class Gracz {
      * @throws PozaZasiegiemWyjatek kiedy cel jest poza zasięgiem leczenia
      * @throws BrakAkcjiWyjatek kiedy gracz nie ma tej akcji na ręce
      */
-    public void akcjaUlecz(Gracz cel) throws PozaZasiegiemWyjatek, BrakAkcjiWyjatek {
+    public void akcjaUlecz(Gracz cel) throws PozaZasiegiemWyjatek, BrakAkcjiWyjatek, NieTwojRochWyjatek {
         if (cel != this && cel != poLewej && cel != poPrawej)
             throw new PozaZasiegiemWyjatek();
+        if (!czyWykonujeRuch())
+            throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.ULECZ);
         cel.dodajPZ(1);
     }
@@ -158,9 +182,11 @@ public abstract class Gracz {
      * @throws PozaZasiegiemWyjatek kiedy cel znajduje się poza zasięgiem
      * @throws BrakAkcjiWyjatek kiedy gracz nie ma tej akcji na ręce
      */
-    public void akcjaStrzel(Gracz cel) throws PozaZasiegiemWyjatek, BrakAkcjiWyjatek {
+    public void akcjaStrzel(Gracz cel) throws PozaZasiegiemWyjatek, BrakAkcjiWyjatek, NieTwojRochWyjatek {
         if (odlegloscOd(cel) > zasieg)
             throw new PozaZasiegiemWyjatek();
+        if (!czyWykonujeRuch())
+            throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.STRZEL);
         cel.dodajPZ(-1);
     }
@@ -169,7 +195,9 @@ public abstract class Gracz {
      * Wykorzystuje akcję zwiększenia zasięgu.
      * @throws BrakAkcjiWyjatek kied gracz nie ma tej akcji
      */
-    public void akcjaZasiegPlusJeden() throws BrakAkcjiWyjatek {
+    public void akcjaZasiegPlusJeden() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
+        if (!czyWykonujeRuch())
+            throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.ZASIEG_PLUS_JEDEN);
         zasieg += 1;
     }
@@ -178,7 +206,9 @@ public abstract class Gracz {
      * Wykorzystuje akcję zwiększenia zasięgu o dwa.
      * @throws BrakAkcjiWyjatek gdy nie ma akcji
      */
-    public void akcjaZasiegPlusDwa() throws BrakAkcjiWyjatek {
+    public void akcjaZasiegPlusDwa() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
+        if (!czyWykonujeRuch())
+            throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.ZASIEG_PLUS_DWA);
         zasieg += 2;
     }
@@ -187,7 +217,9 @@ public abstract class Gracz {
      * Wykorzystuje akcję rzucenia dynamitu
      * @throws BrakAkcjiWyjatek ...
      */
-    public void akcjaDynamit() throws BrakAkcjiWyjatek {
+    public void akcjaDynamit() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
+        if (!czyWykonujeRuch())
+            throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.DYNAMIT);
         gra.uruchomDynamit();
     }
@@ -205,7 +237,14 @@ public abstract class Gracz {
      * Wykonuje ruch gracza.
      */
     void graj() {
-        kontroler.graj();
+        try {
+            wykonujeRuch = true;
+            kontroler.graj();
+        } catch (BladKonrtoleraWyjatek e) {
+            e.printStackTrace();
+        } finally {
+            wykonujeRuch = false;
+        }
     }
 
     /**
@@ -214,12 +253,13 @@ public abstract class Gracz {
      * @param obokZLewej gracz po lewej (poprzedni gracz)
      * @param obokZPrawej gracz po prawej (następny gracz)
      */
-    void przygotujDoGry(Gra gra, Gracz obokZLewej, Gracz obokZPrawej) {
+    void przygotujDoGry(Gra gra, Gracz obokZLewej, Gracz obokZPrawej, int numer) {
         assert obokZLewej != null;
         assert obokZPrawej != null;
         this.poLewej = obokZLewej;
         this.poPrawej = obokZPrawej;
         this.gra = gra;
+        this.numer = numer;
         pz = limitPZ;
     }
 
@@ -227,9 +267,10 @@ public abstract class Gracz {
      * Gracz opuszcza rozgrywkę.
      */
     void skonczGrac() {
-        this.poLewej = null;
-        this.poPrawej = null;
-        this.gra = null;
+        poLewej = null;
+        poPrawej = null;
+        gra = null;
+        numer = -1;
     }
 
     /**

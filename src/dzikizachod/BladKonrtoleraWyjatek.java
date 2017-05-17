@@ -27,3 +27,12 @@ class BrakAkcjiWyjatek extends BladKonrtoleraWyjatek {
         super("Gracz nie posiada tej akcji");
     }
 }
+
+/**
+ * Rzucany, kiedy gracz próbuje wykonac akcję w nieswoim ruchu.
+ */
+class NieTwojRochWyjatek extends BladKonrtoleraWyjatek {
+    NieTwojRochWyjatek() {
+        super("Gracz nie może teraz wykonać akcji, bo to nie jego ruch");
+    }
+}

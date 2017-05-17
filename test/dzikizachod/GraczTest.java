@@ -4,6 +4,22 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+class TestowyGracz extends Gracz {
+    TestowyGracz() {
+        super(new StrategiaWygrywajaca(), 5);
+    }
+
+    @Override
+    public TozsamoscGracza tozsamosc() {
+        return TozsamoscGracza.NIEZNANA;
+    }
+
+    @Override
+    public boolean czyWykonujeRuch() {
+        return true; //Bo musi się dać debugować
+    }
+}
+
 
 public class GraczTest {
     private Gracz gracze[];
@@ -11,18 +27,18 @@ public class GraczTest {
 
     public GraczTest() {
         gracze = new Gracz[]{
-                new Szeryf(new StrategiaWygrywajaca()),
-                new PomocnikSzeryfa(new StrategiaWygrywajaca()),
-                new PomocnikSzeryfa(new StrategiaWygrywajaca()),
-                new Bandyta(new StrategiaWygrywajaca()),
-                new Bandyta(new StrategiaWygrywajaca()),
-                new Bandyta(new StrategiaWygrywajaca())
+                new TestowyGracz(),
+                new TestowyGracz(),
+                new TestowyGracz(),
+                new TestowyGracz(),
+                new TestowyGracz(),
+                new TestowyGracz()
         };
 
         for (int i = 1; i < gracze.length - 1; ++i)
-            gracze[i].przygotujDoGry(gra, gracze[i - 1], gracze[i + 1]);
-        gracze[0].przygotujDoGry(gra, gracze[gracze.length - 1], gracze[1]);
-        gracze[gracze.length - 1].przygotujDoGry(gra, gracze[gracze.length - 2], gracze[0]);
+            gracze[i].przygotujDoGry(gra, gracze[i - 1], gracze[i + 1], i);
+        gracze[0].przygotujDoGry(gra, gracze[gracze.length - 1], gracze[1], 0);
+        gracze[gracze.length - 1].przygotujDoGry(gra, gracze[gracze.length - 2], gracze[0], gracze.length - 1);
     }
 
     @Test
