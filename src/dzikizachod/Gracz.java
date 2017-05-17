@@ -193,6 +193,15 @@ public abstract class Gracz {
     }
 
     /**
+     * Zwraca liczbę akcji danego typu, jaki gracz ma do wykorzystania
+     * @param akcja typ akcji, o którą pytamy
+     * @return liczbę akcji typu <code>akcja</code>
+     */
+    public int ileAkcji(Akcja akcja) {
+        return akcje.ileTypu(akcja);
+    }
+
+    /**
      * Wykonuje ruch gracza.
      */
     void graj() {

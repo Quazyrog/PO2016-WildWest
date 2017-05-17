@@ -59,7 +59,12 @@ public class GraczTest {
         dobryRew.dobierz(Akcja.ULECZ);
         dobryRew.dobierz(Akcja.ULECZ);
         dobryRew.dobierz(Akcja.ULECZ);
+        dobryRew.dobierz(Akcja.ULECZ); //niewykorzystana
         dobryRew.dobierz(Akcja.ZASIEG_PLUS_DWA);
+        dobryRew.dobierz(Akcja.ZASIEG_PLUS_JEDEN); //niewykorzystana
+        dobryRew.dobierz(Akcja.ZASIEG_PLUS_JEDEN); //niewykorzystana
+        dobryRew.dobierz(Akcja.DYNAMIT); //niewykorzystana
+
         try {
             //Ulecz się i samobój
             dobryRew.akcjaUlecz(dobryRew);
@@ -90,5 +95,12 @@ public class GraczTest {
             e.printStackTrace();
             fail();
         }
+
+        //Sprawdź pozostałe akcje
+        assertEquals(0, dobryRew.ileAkcji(Akcja.STRZEL));
+        assertEquals(1, dobryRew.ileAkcji(Akcja.ULECZ));
+        assertEquals(2, dobryRew.ileAkcji(Akcja.ZASIEG_PLUS_JEDEN));
+        assertEquals(0, dobryRew.ileAkcji(Akcja.ZASIEG_PLUS_DWA));
+        assertEquals(1, dobryRew.ileAkcji(Akcja.DYNAMIT));
     }
 }
