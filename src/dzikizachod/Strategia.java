@@ -25,24 +25,24 @@ abstract public class Strategia implements IObserwator {
     }
 
     @Override
-    final public void patrzRuchGracza(Gracz ktoGra) {}
+    final public void patrzRuchGracza(StrategicznyWidokGracza ktoGra) {}
 
     @Override
-    final public void patrzDobralAkcje(Gracz ktoGra, Akcja a) {}
+    final public void patrzDobralAkcje(StrategicznyWidokGracza ktoGra, Akcja a) {}
 
     @Override
-    final public void patrzNaDynamit(Gracz ktoGra, boolean wybuchl) {}
+    final public void patrzNaDynamit(StrategicznyWidokGracza ktoGra, boolean wybuchl) {}
 
     @Override
-    final public void patrzWykonalAkcje(Gracz ktoGra, Akcja a, Gracz naKim) {
+    final public void patrzWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {
         ogarnijWykonalAkcje(new StrategicznyWidokGracza(marionetka, ktoGra), a, new StrategicznyWidokGracza(marionetka, naKim));
     }
 
     @Override
-    final public void patrzSkonczylTure(Gracz ktoGra) {}
+    final public void patrzSkonczylTure(StrategicznyWidokGracza ktoGra) {}
 
     @Override
-    final public void patrzZabojstwo(Gracz ofiara, Gracz zabojca) {
+    final public void patrzZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {
         ogarnijZabojstwo(new StrategicznyWidokGracza(marionetka, ofiara), new StrategicznyWidokGracza(marionetka, zabojca));
     }
 

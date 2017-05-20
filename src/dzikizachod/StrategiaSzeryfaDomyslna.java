@@ -10,7 +10,7 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
     public void patrzKolejnaTura(int numerTury) {}
 
     @Override
-    public void patrzKoniecGry(boolean czyDobroWygralo) {}
+    public void patrzKoniecGry(Zakonczenie zakonczenie) {}
 
     protected ArrayList<StrategicznyWidokGracza> paskudyWZasiegu() {
         ArrayList<StrategicznyWidokGracza> wynik = new ArrayList<>();

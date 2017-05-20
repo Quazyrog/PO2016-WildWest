@@ -12,7 +12,7 @@ public class StrategiaPomocnikaSzeryfaDomyslna extends StrategiaPomocnikaSzeryfa
     public void patrzKolejnaTura(int numerTury) {}
 
     @Override
-    public void patrzKoniecGry(boolean czyDobroWygralo) {}
+    public void patrzKoniecGry(Zakonczenie zakonczenie) {}
 
     @Override
     protected void ogarnijWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {}

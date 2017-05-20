@@ -11,7 +11,7 @@ public class StrategiaWygrywajaca extends Strategia {
     public void patrzKolejnaTura(int numerTury) {}
 
     @Override
-    public void patrzKoniecGry(boolean czyDobroWygralo) {}
+    public void patrzKoniecGry(Zakonczenie czyDobroWygralo) {}
 
     @Override
     protected void ogarnijWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {}

@@ -8,6 +8,10 @@ public class Bandyta extends Gracz {
         super(kontroler);
     }
 
+    public Bandyta() {
+        super(new StrategiaBandytyDomyslna());
+    }
+
     @Override
     public TozsamoscGracza tozsamosc() {
         return TozsamoscGracza.BANDYTA;

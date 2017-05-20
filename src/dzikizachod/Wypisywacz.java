@@ -11,7 +11,7 @@ public class Wypisywacz implements IObserwator {
     private PrintStream out;
     private StrategicznyWidokGracza gracze[];
 
-    private int WielkoscWciecia = 0;
+    private int wielkoscWciecia = 0;
     boolean zrobWciecie = true;
     private StringBuilder wciecie = new StringBuilder();
     private int wypisaneAkcjeDobrane;
@@ -27,16 +27,16 @@ public class Wypisywacz implements IObserwator {
     }
 
     protected void zwiekszWciecie() {
-        ++WielkoscWciecia;
+        ++wielkoscWciecia;
         wciecie.append("  ");
     }
 
     protected void zmniejszWciecie() {
-        if (WielkoscWciecia == 0)
+        if (wielkoscWciecia == 0)
             throw new IllegalStateException("Ta klasa nie potrafi zrobić ujemnego wciecia. " +
                     "Zgłoś się de deweloperów swojego terminala");
-        --WielkoscWciecia;
-        wciecie.delete(wciecie.length() - 2, -1);
+        --wielkoscWciecia;
+        wciecie.delete(wielkoscWciecia * 2, wielkoscWciecia * 2 + 2);
     }
 
     protected void wypluj(String s) {
@@ -57,7 +57,7 @@ public class Wypisywacz implements IObserwator {
 
     @Override
     public void patrzPoczatekGry(StrategicznyWidokGracza[] gracze, StrategicznyWidokGracza szeryf, int liczbaBandytów, int liczbaPomocników) {
-        gracze = gracze;
+        this.gracze = gracze;
 
         wypluj("** START");
         zwiekszWciecie();
@@ -155,7 +155,8 @@ public class Wypisywacz implements IObserwator {
 
     @Override
     public void patrzKoniecGry(Zakonczenie zakonczenie) {
-        zmniejszWciecie();
+        if (wielkoscWciecia > 0)
+            zmniejszWciecie();
         wyplujln("** KONIEC");
 
         switch (zakonczenie) {

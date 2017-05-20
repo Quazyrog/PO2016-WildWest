@@ -16,6 +16,10 @@ public class StrategicznyWidokGracza {
         podgladacz = podgladajacy;
     }
 
+    public StrategicznyWidokGracza(Gracz podgladajacy, StrategicznyWidokGracza podgladanyGracz) {
+        this(podgladajacy, podgladanyGracz.gracz);
+    }
+
     public StrategicznyWidokGracza przeskocz(int wKierunku) {
         return new StrategicznyWidokGracza(gracz, gracz.przeskocz(wKierunku));
     }
