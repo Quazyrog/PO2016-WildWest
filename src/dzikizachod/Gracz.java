@@ -29,7 +29,10 @@ public abstract class Gracz {
     /** Arsenał gracza */
     private LicznikAkcji akcje = new LicznikAkcji();
 
-    /** Numer gracza w toczonej rozgrywce */
+    /** Pierwszy numer nadany graczowi, który nie zmienia się podczas rozgrywki */
+    private int identyfikator;
+
+    /** Numer gracza w toczonej rozgrywce. Zmienia się wraz z zabijaniem kolejnych graczy. */
     private int numer;
 
     /** Ustawiane na <code>true</code>, gdy gracz wykonuje ruch i na <code>false</code>, gdy już skończy */
@@ -130,6 +133,15 @@ public abstract class Gracz {
      */
     public int zasieg() {
         return zasieg;
+    }
+
+    /**
+     * Zwraca identyfikator gracza.
+     * Jest to stały numer, nadany na początku rozgrywki.
+     * @return identyfikator gracza
+     */
+    public int identyfikator() {
+        return identyfikator;
     }
 
     /**
@@ -325,6 +337,7 @@ public abstract class Gracz {
         this.poPrawej = obokZPrawej;
         this.gra = gra;
         this.numer = numer;
+        this.identyfikator = numer;
         pz = limitPZ;
     }
 
@@ -344,6 +357,13 @@ public abstract class Gracz {
      */
     void dobierz(Akcja coDobral) {
         akcje.dodaj(coDobral, 1);
+    }
+
+    /**
+     * Zmienia numer gracza
+     */
+    void przenumeruj(int nowyNumer) {
+        this.numer = nowyNumer;
     }
 
     /**

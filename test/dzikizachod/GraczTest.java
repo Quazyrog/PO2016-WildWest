@@ -1,24 +1,7 @@
 package dzikizachod;
 
 import org.junit.Test;
-
 import static org.junit.Assert.*;
-
-class TestowyGracz extends Gracz {
-    TestowyGracz() {
-        super(new StrategiaWygrywajaca(), 5);
-    }
-
-    @Override
-    public TozsamoscGracza tozsamosc() {
-        return TozsamoscGracza.NIEZNANA;
-    }
-
-    @Override
-    public boolean czyWykonujeRuch() {
-        return true; //Bo musi się dać debugować
-    }
-}
 
 
 public class GraczTest {
@@ -27,27 +10,15 @@ public class GraczTest {
 
     public GraczTest() {
         gracze = new Gracz[]{
-                new TestowyGracz(),
-                new TestowyGracz(),
-                new TestowyGracz(),
-                new TestowyGracz(),
-                new TestowyGracz(),
-                new TestowyGracz()
+                new SzeryfTestowy(),
+                new PomocnikSzeryfaTestowy(),
+                new PomocnikSzeryfaTestowy(),
+                new BandytaTestowy(),
+                new BandytaTestowy(),
+                new BandytaTestowy(),
         };
-        gra = new Gra(){
-            @Override
-            public int liczbaGraczy() {
-                return gracze.length;
-            }
-
-            @Override
-            Gracz graczONumerze(int numer) {
-                return gracze[numer];
-            }
-
-            @Override
-            void oddajAkcje(Akcja akcja) {}
-        };
+        gra = new GraTestowa();
+        gra.rozgrywka(gracze, new PulaAkcji());
 
         for (int i = 1; i < gracze.length - 1; ++i)
             gracze[i].przygotujDoGry(gra, gracze[i - 1], gracze[i + 1], i);
@@ -132,5 +103,28 @@ public class GraczTest {
         assertEquals(2, dobryRew.ileAkcji(Akcja.ZASIEG_PLUS_JEDEN));
         assertEquals(0, dobryRew.ileAkcji(Akcja.ZASIEG_PLUS_DWA));
         assertEquals(1, dobryRew.ileAkcji(Akcja.DYNAMIT));
+    }
+
+    @Test
+    public void usuwanieMartwych() {
+        Gracz g0 = gracze[0];
+        Gracz g1 = gracze[1];
+        Gracz g2 = gracze[2];
+
+        assertEquals(2, g0.odlegloscOd(g2));
+        assertEquals(2, g2.odlegloscOd(g0));
+
+        while (g1.pz() > 0) {
+            g0.dobierz(Akcja.STRZEL);
+            try {
+                g0.akcjaStrzel(g1);
+            } catch (BladKonrtoleraWyjatek e) {
+                e.printStackTrace();
+                fail();
+            }
+        }
+
+        assertEquals(1, g0.odlegloscOd(g2));
+        assertEquals(1, g2.odlegloscOd(g0));
     }
 }

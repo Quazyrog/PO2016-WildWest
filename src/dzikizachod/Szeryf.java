@@ -4,7 +4,7 @@ package dzikizachod;
  * Gracz typu szeryf
  */
 public class Szeryf extends Gracz {
-    public Szeryf(Strategia kontroler) {
+    public Szeryf(StrategiaSzeryfa kontroler) {
         super(kontroler, 5);
     }
 

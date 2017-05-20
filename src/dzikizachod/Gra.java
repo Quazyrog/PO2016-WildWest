@@ -52,28 +52,46 @@ public class Gra { //TODO całość implementacji obsetwatorów
      * Przed wywołaniem, nalezy przypisac do pól obiektu kolekcje graczy.
      */
     protected void przygotujRozgrywke() {
-        //Znajdź szeryfa i policz bandytów
+        sprawdzTabliceGraczy();
+        potasujGraczy();
+        przygotujGraczy();
+    }
+
+    /**
+     * Sprawdza tablice graczy: liczy bandytów i wyszukuje szeryfa.
+     */
+    protected void sprawdzTabliceGraczy() {
         szeryf = null;
         liczbaBandytów = 0;
         for (Gracz g : gracze) {
             if (g.tozsamosc() == TozsamoscGracza.SZERYF) {
                 if (szeryf != null)
-                    throw new IllegalArgumentException("Może być tylko jeden szeryf wśród graczy");
-                szeryf = null;
+                    throw new IllegalArgumentException("To miasto jest za małe dla nas dwóch!");
+                szeryf = g;
             } else if (g.tozsamosc() == TozsamoscGracza.BANDYTA) {
                 ++liczbaBandytów;
             }
         }
+        if (szeryf == null)
+            throw new IllegalArgumentException("Chudy! gdzie jesteś?!");
+    }
 
-        //Potasuj graczy
+    /**
+     * Miesza kolejnośc graczy w tablicy.
+     */
+    protected void potasujGraczy() {
         for (int i = 0; i < gracze.size(); ++i) {
             int j = rng.nextInt(gracze.size());
             Gracz tymczasowa = gracze.get(j);
             gracze.set(j, gracze.get(i));
             gracze.set(i, tymczasowa);
         }
+    }
 
-        //Inicjuj graczy
+    /**
+     * Dla każdego gracz wywołuje na nim <code>przygotujDoGry()</code> z odpowiednimi parametrami.
+     */
+    protected void przygotujGraczy() {
         gracze.get(0).przygotujDoGry(this, gracze.get(gracze.size() - 1), gracze.get(1), 0);
         for (int i = 1; i < gracze.size() - 1; ++i)
             gracze.get(i).przygotujDoGry(this, gracze.get(i - 1), gracze.get(i + 1), i);
@@ -91,6 +109,10 @@ public class Gra { //TODO całość implementacji obsetwatorów
     void graczUmarl(Gracz gracz) {
         if (gracz.tozsamosc() == TozsamoscGracza.BANDYTA) {
             --liczbaBandytów;
+        }
+        for (int i = gracze.indexOf(gracz); i < gracze.size(); ++i) {
+            Gracz g = gracze.get(i);
+            g.przenumeruj(g.numer() - 1);
         }
         gracze.remove(gracz);
         //Nie ma potrzeby aktualisowania cylku formowanego przez pola poLewej i poPrawej u graczy: oni robią to sami
