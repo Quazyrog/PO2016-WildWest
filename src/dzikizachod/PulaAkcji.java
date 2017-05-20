@@ -79,6 +79,8 @@ public class PulaAkcji {
             talia.dodaj(a, a.liczbaPonownieWtasowanych(liczbaSciepow));
             sciepy.zabierz(a, liczbaSciepow);
         }
+        if (talia.ileWszystkich() == 0) //bo dynamit
+            throw new RuntimeException("Talia jest pusta i nie ma czego przetasować");
     }
 
     /**
