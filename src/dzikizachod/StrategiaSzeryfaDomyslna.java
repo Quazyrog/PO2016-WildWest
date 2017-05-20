@@ -30,17 +30,35 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
         return wynik;
     }
 
+    protected void zwalczPaskudy() throws BladKonrtoleraWyjatek {
+        ArrayList<ReprezentacjaGracza> paskudy = paskudyWZasiegu();
+        while (ileAkcji(Akcja.STRZEL) > 0 && paskudy.size() > 0) {
+            ReprezentacjaGracza paskuda = paskudy.get(rng.nextInt(paskudy.size()));
+            akcjaStrzel(paskuda);
+            if (paskuda.pz() == 0)
+                paskudy.remove(paskuda);
+        }
+    }
+
+    protected void zwalczRandomy() throws BladKonrtoleraWyjatek {
+        while (ileAkcji(Akcja.STRZEL) > 0) {
+            int zasiegRandomowania = Math.min(zasieg(), liczbaGraczy() - 1);
+            int polozenieWzgledneCelu = (rng.nextInt(1) * 2 - 1) * (rng.nextInt(zasiegRandomowania) + 1);
+            akcjaStrzel(dalekiSasiad(polozenieWzgledneCelu));
+        }
+    }
+
     @Override
     void graj() {
         super.graj();
         if (ileAkcji(Akcja.STRZEL) == 0)
             return; //Smutny szeryf nie ma naboi
 
-        ArrayList<ReprezentacjaGracza> paskudy = paskudyWZasiegu();
-        while (ileAkcji(Akcja.STRZEL) > 0) {
-            try {
-                akcjaStrzel(paskudy.get(rng.nextInt(paskudy.size())));
-            } catch (BladKonrtoleraWyjatek e) {
+        try {
+            zwalczPaskudy();
+            zwalczRandomy();
+        } catch (BladKonrtoleraWyjatek e) {
+            if (!czyKoniecGry()) {
                 e.printStackTrace();
                 throw new Error("To się nie powinno zdażyc!", e);
             }
