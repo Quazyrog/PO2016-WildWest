@@ -135,6 +135,14 @@ abstract public class Strategia implements IObserwator {
         return marionetka.czyWykonujeRuch();
     }
 
+    public int liczbaGraczy() {
+        return marionetka.liczbaGraczy();
+    }
+
+    public int odlegloscSkierowanOd(int kierunek, ReprezentacjaGracza gracz) {
+        return marionetka.odlegloscSkierowanOd(kierunek, gracz.gracz);
+    }
+
     final protected ReprezentacjaGracza ja() {
 
         return new ReprezentacjaGracza(marionetka);
