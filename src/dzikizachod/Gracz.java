@@ -137,6 +137,11 @@ public abstract class Gracz {
         return gra.czyKoniecGry();
     }
 
+    /** Zwraca liczbę żywych graczy biorących udział w rozgrywce */
+    public int liczbaGraczy() {
+        return gra.liczbaGraczy();
+    }
+
     /**
      * Zwraca odpowiedź na pytanie ,,Czy gracz wykonuje teraz ruch?''
      * Kiedy gra zakończy się w trakcie tury gracza, to gracz nie wykonuje już ruchów po jej zakończeniu.
@@ -156,9 +161,9 @@ public abstract class Gracz {
      * @return gracza znajdującego się we wskazanej odległości na prawo lub lewo od tego gracza
      */
     public Gracz dalekiSasiad(int odlegloscSkierowana) {
-        if (Math.abs(odlegloscSkierowana) >= gra.liczbaGrczy())
+        if (Math.abs(odlegloscSkierowana) >= gra.liczbaGraczy())
             throw new ArrayIndexOutOfBoundsException();
-        return gra.graczONumerze((gra.liczbaGrczy() + odlegloscSkierowana + numer) % gra.liczbaGrczy());
+        return gra.graczONumerze((gra.liczbaGraczy() + odlegloscSkierowana + numer) % gra.liczbaGraczy());
     }
 
     /**
@@ -199,7 +204,7 @@ public abstract class Gracz {
             int zgodnaOdleglosc = gracz.numer - numer;
             if (kierunek > 0)
                 return zgodnaOdleglosc;
-            return gra.liczbaGrczy() - zgodnaOdleglosc;
+            return gra.liczbaGraczy() - zgodnaOdleglosc;
         }
         return gracz.odlegloscSkierowanOd(-kierunek, this);
     }

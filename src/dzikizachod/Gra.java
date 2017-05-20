@@ -10,8 +10,12 @@ public class Gra {
     private Gracz gracze[];
     private Random rng = new Random();
 
-    public int liczbaGrczy() {
-        return gracze.length;
+    /**
+     * Zwraca liczbę żywych grajacych
+     * @return liczbę żywych grajacych
+     */
+    public int liczbaGraczy() {
+        return gracze.length; //fixme liczba żywych graczy
     }
 
     public void rozgrywka(Gracz gracze[], PulaAkcji pulaAkcji) {
@@ -23,6 +27,10 @@ public class Gra {
         this.pulaAkcji = pulaAkcji;
     }
 
+    /**
+     * Zwraca odpowiedź na pytanie ,,Czy gra toczy się dalej?''
+     * @return <code>true</code> kiey gra jeszcze trwa
+     */
     public boolean czyKoniecGry() {
         return false; //todo ...
     }

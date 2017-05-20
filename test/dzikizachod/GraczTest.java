@@ -36,7 +36,7 @@ public class GraczTest {
         };
         gra = new Gra(){
             @Override
-            public int liczbaGrczy() {
+            public int liczbaGraczy() {
                 return gracze.length;
             }
 
