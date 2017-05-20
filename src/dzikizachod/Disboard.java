@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class Disboard {
     /** Ile ckcji gracz dobiera w ciągu tury */
-    protected final int LICZBA_DOBIERANYCH_AKCJI = 5;
+    static protected final int LICZBA_DOBIERANYCH_AKCJI = 5;
 
     /** Pula akcji do gry */
     private PulaAkcji pulaAkcji;
@@ -32,6 +32,9 @@ public class Disboard {
 
     /** Widok gracza-szeryfa */
     private StrategicznyWidokGracza widokSzeryfa;
+
+    /** Numer obecnej tury */
+    private int numerTury;
 
     /** Referencja do właśnie grającego gracza. */
     private Gracz obecnyGracz;
@@ -172,7 +175,7 @@ public class Disboard {
      * @return <code>true</code> kiey gra jeszcze trwa
      */
     public boolean czyKoniecGry() {
-        return liczbaBandytów != 0 && szeryf.pz() > 0;
+        return liczbaBandytów != 0 && szeryf.pz() > 0 && numerTury < 43;
     }
 
     /**
@@ -183,7 +186,7 @@ public class Disboard {
         assert kto.equals("");
 
         obecnyGracz = szeryf;
-        int numerTury = 0;
+        numerTury = 0;
         dynamitIdzie = false;
 
         //Oglos poczatek gry
@@ -193,6 +196,8 @@ public class Disboard {
         while (!czyKoniecGry()) {
             if (obecnyGracz == szeryf) {
                 ++numerTury;
+                if (numerTury == 43)
+                    break;
                 for (IObserwator o : obserwatorzy)
                     o.patrzKolejnaTura(numerTury);
             }
@@ -200,8 +205,15 @@ public class Disboard {
         }
 
         //Oglos koniec gry
+        Zakonczenie zakonczenie;
+        if (numerTury == 43)
+            zakonczenie = Zakonczenie.REMIS;
+        else if (szeryf.pz() > 0)
+            zakonczenie = Zakonczenie.DOBRO_WYGRALO;
+        else
+            zakonczenie = Zakonczenie.ZLO_WYGRALO;
         for (IObserwator o : obserwatorzy)
-            o.patrzKoniecGry(szeryf.pz() > 0);
+            o.patrzKoniecGry(zakonczenie);
     }
 
     /**

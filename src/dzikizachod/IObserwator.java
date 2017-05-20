@@ -70,7 +70,7 @@ public interface IObserwator {
 
     /**
      * Wysyłane na końcu gry.
-     * @param czyDobroWygralo <code>true</code>, kiedy strona szeryfa wygrała
+     * @param zakonczenie jak to się wszystko skończyło
      */
-    void patrzKoniecGry(boolean czyDobroWygralo);
+    void patrzKoniecGry(Zakonczenie zakonczenie);
 }

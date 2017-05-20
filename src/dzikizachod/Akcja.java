@@ -77,4 +77,22 @@ public enum Akcja {
         }
         throw new Error("This should never happen.");
     }
+
+
+    @Override
+    public String toString() {
+        switch (this) {
+            case ULECZ:
+                return "ULECZ";
+            case STRZEL:
+                return "STRZEL";
+            case ZASIEG_PLUS_JEDEN:
+                return "ZASIEG_PLUS_JEDEN";
+            case ZASIEG_PLUS_DWA:
+                return "ZASIEG_PLUS_DWA";
+            case DYNAMIT:
+                return "DYNAMIT";
+        }
+        throw new Error("This should never happen.");
+    }
 }
