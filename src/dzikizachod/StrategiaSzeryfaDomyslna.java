@@ -34,7 +34,7 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
     protected void zwalczRandomy() throws BladKonrtoleraWyjatek {
         while (ja().ileAkcji(Akcja.STRZEL) > 0) {
             int zasiegRandomowania = Math.min(ja().zasieg(), ja().liczbaGraczy() - 1);
-            int polozenieWzgledneCelu = (rng.nextInt(1) * 2 - 1) * (rng.nextInt(zasiegRandomowania) + 1);
+            int polozenieWzgledneCelu = (rng.nextInt(2) * 2 - 1) * (rng.nextInt(zasiegRandomowania) + 1);
             akcjaStrzel(ja().dalekiSasiad(polozenieWzgledneCelu));
         }
     }
