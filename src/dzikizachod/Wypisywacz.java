@@ -145,7 +145,7 @@ public class Wypisywacz implements IObserwator {
     public void patrzSkonczylTure(StrategicznyWidokGracza ktoGra) {
         if (wypisaneAkcjeWykonane > 0)
             zmniejszWciecie();
-        else
+        else if (ktoGra.pz() > 0)
             wyplujln("Ruchy:");
         wyplujln();
         wyplujGraczy();
@@ -155,7 +155,7 @@ public class Wypisywacz implements IObserwator {
     @Override
     public void patrzZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {
         if (zabojca == null) {
-            wyplujln("Akcje:");
+            wyplujln("Ruchy:");
             zwiekszWciecie();
             wyplujln("MARTWY");
             zmniejszWciecie();
