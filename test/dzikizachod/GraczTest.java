@@ -44,6 +44,9 @@ public class GraczTest {
             Gracz graczONumerze(int numer) {
                 return gracze[numer];
             }
+
+            @Override
+            void oddajAkcje(Akcja akcja) {}
         };
 
         for (int i = 1; i < gracze.length - 1; ++i)

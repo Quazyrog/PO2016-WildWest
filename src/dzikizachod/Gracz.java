@@ -60,15 +60,25 @@ public abstract class Gracz {
      * W zależności od znaku kierunku zwraca gracza po lewej lub prawej od podanego.
      * Dziki Zachód jest miejscem, w którym panuje orientacja dodatnia, więc naturalnym kierunkiem gry jest kierunek
      * przeciwny do ruchu wskazówek zegara. Wobec tego kierunek ujemny oznacza gracza po lewej, a dodatni po prawej.
+     * ta funkcja także zaktualizuje danego sąsiada (lewego lub prawego w zależnosci od kierunku), jeżeli poprzedni
+     * sąsiad już nie żyje.
      * @param wKierunku kierunek, oznaczający lewego sąsiada (kierunek ujemny) lub prawego (dodatni); nie może być 0
      * @return <c>odGracza.poLewej</c> gdy <c>kierunek < 0</c>; <c>odGracza.poPrawej</c> gdy <c>kierunek > 0</c>
      */
     public Gracz przeskocz(int wKierunku) {
-        assert wKierunku != 0;
-        if (wKierunku < 0)
+        if (wKierunku == 0) {
+            throw new IllegalArgumentException();
+        }
+        if (wKierunku < 0) {
+            if (poLewej.pz() == 0)
+                poLewej = poLewej.przeskocz(-1);
             return poLewej;
-        if (wKierunku > 0)
+        }
+        if (wKierunku > 0) {
+            if (poPrawej.pz() == 0)
+                poPrawej = poPrawej.przeskocz(1);
             return poPrawej;
+        }
         throw new Error("To się nie powinno zdażyć");
     }
 
@@ -218,11 +228,12 @@ public abstract class Gracz {
      * @throws BrakAkcjiWyjatek kiedy gracz nie ma tej akcji na ręce
      */
     public void akcjaUlecz(Gracz cel) throws PozaZasiegiemWyjatek, BrakAkcjiWyjatek, NieTwojRochWyjatek {
-        if (cel != this && cel != poLewej && cel != poPrawej)
+        if (cel != this && cel != przeskocz(-1) && cel != przeskocz(1))
             throw new PozaZasiegiemWyjatek();
         if (!czyWykonujeRuch())
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.ULECZ);
+        gra.oglosWykonanieAkcji(this, Akcja.ULECZ, cel);
         cel.dodajPZ(1);
     }
 
@@ -238,6 +249,7 @@ public abstract class Gracz {
         if (!czyWykonujeRuch())
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.STRZEL);
+        gra.oglosWykonanieAkcji(this, Akcja.STRZEL, cel);
         cel.dodajPZ(-1);
     }
 
@@ -249,6 +261,7 @@ public abstract class Gracz {
         if (!czyWykonujeRuch())
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.ZASIEG_PLUS_JEDEN);
+        gra.oglosWykonanieAkcji(this, Akcja.ZASIEG_PLUS_JEDEN, this);
         zasieg += 1;
     }
 
@@ -260,6 +273,7 @@ public abstract class Gracz {
         if (!czyWykonujeRuch())
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.ZASIEG_PLUS_DWA);
+        gra.oglosWykonanieAkcji(this, Akcja.ZASIEG_PLUS_DWA, this);
         zasieg += 2;
     }
 
@@ -271,6 +285,7 @@ public abstract class Gracz {
         if (!czyWykonujeRuch())
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.DYNAMIT);
+        gra.oglosWykonanieAkcji(this, Akcja.DYNAMIT, null);
         gra.uruchomDynamit();
     }
 
