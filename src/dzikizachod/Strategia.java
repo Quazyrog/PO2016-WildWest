@@ -56,7 +56,6 @@ abstract public class Strategia implements IObserwator {
             return ((ReprezentacjaGracza)other).gracz == gracz;
         }
 
-    //POCZĄTEK METOD DELEGOWANYCH Z REPREZENTOWANEGO GRAZCZA
         public int pz() {
             return gracz.pz();
         }
@@ -84,16 +83,56 @@ abstract public class Strategia implements IObserwator {
         public ReprezentacjaGracza przeskocz(int kierunek) {
             return new ReprezentacjaGracza(gracz.przeskocz(kierunek));
         }
-    //KONIEC METOD DELEGOWANYCH Z REPREZENTOWANEGO GRAZCZA
     }
 
     /** Gracz kontrolowany przez tę strategię. */
     private Gracz marionetka;
 
+    /** Szeryf */
     protected ReprezentacjaGracza szeryf;
 
-    final void przypiszGracza(Gracz gracz) {
-        marionetka = gracz;
+
+    public int odlegloscIKierunekOd(ReprezentacjaGracza gracz) {
+        return marionetka.odlegloscIKierunekOd(gracz.gracz);
+    }
+
+    @Override
+    final public void patrzPoczatekGry(Gracz[] gracze, Gracz szeryf, int liczbaBandytów, int liczbaPomocników) {
+        this.szeryf = new ReprezentacjaGracza(szeryf);
+        ReprezentacjaGracza reprezentacja[] = new ReprezentacjaGracza[gracze.length];
+        ogarnijPoczatekGry(reprezentacja, this.szeryf, liczbaBandytów, liczbaPomocników);
+    }
+
+    @Override
+    final public void patrzRuchGracza(Gracz ktoGra) {
+        ogarnijRuchGracza(new ReprezentacjaGracza(ktoGra));
+    }
+
+    @Override
+    final public void patrzDobralAkcje(Gracz ktoGra, Akcja a) {}
+
+    @Override
+    final public void patrzNaDynamit(Gracz ktoGra, boolean wybuchl) {}
+
+    @Override
+    final public void patrzWykonalAkcje(Gracz ktoGra, Akcja a, Gracz naKim) {
+        ogarnijWykonalAkcje(new ReprezentacjaGracza(ktoGra), a, new ReprezentacjaGracza(naKim));
+    }
+
+    @Override
+    final public void patrzSkonczylTure(Gracz ktoGra) {}
+
+    @Override
+    final public void patrzZabojstwo(Gracz ofiara, Gracz zabojca) {
+        ogarnijZabojstwo(new ReprezentacjaGracza(ofiara), new ReprezentacjaGracza(zabojca));
+    }
+
+    public boolean czyKoniecGry() {
+        return marionetka.czyKoniecGry();
+    }
+
+    public boolean czyWykonujeRuch() {
+        return marionetka.czyWykonujeRuch();
     }
 
     final protected ReprezentacjaGracza ja() {
@@ -101,7 +140,6 @@ abstract public class Strategia implements IObserwator {
         return new ReprezentacjaGracza(marionetka);
     }
 
-//POCZĄTEK METOD DELEGOWANYCH Z KONTROLOWANEGO GRAZCZA
     final protected TozsamoscGracza tozsamosc() {
         return marionetka.tozsamosc();
     }
@@ -152,47 +190,6 @@ abstract public class Strategia implements IObserwator {
         return marionetka.ileAkcji(akcja);
     }
 
-    public int odlegloscIKierunekOd(ReprezentacjaGracza gracz) {
-        return marionetka.odlegloscIKierunekOd(gracz.gracz);
-    }
-//KONIEC METOD DELEGOWANYCH Z KONTROLOWANEGO GRACZA
-
-
-//POCZATEK METOD Z IOBSERWATOR
-    @Override
-    final public void patrzPoczatekGry(Gracz[] gracze, Gracz szeryf, int liczbaBandytów, int liczbaPomocników) {
-        this.szeryf = new ReprezentacjaGracza(szeryf);
-        ReprezentacjaGracza reprezentacja[] = new ReprezentacjaGracza[gracze.length];
-        ogarnijPoczatekGry(reprezentacja, this.szeryf, liczbaBandytów, liczbaPomocników);
-    }
-
-    @Override
-    final public void patrzRuchGracza(Gracz ktoGra) {
-        ogarnijRuchGracza(new ReprezentacjaGracza(ktoGra));
-    }
-
-    @Override
-    final public void patrzDobralAkcje(Gracz ktoGra, Akcja a) {}
-
-    @Override
-    final public void patrzNaDynamit(Gracz ktoGra, boolean wybuchl) {}
-
-    @Override
-    final public void patrzWykonalAkcje(Gracz ktoGra, Akcja a, Gracz naKim) {
-        ogarnijWykonalAkcje(new ReprezentacjaGracza(ktoGra), a, new ReprezentacjaGracza(naKim));
-    }
-
-    @Override
-    final public void patrzSkonczylTure(Gracz ktoGra) {}
-
-    @Override
-    final public void patrzZabojstwo(Gracz ofiara, Gracz zabojca) {
-        ogarnijZabojstwo(new ReprezentacjaGracza(ofiara), new ReprezentacjaGracza(zabojca));
-    }
-//KONIEC METOD Z IOBSERWATOR
-
-    abstract void graj() throws BladKonrtoleraWyjatek;
-
     abstract protected void
     ogarnijPoczatekGry(ReprezentacjaGracza[] gracze, ReprezentacjaGracza szeryf,
                        int liczbaBandytów, int liczbaPomocników);
@@ -202,4 +199,16 @@ abstract public class Strategia implements IObserwator {
     abstract protected void ogarnijWykonalAkcje(ReprezentacjaGracza ktoGra, Akcja a, ReprezentacjaGracza naKim);
 
     abstract protected void ogarnijZabojstwo(ReprezentacjaGracza ofiara, ReprezentacjaGracza zabojca);
+
+
+    final void przypiszGracza(Gracz gracz) {
+        marionetka = gracz;
+    }
+
+    /**
+     * W tej metodzie strategia kontroluje gracza podczas jego tury.
+     * Kontrolująca strategia powinna sprawdzać, czy jest już koniec gry i należy zakończyć sterowanie graczem.
+     * @throws BladKonrtoleraWyjatek jakby nie złapała, to gracz obsłuży
+     */
+    abstract void graj() throws BladKonrtoleraWyjatek;
 }

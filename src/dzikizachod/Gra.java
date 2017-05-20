@@ -23,6 +23,10 @@ public class Gra {
         this.pulaAkcji = pulaAkcji;
     }
 
+    public boolean czyKoniecGry() {
+        return false; //todo ...
+    }
+
     protected void przygotujRozgrywke() {
         //Potasuj graczy
         for (int i = 0; i < gracze.length; ++i) {

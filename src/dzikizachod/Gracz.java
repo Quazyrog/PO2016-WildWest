@@ -130,11 +130,20 @@ public abstract class Gracz {
     }
 
     /**
+     * Delegacja <code>czyKoniecGry</code> z klasy gry
+     * @return <code>true</code>, kiedy któraś ze stron już wygrała; <code>false</code> w.p.p.
+     */
+    public boolean czyKoniecGry() {
+        return gra.czyKoniecGry();
+    }
+
+    /**
      * Zwraca odpowiedź na pytanie ,,Czy gracz wykonuje teraz ruch?''
+     * Kiedy gra zakończy się w trakcie tury gracza, to gracz nie wykonuje już ruchów po jej zakończeniu.
      * @return <code>true</code> podczas ruchu tego gracza; <code>false</code> poza ruchem
      */
     public boolean czyWykonujeRuch() {
-        return wykonujeRuch;
+        return wykonujeRuch && !czyKoniecGry();
     }
 
     /**
