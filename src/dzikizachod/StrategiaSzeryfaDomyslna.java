@@ -4,37 +4,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
-    protected Random rng = new Random();
-
     @Override
     public void patrzKolejnaTura(int numerTury) {}
 
     @Override
     public void patrzKoniecGry(Zakonczenie zakonczenie) {}
-
-    protected ArrayList<StrategicznyWidokGracza> paskudyWZasiegu() {
-        ArrayList<StrategicznyWidokGracza> wynik = new ArrayList<>();
-        for (StrategicznyWidokGracza paskuda : paskudniBandyci) {
-            try {
-                if (ja().odlegloscOd(paskuda) <= ja().zasieg())
-                    wynik.add(paskuda);
-            } catch (NieInteresujSieTrupemWyjatek e) {
-                System.err.println("To się nie powinno zdażyć");
-                e.printStackTrace();
-            }
-        }
-        return wynik;
-    }
-
-    protected void zwalczPaskudy() throws BladKonrtoleraWyjatek {
-        ArrayList<StrategicznyWidokGracza> paskudy = paskudyWZasiegu();
-        while (ja().ileAkcji(Akcja.STRZEL) > 0 && paskudy.size() > 0 && !ja().czyKoniecGry()) {
-            StrategicznyWidokGracza paskuda = paskudy.get(rng.nextInt(paskudy.size()));
-            akcjaStrzel(paskuda);
-            if (paskuda.pz() == 0)
-                paskudy.remove(paskuda);
-        }
-    }
 
     protected void zwalczRandomy() throws BladKonrtoleraWyjatek {
         while (ja().ileAkcji(Akcja.STRZEL) > 0 && !ja().czyKoniecGry()) {
