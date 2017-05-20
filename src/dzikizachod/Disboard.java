@@ -171,11 +171,11 @@ public class Disboard {
     }
 
     /**
-     * Zwraca odpowiedź na pytanie ,,Czy gra toczy się dalej?''
-     * @return <code>true</code> kiey gra jeszcze trwa
+     * Zwraca odpowiedź na pytanie
+     * @return <code>false</code> kiey gra jeszcze trwa
      */
     public boolean czyKoniecGry() {
-        return liczbaBandytów != 0 && szeryf.pz() > 0 && numerTury < 43;
+        return liczbaBandytów == 0 || szeryf.pz() == 0 && numerTury > 42;
     }
 
     /**
