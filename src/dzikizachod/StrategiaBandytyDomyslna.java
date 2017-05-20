@@ -48,8 +48,5 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty {
         } catch (BladKonrtoleraWyjatek e) {
             e.printStackTrace();
         }
-
-        if (ja().ileAkcji(Akcja.DYNAMIT) > 0 && ja().odlegloscSkierowanOd(1, szeryf()) < 3)
-            akcjaDynamit();
     }
 }
