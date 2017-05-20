@@ -56,7 +56,7 @@ public abstract class Gracz {
      * @param kontroler strategia kontrolujaca
      */
     public Gracz(Strategia kontroler) {
-        this(kontroler, 3 + rng.nextInt(1));
+        this(kontroler, 3 + rng.nextInt(2));
     }
 
     /**
