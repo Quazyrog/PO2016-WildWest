@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 
 public class GraczTest {
     private Gracz gracze[];
-    private Gra gra;
+    private Disboard gra;
 
     public GraczTest() {
         gracze = new Gracz[]{

@@ -24,7 +24,7 @@ public abstract class Gracz {
     private Gracz poLewej, poPrawej;
 
     /** Gra, w której aktualnie bierze udział gracz */
-    private Gra gra;
+    private Disboard gra;
 
     /** Arsenał gracza */
     private LicznikAkcji akcje = new LicznikAkcji();
@@ -330,7 +330,7 @@ public abstract class Gracz {
      * @param obokZLewej gracz po lewej (poprzedni gracz)
      * @param obokZPrawej gracz po prawej (następny gracz)
      */
-    void przygotujDoGry(Gra gra, Gracz obokZLewej, Gracz obokZPrawej, int numer) {
+    void przygotujDoGry(Disboard gra, Gracz obokZLewej, Gracz obokZPrawej, int numer) {
         assert obokZLewej != null;
         assert obokZPrawej != null;
         this.poLewej = obokZLewej;

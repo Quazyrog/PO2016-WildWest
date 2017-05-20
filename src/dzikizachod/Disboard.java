@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Reprezentacja całej gry
  */
-public class Gra {
+public class Disboard {
     /** Ile ckcji gracz dobiera w ciągu tury */
     protected final int LICZBA_DOBIERANYCH_AKCJI = 5;
 
