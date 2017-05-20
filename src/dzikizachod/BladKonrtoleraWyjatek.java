@@ -41,8 +41,8 @@ class NieTwojRochWyjatek extends BladKonrtoleraWyjatek {
  * Rzucany, gdy strategia spróbujezrobić coś, czego nie może.
  * Na przykład kiedy odpyta widok gracza o liczbe akcji.
  */
-class NieuprawnioneDzialanieWyjatek extends BladKonrtoleraWyjatek {
-    NieuprawnioneDzialanieWyjatek() {
-        super("Strategia nie ma takich uprawnień");
+class NieInteresujSieTrupemWyjatek extends BladKonrtoleraWyjatek {
+    NieInteresujSieTrupemWyjatek() {
+        super("Strzał do trupa");
     }
 }

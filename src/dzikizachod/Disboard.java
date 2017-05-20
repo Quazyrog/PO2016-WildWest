@@ -175,7 +175,7 @@ public class Disboard {
      * @return <code>false</code> kiey gra jeszcze trwa
      */
     public boolean czyKoniecGry() {
-        return liczbaBandytów == 0 || szeryf.pz() == 0 && numerTury > 42;
+        return liczbaBandytów == 0 || szeryf.pz() == 0 || numerTury > 42;
     }
 
     /**
@@ -243,13 +243,20 @@ public class Disboard {
     }
 
     protected void rozstrzygnijDynamit() {
+        if (!dynamitIdzie)
+            return;
+
         boolean kabum = rng.nextInt(6) == 0;
         StrategicznyWidokGracza w = widokiGraczy[obecnyGracz.identyfikator()];
         for (IObserwator o : obserwatorzy)
             o.patrzNaDynamit(w, kabum);
 
         if (kabum) {
-            obecnyGracz.dodajPZ(-3, null);
+            try {
+                obecnyGracz.dodajPZ(-3, null);
+            } catch (BladKonrtoleraWyjatek e) {
+                throw new Error("Obsługuję trupa!", e);
+            }
             dynamitIdzie = false;
         }
     }

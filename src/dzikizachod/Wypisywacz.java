@@ -33,15 +33,16 @@ public class Wypisywacz implements IObserwator {
 
     protected void zmniejszWciecie() {
         if (wielkoscWciecia == 0)
-            throw new IllegalStateException("Ta klasa nie potrafi zrobić ujemnego wciecia. " +
-                    "Zgłoś się de deweloperów swojego terminala");
+            return;
         --wielkoscWciecia;
         wciecie.delete(wielkoscWciecia * 2, wielkoscWciecia * 2 + 2);
     }
 
     protected void wypluj(String s) {
-        if (zrobWciecie)
+        if (zrobWciecie) {
             out.print(wciecie);
+            zrobWciecie = false;
+        }
         out.print(s);
     }
 
@@ -59,7 +60,7 @@ public class Wypisywacz implements IObserwator {
     public void patrzPoczatekGry(StrategicznyWidokGracza[] gracze, StrategicznyWidokGracza szeryf, int liczbaBandytów, int liczbaPomocników) {
         this.gracze = gracze;
 
-        wypluj("** START");
+        wyplujln("** START");
         zwiekszWciecie();
         wyplujGraczy();
         zmniejszWciecie();
@@ -67,23 +68,27 @@ public class Wypisywacz implements IObserwator {
 
     protected void wyplujGraczy() {
         wyplujln("Gracze:");
+        zwiekszWciecie();
         for (StrategicznyWidokGracza g : gracze) {
             if (g.pz() > 0)
-                wyplujln((g.identyfikator() + 1) + ": " + g.tozsamosc() + "(liczba żyć: " + g.pz() + ")");
+                wyplujln(g.identyfikator() + ": " + g.tozsamosc() + "(liczba żyć: " + g.pz() + ")");
             else
-                wyplujln((g.identyfikator() + 1) + ": X (" + g.tozsamosc() + ")");
+                wyplujln(g.identyfikator() + ": X (" + g.tozsamosc() + ")");
         }
+        zmniejszWciecie();
     }
 
     @Override
     public void patrzKolejnaTura(int numerTury) {
         zmniejszWciecie();
-        wyplujln("** TURA " + numerTury);
+        wyplujln("\n** TURA " + numerTury);
         zwiekszWciecie();
     }
 
     @Override
     public void patrzRuchGracza(StrategicznyWidokGracza ktoGra) {
+        if (ktoGra.tozsamosc() != TozsamoscGracza.SZERYF)
+            wyplujln();
         wyplujln("GRACZ " + ktoGra.identyfikator() + "(" + ktoGra.tozsamosc() + "):");
         zwiekszWciecie();
         wypisaneAkcjeDobrane = 0;
@@ -92,9 +97,10 @@ public class Wypisywacz implements IObserwator {
 
     @Override
     public void patrzDobralAkcje(StrategicznyWidokGracza ktoGra, Akcja a) {
+        //FIXME to nie ma być lista DOBRANYCH akcji
         if (wypisaneAkcjeDobrane == 0) {
             wypluj("Akcje: [" + a);
-        } else if (wypisaneAkcjeDobrane == Disboard.LICZBA_DOBIERANYCH_AKCJI) {
+        } else if (wypisaneAkcjeDobrane + 1 == Disboard.LICZBA_DOBIERANYCH_AKCJI) {
             wyplujln(", " + a + "]");
         } else {
             wypluj(", " + a);
@@ -113,7 +119,7 @@ public class Wypisywacz implements IObserwator {
     @Override
     public void patrzWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {
         if (wypisaneAkcjeWykonane == 0) {
-            wyplujln("Akcje:");
+            wyplujln("Ruchy:");
             zwiekszWciecie();
         }
         switch (a) {
@@ -124,7 +130,7 @@ public class Wypisywacz implements IObserwator {
                     wyplujln(a.toString() + " " + naKim.identyfikator());
                 break;
             case STRZEL:
-                wyplujln(a.toString() + naKim.identyfikator());
+                wyplujln(a.toString() + " " + naKim.identyfikator());
                 break;
             case ZASIEG_PLUS_JEDEN:
             case ZASIEG_PLUS_DWA:
@@ -139,6 +145,9 @@ public class Wypisywacz implements IObserwator {
     public void patrzSkonczylTure(StrategicznyWidokGracza ktoGra) {
         if (wypisaneAkcjeWykonane > 0)
             zmniejszWciecie();
+        else
+            wyplujln("Ruchy:");
+        wyplujln();
         wyplujGraczy();
         zmniejszWciecie();
     }

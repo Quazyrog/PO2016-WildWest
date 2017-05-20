@@ -97,19 +97,12 @@ public abstract class Gracz {
      * @param delta liczba dodana do punktów życia
      * @param zrodloAtaku gracz, który uleczyl lub zaatakował; <code>null</code> w przypadku dynamitu
      */
-    public void dodajPZ(int delta, Gracz zrodloAtaku) {
+    public void dodajPZ(int delta, Gracz zrodloAtaku) throws BladKonrtoleraWyjatek {
+        if (pz == 0)
+            throw new NieInteresujSieTrupemWyjatek();
         pz = Math.max(0, Math.min(limitPZ, pz + delta));
-        if (pz == 0) {
-            gra.graczUmarl(this, zrodloAtaku);
-            for (Akcja a : Akcja.values()) {
-                try {
-                    while (ileAkcji(a) > 0)
-                        odrzucAkcje(a);
-                } catch (BrakAkcjiWyjatek e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        if (pz == 0)
+            umieram(zrodloAtaku);
     }
 
     /**
@@ -184,7 +177,9 @@ public abstract class Gracz {
      *                            mierzenia (ujemny -> na lewo; dodatni -> na prawo). Zerowy oznacza tego gracza.
      * @return gracza znajdującego się we wskazanej odległości na prawo lub lewo od tego gracza
      */
-    public Gracz dalekiSasiad(int odlegloscSkierowana) {
+    public Gracz dalekiSasiad(int odlegloscSkierowana) throws NieInteresujSieTrupemWyjatek {
+        if (pz == 0)
+            throw new NieInteresujSieTrupemWyjatek();
         if (Math.abs(odlegloscSkierowana) >= gra.liczbaGraczy())
             throw new ArrayIndexOutOfBoundsException();
         return gra.graczONumerze((gra.liczbaGraczy() + odlegloscSkierowana + numer) % gra.liczbaGraczy());
@@ -195,7 +190,7 @@ public abstract class Gracz {
      * @param gracz gracz, do którego mierzymy odległość. Musi być żywy i brać udział w tej samej rozgrywce.
      * @return odległość tego gracza od podanego
      */
-    public int odlegloscOd(Gracz gracz) {
+    public int odlegloscOd(Gracz gracz) throws NieInteresujSieTrupemWyjatek {
         return Math.abs(odlegloscIKierunekOd(gracz));
     }
 
@@ -205,7 +200,7 @@ public abstract class Gracz {
      * @return liczbę całkowita o module równym odległości do wskazanego gracza, której znak zależy od kierunku jej
      * mierzenia (dodatni -- zgodnie z kierunkiem gry, ujemny -- przeciwnie do niefgo)
      */
-    public int odlegloscIKierunekOd(Gracz gracz) {
+    public int odlegloscIKierunekOd(Gracz gracz) throws NieInteresujSieTrupemWyjatek {
         int przeciwna = odlegloscSkierowanOd(-1, gracz);
         int zgodna = odlegloscSkierowanOd(1, gracz);
         if (zgodna <= przeciwna)
@@ -219,11 +214,15 @@ public abstract class Gracz {
      * @param gracz gracz, do którego mierzymy odległość
      * @return odległość od gracza mierząoną we wskazanym kierunku
      */
-    public int odlegloscSkierowanOd(int kierunek, Gracz gracz) {
+    public int odlegloscSkierowanOd(int kierunek, Gracz gracz) throws NieInteresujSieTrupemWyjatek {
+        if (pz == 0)
+            throw new NieInteresujSieTrupemWyjatek();
         if (kierunek == 0)
             throw new IllegalArgumentException();
         if (gracz == this)
             return 0;
+        else
+            assert gracz.numer != this.numer;
         if (numer < gracz.numer) {
             int zgodnaOdleglosc = gracz.numer - numer;
             if (kierunek > 0)
@@ -240,7 +239,7 @@ public abstract class Gracz {
      * @throws PozaZasiegiemWyjatek kiedy cel jest poza zasięgiem leczenia
      * @throws BrakAkcjiWyjatek kiedy gracz nie ma tej akcji na ręce
      */
-    public void akcjaUlecz(Gracz cel) throws PozaZasiegiemWyjatek, BrakAkcjiWyjatek, NieTwojRochWyjatek {
+    public void akcjaUlecz(Gracz cel) throws BladKonrtoleraWyjatek {
         if (cel != this && cel != przeskocz(-1) && cel != przeskocz(1))
             throw new PozaZasiegiemWyjatek();
         if (!czyWykonujeRuch())
@@ -255,8 +254,9 @@ public abstract class Gracz {
      * @param cel gracz, do którego mierzymy
      * @throws PozaZasiegiemWyjatek kiedy cel znajduje się poza zasięgiem
      * @throws BrakAkcjiWyjatek kiedy gracz nie ma tej akcji na ręce
+     * @throws NieInteresujSieTrupemWyjatek kiedy strzelisz do trupa
      */
-    public void akcjaStrzel(Gracz cel) throws PozaZasiegiemWyjatek, BrakAkcjiWyjatek, NieTwojRochWyjatek {
+    public void akcjaStrzel(Gracz cel) throws BladKonrtoleraWyjatek {
         if (odlegloscOd(cel) > zasieg)
             throw new PozaZasiegiemWyjatek();
         if (!czyWykonujeRuch())
@@ -311,6 +311,19 @@ public abstract class Gracz {
         return akcje.ileTypu(akcja);
     }
 
+    protected void umieram(Gracz zrodloAtaku) {
+        gra.graczUmarl(this, zrodloAtaku);
+        gra.usunObserwatora(kontroler);
+        for (Akcja a : Akcja.values()) {
+            try {
+                while (ileAkcji(a) > 0)
+                    odrzucAkcje(a);
+            } catch (BrakAkcjiWyjatek e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /**
      * Wykonuje ruch gracza.
      */
@@ -319,7 +332,11 @@ public abstract class Gracz {
             wykonujeRuch = true;
             kontroler.graj();
         } catch (BladKonrtoleraWyjatek e) {
-            e.printStackTrace();
+            //Jeśli koniec gry, to można odpuścić, bo strategie tego nie sprawdzają
+            if (!czyKoniecGry()) {
+                System.err.println("gugu");
+                e.printStackTrace();
+            }
         } finally {
             wykonujeRuch = false;
         }

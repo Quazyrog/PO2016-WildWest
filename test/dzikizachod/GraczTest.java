@@ -28,25 +28,35 @@ public class GraczTest {
 
     @Test
     public void przeskokiPoKole() {
-        assertSame(gracze[0].dalekiSasiad(0), gracze[0]);
-        assertSame(gracze[0].dalekiSasiad(3), gracze[3]);
-        assertSame(gracze[0].dalekiSasiad(-3), gracze[gracze.length - 3]);
-        assertSame(gracze[3].dalekiSasiad(-3), gracze[0]);
-        assertSame(gracze[gracze.length - 3].dalekiSasiad(3), gracze[0]);
+        try {
+            assertSame(gracze[0].dalekiSasiad(0), gracze[0]);
+            assertSame(gracze[0].dalekiSasiad(3), gracze[3]);
+            assertSame(gracze[0].dalekiSasiad(-3), gracze[gracze.length - 3]);
+            assertSame(gracze[3].dalekiSasiad(-3), gracze[0]);
+            assertSame(gracze[gracze.length - 3].dalekiSasiad(3), gracze[0]);
 
-        assertSame(gracze[2].dalekiSasiad(3), gracze[5]);
-        assertSame(gracze[2].dalekiSasiad(-3), gracze[gracze.length - 1]);
-        assertSame(gracze[5].dalekiSasiad(-3), gracze[2]);
-        assertSame(gracze[gracze.length - 1].dalekiSasiad(3), gracze[2]);
+            assertSame(gracze[2].dalekiSasiad(3), gracze[5]);
+            assertSame(gracze[2].dalekiSasiad(-3), gracze[gracze.length - 1]);
+            assertSame(gracze[5].dalekiSasiad(-3), gracze[2]);
+            assertSame(gracze[gracze.length - 1].dalekiSasiad(3), gracze[2]);
+        } catch (NieInteresujSieTrupemWyjatek e) {
+            e.printStackTrace();
+            fail();
+        }
     }
 
     @Test
     public void odleglosci() {
-        assertEquals(1, gracze[0].odlegloscOd(gracze[1]));
-        assertEquals(1, gracze[0].odlegloscOd(gracze[gracze.length - 1]));
-        assertEquals(3, gracze[3].odlegloscOd(gracze[0]));
-        assertEquals(2, gracze[3].odlegloscOd(gracze[1]));
-        assertEquals(2, gracze[3].odlegloscOd(gracze[gracze.length - 1]));
+        try {
+            assertEquals(1, gracze[0].odlegloscOd(gracze[1]));
+            assertEquals(1, gracze[0].odlegloscOd(gracze[gracze.length - 1]));
+            assertEquals(3, gracze[3].odlegloscOd(gracze[0]));
+            assertEquals(2, gracze[3].odlegloscOd(gracze[1]));
+            assertEquals(2, gracze[3].odlegloscOd(gracze[gracze.length - 1]));
+        } catch (NieInteresujSieTrupemWyjatek e) {
+            e.printStackTrace();
+            fail();
+        }
     }
 
     @Test
@@ -111,20 +121,25 @@ public class GraczTest {
         Gracz g1 = gracze[1];
         Gracz g2 = gracze[2];
 
-        assertEquals(2, g0.odlegloscOd(g2));
-        assertEquals(2, g2.odlegloscOd(g0));
+        try {
+            assertEquals(2, g0.odlegloscOd(g2));
+            assertEquals(2, g2.odlegloscOd(g0));
 
-        while (g1.pz() > 0) {
-            g0.dobierz(Akcja.STRZEL);
-            try {
-                g0.akcjaStrzel(g1);
-            } catch (BladKonrtoleraWyjatek e) {
-                e.printStackTrace();
-                fail();
+            while (g1.pz() > 0) {
+                g0.dobierz(Akcja.STRZEL);
+                try {
+                    g0.akcjaStrzel(g1);
+                } catch (BladKonrtoleraWyjatek e) {
+                    e.printStackTrace();
+                    fail();
+                }
             }
-        }
 
-        assertEquals(1, g0.odlegloscOd(g2));
-        assertEquals(1, g2.odlegloscOd(g0));
+            assertEquals(1, g0.odlegloscOd(g2));
+            assertEquals(1, g2.odlegloscOd(g0));
+        } catch (NieInteresujSieTrupemWyjatek e) {
+            e.printStackTrace();
+            fail();
+        }
     }
 }

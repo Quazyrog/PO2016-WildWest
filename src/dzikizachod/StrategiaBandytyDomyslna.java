@@ -42,11 +42,8 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty {
     void graj() throws BladKonrtoleraWyjatek {
         super.graj();
         try {
-            while (ja().ileAkcji(Akcja.STRZEL) > 0)
+            while (ja().ileAkcji(Akcja.STRZEL) > 0 && !ja().czyKoniecGry())
                 najazdNaSzeryfa();
-        } catch (NieDaSieNicZrobicWyjatek ignored) {
-        } catch (BladKonrtoleraWyjatek e) {
-            e.printStackTrace();
-        }
+        } catch (NieDaSieNicZrobicWyjatek ignored) {}
     }
 }

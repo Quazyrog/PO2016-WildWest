@@ -76,19 +76,19 @@ public class StrategicznyWidokGracza {
         return gracz.czyWykonujeRuch();
     }
 
-    public StrategicznyWidokGracza dalekiSasiad(int odlegloscSkierowana) {
+    public StrategicznyWidokGracza dalekiSasiad(int odlegloscSkierowana) throws NieInteresujSieTrupemWyjatek {
         return new StrategicznyWidokGracza(gracz, gracz.dalekiSasiad(odlegloscSkierowana));
     }
 
-    public int odlegloscOd(StrategicznyWidokGracza gracz) {
+    public int odlegloscOd(StrategicznyWidokGracza gracz) throws NieInteresujSieTrupemWyjatek {
         return this.gracz.odlegloscOd(gracz.gracz);
     }
 
-    public int odlegloscIKierunekOd(StrategicznyWidokGracza gracz) {
+    public int odlegloscIKierunekOd(StrategicznyWidokGracza gracz) throws NieInteresujSieTrupemWyjatek {
         return this.gracz.odlegloscIKierunekOd(gracz.gracz);
     }
 
-    public int odlegloscSkierowanOd(int kierunek, StrategicznyWidokGracza gracz) {
+    public int odlegloscSkierowanOd(int kierunek, StrategicznyWidokGracza gracz) throws NieInteresujSieTrupemWyjatek {
         return this.gracz.odlegloscSkierowanOd(kierunek, gracz.gracz);
     }
 

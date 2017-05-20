@@ -43,14 +43,17 @@ abstract public class Strategia implements IObserwator {
 
     @Override
     final public void patrzZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {
-        ogarnijZabojstwo(new StrategicznyWidokGracza(marionetka, ofiara), new StrategicznyWidokGracza(marionetka, zabojca));
+        if (zabojca != null)
+            ogarnijZabojstwo(new StrategicznyWidokGracza(marionetka, ofiara), new StrategicznyWidokGracza(marionetka, zabojca));
+        else
+            ogarnijZabojstwo(new StrategicznyWidokGracza(marionetka, ofiara), null);
     }
 
-    public void akcjaUlecz(StrategicznyWidokGracza cel) throws PozaZasiegiemWyjatek, BrakAkcjiWyjatek, NieTwojRochWyjatek {
+    public void akcjaUlecz(StrategicznyWidokGracza cel) throws BladKonrtoleraWyjatek {
         marionetka.akcjaUlecz(cel.gracz);
     }
 
-    public void akcjaStrzel(StrategicznyWidokGracza cel) throws PozaZasiegiemWyjatek, BrakAkcjiWyjatek, NieTwojRochWyjatek {
+    public void akcjaStrzel(StrategicznyWidokGracza cel) throws BladKonrtoleraWyjatek {
         marionetka.akcjaStrzel(cel.gracz);
     }
 

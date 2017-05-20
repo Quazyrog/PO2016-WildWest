@@ -15,15 +15,20 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
     protected ArrayList<StrategicznyWidokGracza> paskudyWZasiegu() {
         ArrayList<StrategicznyWidokGracza> wynik = new ArrayList<>();
         for (StrategicznyWidokGracza paskuda : paskudniBandyci) {
-            if (ja().odlegloscOd(paskuda) <= ja().zasieg())
-                wynik.add(paskuda);
+            try {
+                if (ja().odlegloscOd(paskuda) <= ja().zasieg())
+                    wynik.add(paskuda);
+            } catch (NieInteresujSieTrupemWyjatek e) {
+                System.err.println("To się nie powinno zdażyć");
+                e.printStackTrace();
+            }
         }
         return wynik;
     }
 
     protected void zwalczPaskudy() throws BladKonrtoleraWyjatek {
         ArrayList<StrategicznyWidokGracza> paskudy = paskudyWZasiegu();
-        while (ja().ileAkcji(Akcja.STRZEL) > 0 && paskudy.size() > 0) {
+        while (ja().ileAkcji(Akcja.STRZEL) > 0 && paskudy.size() > 0 && !ja().czyKoniecGry()) {
             StrategicznyWidokGracza paskuda = paskudy.get(rng.nextInt(paskudy.size()));
             akcjaStrzel(paskuda);
             if (paskuda.pz() == 0)
@@ -32,7 +37,7 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
     }
 
     protected void zwalczRandomy() throws BladKonrtoleraWyjatek {
-        while (ja().ileAkcji(Akcja.STRZEL) > 0) {
+        while (ja().ileAkcji(Akcja.STRZEL) > 0 && !ja().czyKoniecGry()) {
             int zasiegRandomowania = Math.min(ja().zasieg(), ja().liczbaGraczy() - 1);
             int polozenieWzgledneCelu = (rng.nextInt(2) * 2 - 1) * (rng.nextInt(zasiegRandomowania) + 1);
             akcjaStrzel(ja().dalekiSasiad(polozenieWzgledneCelu));

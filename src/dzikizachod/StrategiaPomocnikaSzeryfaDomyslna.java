@@ -24,7 +24,7 @@ public class StrategiaPomocnikaSzeryfaDomyslna extends StrategiaPomocnikaSzeryfa
     void graj() throws BladKonrtoleraWyjatek {
         super.graj();
         int zasiegLosowania = Math.min(ja().liczbaGraczy() - 1, ja().zasieg());
-        while (ja().ileAkcji(Akcja.STRZEL) > 0) {
+        while (ja().ileAkcji(Akcja.STRZEL) > 0 && !ja().czyKoniecGry()) {
             int polozenieCelu = (rng.nextInt(2) * 2 - 1) * (rng.nextInt(zasiegLosowania) + 1);
             StrategicznyWidokGracza cel = ja().dalekiSasiad(polozenieCelu);
             if (cel.tozsamosc() == TozsamoscGracza.SZERYF)
