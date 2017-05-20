@@ -11,7 +11,7 @@ public abstract class StrategiaSzeryfa extends StrategiaOgolna {
     protected ArrayList<StrategicznyWidokGracza> paskudniBandyci = new ArrayList<>();
 
     @Override
-    protected void ogarnijWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {
+    public void patrzWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {
         switch (a) {
             case STRZEL:
                 if (naKim.equals(ja()) && !paskudniBandyci.contains(ktoGra))
@@ -21,7 +21,7 @@ public abstract class StrategiaSzeryfa extends StrategiaOgolna {
     }
 
     @Override
-    protected void ogarnijZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {
+    public void patrzZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {
         paskudniBandyci.remove(ofiara);
     }
 }

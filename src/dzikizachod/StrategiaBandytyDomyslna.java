@@ -19,10 +19,10 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty {
     public void patrzKoniecGry(Zakonczenie zakonczenie) {}
 
     @Override
-    protected void ogarnijWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {}
+    public void patrzWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {}
 
     @Override
-    protected void ogarnijZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {}
+    public void patrzZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {}
 
     protected void najazdNaSzeryfa() throws BladKonrtoleraWyjatek {
         int doSzeryfa = ja().odlegloscIKierunekOd(szeryf());

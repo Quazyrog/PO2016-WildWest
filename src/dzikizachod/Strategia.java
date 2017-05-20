@@ -34,20 +34,7 @@ abstract public class Strategia implements IObserwator {
     final public void patrzNaDynamit(StrategicznyWidokGracza ktoGra, boolean wybuchl) {}
 
     @Override
-    final public void patrzWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {
-        ogarnijWykonalAkcje(ktoGra, a, naKim);
-    }
-
-    @Override
     final public void patrzSkonczylTure(StrategicznyWidokGracza ktoGra) {}
-
-    @Override
-    final public void patrzZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {
-        if (zabojca != null)
-            ogarnijZabojstwo(new StrategicznyWidokGracza(marionetka, ofiara), new StrategicznyWidokGracza(marionetka, zabojca));
-        else
-            ogarnijZabojstwo(new StrategicznyWidokGracza(marionetka, ofiara), null);
-    }
 
     public void akcjaUlecz(StrategicznyWidokGracza cel) throws BladKonrtoleraWyjatek {
         marionetka.akcjaUlecz(cel.gracz);
@@ -76,11 +63,6 @@ abstract public class Strategia implements IObserwator {
     final protected StrategicznyWidokGracza szeryf() {
         return widokSzeryfa;
     }
-
-    abstract protected void ogarnijWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim);
-
-    abstract protected void ogarnijZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca);
-
 
     final void przypiszGracza(Gracz gracz) {
         marionetka = gracz;
