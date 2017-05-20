@@ -249,7 +249,7 @@ public class Disboard {
             o.patrzNaDynamit(w, kabum);
 
         if (kabum) {
-            obecnyGracz.dodajPZ(-3);
+            obecnyGracz.dodajPZ(-3, null);
             dynamitIdzie = false;
         }
     }
@@ -272,10 +272,14 @@ public class Disboard {
      * Gracz informuje w ten sposób grę, że umarł.
      * @param gracz nieboszczyk
      */
-    void graczUmarl(Gracz gracz) {
+    void graczUmarl(Gracz gracz, Gracz zrodloAtaku) {
         StrategicznyWidokGracza strasznyWidok = widokiGraczy[gracz.identyfikator()];
+        StrategicznyWidokGracza kira = null;
+        if (zrodloAtaku != null)
+            kira = widokiGraczy[zrodloAtaku.identyfikator()];
+
         for (IObserwator o : obserwatorzy)
-            o.patrzZabojstwo(strasznyWidok, widokObecnegoGracza);
+            o.patrzZabojstwo(strasznyWidok, kira);
 
         if (gracz.tozsamosc() == TozsamoscGracza.BANDYTA) {
             --liczbaBandytów;

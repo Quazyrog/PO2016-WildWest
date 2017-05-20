@@ -145,7 +145,12 @@ public class Wypisywacz implements IObserwator {
 
     @Override
     public void patrzZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {
-        //TODO jak by to bł dynamit
+        if (zabojca == null) {
+            wyplujln("Akcje:");
+            zwiekszWciecie();
+            wyplujln("MARTWY");
+            zmniejszWciecie();
+        }
     }
 
     @Override

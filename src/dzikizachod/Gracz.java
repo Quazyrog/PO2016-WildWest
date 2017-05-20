@@ -95,11 +95,12 @@ public abstract class Gracz {
      * Zmienia punkty życia gracza o podana liczbę.
      * Punkty życia nie spadną do wartości mniejszej niż 0.
      * @param delta liczba dodana do punktów życia
+     * @param zrodloAtaku gracz, który uleczyl lub zaatakował; <code>null</code> w przypadku dynamitu
      */
-    public void dodajPZ(int delta) {
+    public void dodajPZ(int delta, Gracz zrodloAtaku) {
         pz = Math.max(0, Math.min(limitPZ, pz + delta));
         if (pz == 0) {
-            gra.graczUmarl(this);
+            gra.graczUmarl(this, zrodloAtaku);
             for (Akcja a : Akcja.values()) {
                 try {
                     while (ileAkcji(a) > 0)
@@ -246,7 +247,7 @@ public abstract class Gracz {
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.ULECZ);
         gra.oglosWykonanieAkcji(this, Akcja.ULECZ, cel);
-        cel.dodajPZ(1);
+        cel.dodajPZ(1, this);
     }
 
     /**
@@ -262,7 +263,7 @@ public abstract class Gracz {
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.STRZEL);
         gra.oglosWykonanieAkcji(this, Akcja.STRZEL, cel);
-        cel.dodajPZ(-1);
+        cel.dodajPZ(-1, this);
     }
 
     /**
