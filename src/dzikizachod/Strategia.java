@@ -16,12 +16,12 @@ abstract public class Strategia implements IObserwator {
     private StrategicznyWidokGracza mojWidok;
 
     /** Szeryf */
-    private Gracz szeryf;
+    private StrategicznyWidokGracza widokSzeryfa;
 
 
     @Override
-    final public void patrzPoczatekGry(Gracz[] gracze, Gracz szeryf, int liczbaBandytów, int liczbaPomocników) {
-        this.szeryf = szeryf;
+    final public void patrzPoczatekGry(StrategicznyWidokGracza[] gracze, StrategicznyWidokGracza szeryf, int liczbaBandytów, int liczbaPomocników) {
+        widokSzeryfa = szeryf;
     }
 
     @Override
@@ -71,7 +71,7 @@ abstract public class Strategia implements IObserwator {
     }
 
     final protected StrategicznyWidokGracza szeryf() {
-        return new StrategicznyWidokGracza(marionetka, szeryf);
+        return widokSzeryfa;
     }
 
     abstract protected void ogarnijWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim);

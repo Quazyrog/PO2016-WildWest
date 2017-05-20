@@ -11,7 +11,7 @@ public interface IObserwator {
      * @param liczbaBandytów ile jest bandytów
      * @param liczbaPomocników ile jest pomocników
      */
-    void patrzPoczatekGry(Gracz gracze[], Gracz szeryf, int liczbaBandytów, int liczbaPomocników);
+    void patrzPoczatekGry(StrategicznyWidokGracza[] gracze, StrategicznyWidokGracza szeryf, int liczbaBandytów, int liczbaPomocników);
 
 
     /**
@@ -25,21 +25,21 @@ public interface IObserwator {
      * Wysyłane na początku ruchu gracza
      * @param ktoGra gracz, który zaczyna ruch
      */
-    void patrzRuchGracza(Gracz ktoGra);
+    void patrzRuchGracza(StrategicznyWidokGracza ktoGra);
 
     /**
      * Wysyłane, kiedy grajacy gracz dobiera akcje
      * @param ktoGra grający
      * @param a akcja, którą dobrał
      */
-    void patrzDobralAkcje(Gracz ktoGra, Akcja a);
+    void patrzDobralAkcje(StrategicznyWidokGracza ktoGra, Akcja a);
 
     /**
      * Wysyłane po rozstrzygnięciu czy dynamit wybuchł.
      * @param ktoGra grający
      * @param wybuchl czy dynamit wybuchł
      */
-    void patrzNaDynamit(Gracz ktoGra, boolean wybuchl);
+    void patrzNaDynamit(StrategicznyWidokGracza ktoGra, boolean wybuchl);
 
     /**
      * Wysyłane, kiedy grający gracz wykona akcję.
@@ -51,13 +51,13 @@ public interface IObserwator {
      *              - w przypadku zwiększenia zasięgu, grający (czyli <code>ktoGra</code>)
      *              - w przypadku dynamitu, <code>null</code>
      */
-    void patrzWykonalAkcje(Gracz ktoGra, Akcja a, Gracz naKim);
+    void patrzWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim);
 
     /**
      * Wysyłane, kiedy grający gracz kończy swoją turę.
      * @param ktoGra grający
      */
-    void patrzSkonczylTure(Gracz ktoGra);
+    void patrzSkonczylTure(StrategicznyWidokGracza ktoGra);
 
 
     /**
@@ -65,7 +65,7 @@ public interface IObserwator {
      * @param ofiara gracz, który został zabity
      * @param zabojca gracz który zabił; jeśli śmierć spowodowana została przez dynamit, to rzucajacy jest zabujcą
      */
-    void patrzZabojstwo(Gracz ofiara, Gracz zabojca);
+    void patrzZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca);
 
 
     /**

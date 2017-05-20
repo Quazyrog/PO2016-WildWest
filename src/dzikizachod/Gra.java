@@ -1,5 +1,6 @@
 package dzikizachod;
 
+import com.sun.corba.se.spi.activation.InvalidORBid;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.util.*;
@@ -11,11 +12,19 @@ public class Gra { //TODO całość implementacji obsetwatorów
     protected final int LICZBA_DOBIERANYCH_AKCJI = 5;
 
     private PulaAkcji pulaAkcji;
-    private ArrayList<Gracz> gracze;
     private Random rng = new Random();
-    private Set<IObserwator> obserwatorzy = new HashSet<>();
+
+    private ArrayList<Gracz> gracze;
     private int liczbaBandytów;
     private Gracz szeryf;
+
+    private Set<IObserwator> obserwatorzy = new HashSet<>();
+    private StrategicznyWidokGracza widokiGraczy[];
+    private StrategicznyWidokGracza widokSzeryfa;
+
+    private Gracz obecnyGracz;
+    private int numerTury;
+    private StrategicznyWidokGracza widokObecnegoGracza;
 
 
     /**
@@ -74,30 +83,6 @@ public class Gra { //TODO całość implementacji obsetwatorów
     }
 
     /**
-     * Rozgrywa grę w pętli.
-     * X) Bawcie się dobrze
-     */
-    protected void bawcieSieDobrze(String kto) {
-        assert kto.equals("");
-
-        Gracz grajacy = szeryf;
-        while (!czyKoniecGry()) {
-            for (int i = 0; i < LICZBA_DOBIERANYCH_AKCJI; ++i)
-                grajacy.dobierz(pulaAkcji.dobierz());
-            grajacy.graj();
-            grajacy = grajacy.przeskocz(1);
-        }
-    }
-
-    /**
-     * Zwraca odpowiedź na pytanie ,,Czy gra toczy się dalej?''
-     * @return <code>true</code> kiey gra jeszcze trwa
-     */
-    public boolean czyKoniecGry() {
-        return liczbaBandytów != 0 && szeryf.pz() > 0;
-    }
-
-    /**
      * Wykonuje różnorakie operacje potrzebne przed przeprowadzeniem rozgrywki.
      * Przed wywołaniem, nalezy przypisac do pól obiektu kolekcje graczy.
      */
@@ -105,6 +90,23 @@ public class Gra { //TODO całość implementacji obsetwatorów
         sprawdzTabliceGraczy();
         potasujGraczy();
         przygotujGraczy();
+        przygotujWidokiGraczy();
+    }
+
+    /**
+     * Tworzy widoki dla wszystkich graczy, które będą przekazywane obserwatorom gry.
+     * Dba o to, aby na jednego gracza zawsze przypadał jeden widok. Każdy widok jest tworzony tak, aby udzielić pełnej
+     * informacji o graczu (podglądający gracza jest graczem podglądanym).
+     */
+    private void przygotujWidokiGraczy() {
+        widokiGraczy = new StrategicznyWidokGracza[gracze.size()];
+        widokSzeryfa = null;
+        for (int i = 0; i < gracze.size(); ++i) {
+            Gracz g = gracze.get(i);
+            widokiGraczy[i] = new StrategicznyWidokGracza(g, g);
+            if (g.tozsamosc() == TozsamoscGracza.SZERYF)
+                widokSzeryfa = widokiGraczy[i];
+        }
     }
 
     /**
@@ -148,6 +150,66 @@ public class Gra { //TODO całość implementacji obsetwatorów
         gracze.get(gracze.size() - 1).przygotujDoGry(this, gracze.get(gracze.size() - 2), gracze.get(0), gracze.size() - 1);
     }
 
+    /**
+     * Zwraca odpowiedź na pytanie ,,Czy gra toczy się dalej?''
+     * @return <code>true</code> kiey gra jeszcze trwa
+     */
+    public boolean czyKoniecGry() {
+        return liczbaBandytów != 0 && szeryf.pz() > 0;
+    }
+
+    /**
+     * Rozgrywa grę w pętli.
+     * X) Bawcie się dobrze
+     */
+    protected void bawcieSieDobrze(String kto) {
+        assert kto.equals("");
+
+        obecnyGracz = szeryf;
+        numerTury = 0;
+        for (IObserwator o : obserwatorzy)
+            o.patrzPoczatekGry(widokiGraczy, widokSzeryfa, liczbaBandytów, gracze.size() - liczbaBandytów - 1);
+
+        while (!czyKoniecGry()) {
+            if (obecnyGracz == szeryf) {
+                ++numerTury;
+                for (IObserwator o : obserwatorzy)
+                    o.patrzKolejnaTura(numerTury);
+            }
+
+            widokObecnegoGracza = widokiGraczy[obecnyGracz.identyfikator()];
+            for (IObserwator o : obserwatorzy)
+                o.patrzRuchGracza(widokObecnegoGracza);
+
+            dajAkcje();
+            obecnyGracz.graj();
+            obecnyGracz = obecnyGracz.przeskocz(1);
+
+            for (IObserwator o : obserwatorzy)
+                o.patrzSkonczylTure(widokObecnegoGracza);
+        }
+
+        //Oglos koniec gry
+        for (IObserwator o : obserwatorzy)
+            o.patrzKoniecGry(szeryf.pz() > 0);
+    }
+
+    protected void dajAkcje() {
+        for (int i = 0; i < LICZBA_DOBIERANYCH_AKCJI; ++i) {
+            Akcja a = pulaAkcji.dobierz();
+            for (IObserwator o : obserwatorzy)
+                o.patrzDobralAkcje(widokObecnegoGracza, a);
+            obecnyGracz.dobierz(a);
+        }
+    }
+
+    protected void rozstrzygnijDynamit() {
+        boolean kabum = rng.nextInt(6) == 0;
+        StrategicznyWidokGracza w = widokiGraczy[obecnyGracz.identyfikator()];
+        for (IObserwator o : obserwatorzy)
+            o.patrzNaDynamit(w, kabum);
+    }
+
     void uruchomDynamit() {
         //TODO ...
     }
@@ -162,9 +224,13 @@ public class Gra { //TODO całość implementacji obsetwatorów
 
     /**
      * Gracz informuje w ten sposób grę, że umarł.
-     * @param gracz
+     * @param gracz nieboszczyk
      */
     void graczUmarl(Gracz gracz) {
+        StrategicznyWidokGracza strasznyWidok = widokiGraczy[gracz.identyfikator()];
+        for (IObserwator o : obserwatorzy)
+            o.patrzZabojstwo(strasznyWidok, widokObecnegoGracza);
+
         if (gracz.tozsamosc() == TozsamoscGracza.BANDYTA) {
             --liczbaBandytów;
         }
@@ -177,8 +243,19 @@ public class Gra { //TODO całość implementacji obsetwatorów
         //(w funkcji przeskocz)
     }
 
+    /**
+     * Ogłasza wszystkim obserwatorom wykonanie akcji przez gracza.
+     * Ta metoda jest wywoływana przez gracza wykonującego akcje.
+     * @param kto gracz wykonujący akcję
+     * @param a wykonana akcja
+     * @param naKim gracz, na którym wykonano akcję (null w przypadku dynamitu)
+     */
     void oglosWykonanieAkcji(Gracz kto, Akcja a, Gracz naKim) {
-        //TODO ...
+
+        StrategicznyWidokGracza wKto = widokiGraczy[kto.identyfikator()];
+        StrategicznyWidokGracza wNaKim = naKim != null ? widokiGraczy[naKim.identyfikator()] : null;
+        for (IObserwator o : obserwatorzy)
+            o.patrzWykonalAkcje(wKto, a, wNaKim);
     }
 
     /**

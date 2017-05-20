@@ -3,7 +3,7 @@ package dzikizachod;
 /**
  * Proxy dostępu do gracza, które pozawala tylko na odczytywanie jego stanu, bez modyfikacji.
  */
-class StrategicznyWidokGracza {
+public class StrategicznyWidokGracza {
     protected Gracz gracz;
     protected Gracz podgladacz;
 
@@ -54,6 +54,10 @@ class StrategicznyWidokGracza {
 
     public int numer() {
         return gracz.numer();
+    }
+
+    public int identyfikator() {
+        return gracz.identyfikator();
     }
 
     public boolean czyKoniecGry() {
