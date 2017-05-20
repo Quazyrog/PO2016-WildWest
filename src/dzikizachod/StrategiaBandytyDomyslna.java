@@ -19,24 +19,18 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty {
     public void patrzKoniecGry(boolean czyDobroWygralo) {}
 
     @Override
-    protected void ogarnijPoczatekGry(ReprezentacjaGracza[] gracze, ReprezentacjaGracza szeryf, int liczbaBandytów, int liczbaPomocników) {}
+    protected void ogarnijWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {}
 
     @Override
-    protected void ogarnijRuchGracza(ReprezentacjaGracza ktoGra) {}
-
-    @Override
-    protected void ogarnijWykonalAkcje(ReprezentacjaGracza ktoGra, Akcja a, ReprezentacjaGracza naKim) {}
-
-    @Override
-    protected void ogarnijZabojstwo(ReprezentacjaGracza ofiara, ReprezentacjaGracza zabojca) {}
+    protected void ogarnijZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {}
 
     protected void najazdNaSzeryfa() throws BladKonrtoleraWyjatek {
-        int doSzeryfa = odlegloscIKierunekOd(szeryf);
-        if (Math.abs(doSzeryfa) <= zasieg()) {
-            while (ileAkcji(Akcja.STRZEL) > 0)
-                akcjaStrzel(szeryf);
+        int doSzeryfa = ja().odlegloscIKierunekOd(szeryf());
+        if (Math.abs(doSzeryfa) <= ja().zasieg()) {
+            while (ja().ileAkcji(Akcja.STRZEL) > 0)
+                akcjaStrzel(szeryf());
         } else {
-            ReprezentacjaGracza cel = losowyPomocnikWZasieguNaLuku(doSzeryfa);
+            StrategicznyWidokGracza cel = losowyPomocnikWZasieguNaLuku(doSzeryfa);
             if (cel == null)
                 cel = losowyPomocnikWZasieguNaLuku(-doSzeryfa);
             if (cel == null)
@@ -48,14 +42,14 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty {
     void graj() throws BladKonrtoleraWyjatek {
         super.graj();
         try {
-            while (ileAkcji(Akcja.STRZEL) > 0)
+            while (ja().ileAkcji(Akcja.STRZEL) > 0)
                 najazdNaSzeryfa();
         } catch (NieDaSieNicZrobicWyjatek ignored) {
         } catch (BladKonrtoleraWyjatek e) {
             e.printStackTrace();
         }
 
-        if (ileAkcji(Akcja.DYNAMIT) > 0 && odlegloscSkierowanOd(1, szeryf) < 3)
+        if (ja().ileAkcji(Akcja.DYNAMIT) > 0 && ja().odlegloscSkierowanOd(1, szeryf()) < 3)
             akcjaDynamit();
     }
 }

@@ -9,11 +9,11 @@ import java.util.Random;
 public abstract class StrategiaBandyty extends StrategiaOgolna {
     protected Random rng = new Random();
 
-    protected ReprezentacjaGracza losowyPomocnikWZasieguNaLuku(int kierunek) {
-        ReprezentacjaGracza iter = ja().przeskocz(kierunek);
-        ArrayList<ReprezentacjaGracza> znalezieniPomocnicy = new ArrayList<>();
+    protected StrategicznyWidokGracza losowyPomocnikWZasieguNaLuku(int kierunek) {
+        StrategicznyWidokGracza iter = ja().przeskocz(kierunek);
+        ArrayList<StrategicznyWidokGracza> znalezieniPomocnicy = new ArrayList<>();
 
-        for (int odleglosc = 1; odleglosc < zasieg(); ++odleglosc) {
+        for (int odleglosc = 1; odleglosc < ja().zasieg(); ++odleglosc) {
             if (iter.tozsamosc() == TozsamoscGracza.POMOCNIK_SZERYFA)
                 znalezieniPomocnicy.add(iter);
             iter = iter.przeskocz(kierunek);

@@ -11,11 +11,11 @@ public abstract class StrategiaOgolna extends Strategia {
      */
     @Override
     void graj() throws BladKonrtoleraWyjatek {
-        while (ileAkcji(Akcja.ZASIEG_PLUS_JEDEN) > 0)
+        while (ja().ileAkcji(Akcja.ZASIEG_PLUS_JEDEN) > 0)
             akcjaZasiegPlusJeden();
-        while (ileAkcji(Akcja.ZASIEG_PLUS_DWA) > 0)
+        while (ja().ileAkcji(Akcja.ZASIEG_PLUS_DWA) > 0)
             akcjaZasiegPlusDwa();
-        while (ileAkcji(Akcja.ULECZ) > 0 && pz() < maksymalnePZ())
+        while (ja().ileAkcji(Akcja.ULECZ) > 0 && ja().pz() < ja().maksymalnePZ())
             akcjaUlecz(ja());
     }
 }

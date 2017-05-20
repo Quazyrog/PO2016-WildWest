@@ -8,10 +8,10 @@ import java.util.ArrayList;
  */
 public abstract class StrategiaSzeryfa extends StrategiaOgolna {
     /** Lista żywych graczy, którzy zaatakowali tego gracza. */
-    protected ArrayList<ReprezentacjaGracza> paskudniBandyci = new ArrayList<>();
+    protected ArrayList<StrategicznyWidokGracza> paskudniBandyci = new ArrayList<>();
 
     @Override
-    protected void ogarnijWykonalAkcje(ReprezentacjaGracza ktoGra, Akcja a, ReprezentacjaGracza naKim) {
+    protected void ogarnijWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {
         switch (a) {
             case STRZEL:
                 if (naKim.equals(ja()) && !paskudniBandyci.contains(ktoGra))
@@ -21,7 +21,7 @@ public abstract class StrategiaSzeryfa extends StrategiaOgolna {
     }
 
     @Override
-    protected void ogarnijZabojstwo(ReprezentacjaGracza ofiara, ReprezentacjaGracza zabojca) {
+    protected void ogarnijZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {
         paskudniBandyci.remove(ofiara);
     }
 }

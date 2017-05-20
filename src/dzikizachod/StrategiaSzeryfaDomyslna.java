@@ -12,28 +12,19 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
     @Override
     public void patrzKoniecGry(boolean czyDobroWygralo) {}
 
-    @Override
-    protected void
-    ogarnijPoczatekGry(ReprezentacjaGracza[] gracze, ReprezentacjaGracza szeryf,
-                       int liczbaBandytów, int liczbaPomocników)
-    {}
-
-    @Override
-    protected void ogarnijRuchGracza(ReprezentacjaGracza ktoGra) {}
-
-    protected ArrayList<ReprezentacjaGracza> paskudyWZasiegu() {
-        ArrayList<ReprezentacjaGracza> wynik = new ArrayList<>();
-        for (ReprezentacjaGracza paskuda : paskudniBandyci) {
-            if (odlegloscOd(paskuda) <= zasieg())
+    protected ArrayList<StrategicznyWidokGracza> paskudyWZasiegu() {
+        ArrayList<StrategicznyWidokGracza> wynik = new ArrayList<>();
+        for (StrategicznyWidokGracza paskuda : paskudniBandyci) {
+            if (ja().odlegloscOd(paskuda) <= ja().zasieg())
                 wynik.add(paskuda);
         }
         return wynik;
     }
 
     protected void zwalczPaskudy() throws BladKonrtoleraWyjatek {
-        ArrayList<ReprezentacjaGracza> paskudy = paskudyWZasiegu();
-        while (ileAkcji(Akcja.STRZEL) > 0 && paskudy.size() > 0) {
-            ReprezentacjaGracza paskuda = paskudy.get(rng.nextInt(paskudy.size()));
+        ArrayList<StrategicznyWidokGracza> paskudy = paskudyWZasiegu();
+        while (ja().ileAkcji(Akcja.STRZEL) > 0 && paskudy.size() > 0) {
+            StrategicznyWidokGracza paskuda = paskudy.get(rng.nextInt(paskudy.size()));
             akcjaStrzel(paskuda);
             if (paskuda.pz() == 0)
                 paskudy.remove(paskuda);
@@ -41,24 +32,24 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
     }
 
     protected void zwalczRandomy() throws BladKonrtoleraWyjatek {
-        while (ileAkcji(Akcja.STRZEL) > 0) {
-            int zasiegRandomowania = Math.min(zasieg(), liczbaGraczy() - 1);
+        while (ja().ileAkcji(Akcja.STRZEL) > 0) {
+            int zasiegRandomowania = Math.min(ja().zasieg(), ja().liczbaGraczy() - 1);
             int polozenieWzgledneCelu = (rng.nextInt(1) * 2 - 1) * (rng.nextInt(zasiegRandomowania) + 1);
-            akcjaStrzel(dalekiSasiad(polozenieWzgledneCelu));
+            akcjaStrzel(ja().dalekiSasiad(polozenieWzgledneCelu));
         }
     }
 
     @Override
-    void graj() {
+    void graj() throws BladKonrtoleraWyjatek {
         super.graj();
-        if (ileAkcji(Akcja.STRZEL) == 0)
+        if (ja().ileAkcji(Akcja.STRZEL) == 0)
             return; //Smutny szeryf nie ma naboi
 
         try {
             zwalczPaskudy();
             zwalczRandomy();
         } catch (BladKonrtoleraWyjatek e) {
-            if (!czyKoniecGry()) {
+            if (!ja().czyKoniecGry()) {
                 e.printStackTrace();
                 throw new Error("To się nie powinno zdażyc!", e);
             }

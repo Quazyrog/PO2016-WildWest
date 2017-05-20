@@ -35,6 +35,7 @@ public abstract class Gracz {
     /** Ustawiane na <code>true</code>, gdy gracz wykonuje ruch i na <code>false</code>, gdy już skończy */
     private boolean wykonujeRuch;
 
+
     /**
      * Inicjuje gracza opodana strategią oraz ustawia mu liczbę punktów życia
      * @param kontroler strategia kontrolujaca
@@ -45,6 +46,14 @@ public abstract class Gracz {
         this.pz = pz;
         this.kontroler = kontroler;
         kontroler.przypiszGracza(this);
+    }
+
+    /**
+     * Inicjuje gracza opodana strategią oraz ustawia mu losowo 3 lub 4 PZ
+     * @param kontroler strategia kontrolujaca
+     */
+    public Gracz(Strategia kontroler) {
+        this(kontroler, 3 + rng.nextInt(1));
     }
 
     /**
@@ -61,14 +70,6 @@ public abstract class Gracz {
         if (wKierunku > 0)
             return poPrawej;
         throw new Error("To się nie powinno zdażyć");
-    }
-
-    /**
-     * Inicjuje gracza opodana strategią oraz ustawia mu losowo 3 lub 4 PZ
-     * @param kontroler strategia kontrolujaca
-     */
-    public Gracz(Strategia kontroler) {
-        this(kontroler, 3 + rng.nextInt(1));
     }
 
     /**
