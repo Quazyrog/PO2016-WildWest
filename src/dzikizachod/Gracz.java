@@ -340,6 +340,7 @@ public abstract class Gracz {
         this.numer = numer;
         this.identyfikator = numer;
         pz = limitPZ;
+        gra.dodajObserwatora(kontroler);
     }
 
     /**
