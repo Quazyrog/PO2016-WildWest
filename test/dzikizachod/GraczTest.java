@@ -23,7 +23,7 @@ class TestowyGracz extends Gracz {
 
 public class GraczTest {
     private Gracz gracze[];
-    private Gra gra = new Gra();
+    private Gra gra;
 
     public GraczTest() {
         gracze = new Gracz[]{
@@ -33,6 +33,17 @@ public class GraczTest {
                 new TestowyGracz(),
                 new TestowyGracz(),
                 new TestowyGracz()
+        };
+        gra = new Gra(){
+            @Override
+            public int liczbaGrczy() {
+                return gracze.length;
+            }
+
+            @Override
+            Gracz graczONumerze(int numer) {
+                return gracze[numer];
+            }
         };
 
         for (int i = 1; i < gracze.length - 1; ++i)

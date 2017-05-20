@@ -76,6 +76,14 @@ abstract public class Strategia implements IObserwator {
         public int numer() {
             return gracz.numer();
         }
+
+        public int odlegloscIKierunekOd(ReprezentacjaGracza gracz) {
+            return this.gracz.odlegloscIKierunekOd(gracz.gracz);
+        }
+
+        public ReprezentacjaGracza przeskocz(int kierunek) {
+            return new ReprezentacjaGracza(gracz.przeskocz(kierunek));
+        }
     //KONIEC METOD DELEGOWANYCH Z REPREZENTOWANEGO GRAZCZA
     }
 
@@ -142,6 +150,10 @@ abstract public class Strategia implements IObserwator {
 
     final protected int ileAkcji(Akcja akcja) {
         return marionetka.ileAkcji(akcja);
+    }
+
+    public int odlegloscIKierunekOd(ReprezentacjaGracza gracz) {
+        return marionetka.odlegloscIKierunekOd(gracz.gracz);
     }
 //KONIEC METOD DELEGOWANYCH Z KONTROLOWANEGO GRACZA
 

@@ -36,23 +36,6 @@ public abstract class Gracz {
     private boolean wykonujeRuch;
 
     /**
-     * W zależności od znaku kierunku zwraca gracza po lewej lub prawej od podanego.
-     * Dziki Zachód jest miejscem, w którym panuje orientacja dodatnia, więc naturalnym kierunkiem gry jest kierunek
-     * przeciwny do ruchu wskazówek zegara. Wobec tego kierunek ujemny oznacza gracza po lewej, a dodatni po prawej.
-     * @param odGracza gracz, którego sąsiada potrzebujemy
-     * @param wKierunku kierunek, oznaczający lewego sąsiada (kierunek ujemny) lub prawego (dodatni); nie może być 0
-     * @return <c>odGracza.poLewej</c> gdy <c>kierunek < 0</c>; <c>odGracza.poPrawej</c> gdy <c>kierunek > 0</c>
-     */
-    static private Gracz przeskocz(Gracz odGracza, int wKierunku) {
-        assert wKierunku != 0;
-        if (wKierunku < 0)
-            return odGracza.poLewej;
-        if (wKierunku > 0)
-            return odGracza.poPrawej;
-        throw new Error("To się nie powinno zdażyć");
-    }
-
-    /**
      * Inicjuje gracza opodana strategią oraz ustawia mu liczbę punktów życia
      * @param kontroler strategia kontrolujaca
      * @param pz maksymalne punkty życia (tyle samo będzie początkowych)
@@ -62,6 +45,22 @@ public abstract class Gracz {
         this.pz = pz;
         this.kontroler = kontroler;
         kontroler.przypiszGracza(this);
+    }
+
+    /**
+     * W zależności od znaku kierunku zwraca gracza po lewej lub prawej od podanego.
+     * Dziki Zachód jest miejscem, w którym panuje orientacja dodatnia, więc naturalnym kierunkiem gry jest kierunek
+     * przeciwny do ruchu wskazówek zegara. Wobec tego kierunek ujemny oznacza gracza po lewej, a dodatni po prawej.
+     * @param wKierunku kierunek, oznaczający lewego sąsiada (kierunek ujemny) lub prawego (dodatni); nie może być 0
+     * @return <c>odGracza.poLewej</c> gdy <c>kierunek < 0</c>; <c>odGracza.poPrawej</c> gdy <c>kierunek > 0</c>
+     */
+    public Gracz przeskocz(int wKierunku) {
+        assert wKierunku != 0;
+        if (wKierunku < 0)
+            return poLewej;
+        if (wKierunku > 0)
+            return poPrawej;
+        throw new Error("To się nie powinno zdażyć");
     }
 
     /**
@@ -85,8 +84,17 @@ public abstract class Gracz {
      */
     public void dodajPZ(int delta) {
         pz = Math.max(0, Math.min(limitPZ, pz + delta));
-        if (pz == 0)
+        if (pz == 0) {
             gra.graczUmarl(this);
+            for (Akcja a : Akcja.values()) {
+                try {
+                    while (ileAkcji(a) > 0)
+                        odrzucAkcje(a);
+                } catch (BrakAkcjiWyjatek e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
@@ -139,16 +147,9 @@ public abstract class Gracz {
      * @return gracza znajdującego się we wskazanej odległości na prawo lub lewo od tego gracza
      */
     public Gracz dalekiSasiad(int odlegloscSkierowana) {
-        if (odlegloscSkierowana == 0)
-            return this;
-        Gracz iter = this;
-        while (odlegloscSkierowana != 0) {
-            iter = przeskocz(iter, odlegloscSkierowana);
-            odlegloscSkierowana -= Integer.signum(odlegloscSkierowana);
-            if (iter == this)
-                throw new ArrayIndexOutOfBoundsException();
-        }
-        return iter;
+        if (Math.abs(odlegloscSkierowana) >= gra.liczbaGrczy())
+            throw new ArrayIndexOutOfBoundsException();
+        return gra.graczONumerze((gra.liczbaGrczy() + odlegloscSkierowana + numer) % gra.liczbaGrczy());
     }
 
     /**
@@ -157,7 +158,41 @@ public abstract class Gracz {
      * @return odległość tego gracza od podanego
      */
     public int odlegloscOd(Gracz gracz) {
-        return Math.min(odlegloscSkierowanOd(-1, gracz), odlegloscSkierowanOd(1, gracz));
+        return Math.abs(odlegloscIKierunekOd(gracz));
+    }
+
+    /**
+     * Mierzy odległość pomiędzy tym graczem, a wskazanym w parametrze; zwraca dodatkowo informację o kierunku
+     * @param gracz gracz, do którego mierzymy odległość. Musi być żywy i brać udział w tej samej rozgrywce.
+     * @return liczbę całkowita o module równym odległości do wskazanego gracza, której znak zależy od kierunku jej
+     * mierzenia (dodatni -- zgodnie z kierunkiem gry, ujemny -- przeciwnie do niefgo)
+     */
+    public int odlegloscIKierunekOd(Gracz gracz) {
+        int przeciwna = odlegloscSkierowanOd(-1, gracz);
+        int zgodna = odlegloscSkierowanOd(1, gracz);
+        if (zgodna <= przeciwna)
+            return zgodna;
+        return -przeciwna;
+    }
+
+    /**
+     * Mierzy odległosć w danym kierunku do podanego gracza.
+     * @param kierunek dodatni oznacza odległośc na peawo, ujemny w lewo (nie może być 0)
+     * @param gracz gracz, do którego mierzymy odległość
+     * @return odległość od gracza mierząoną we wskazanym kierunku
+     */
+    public int odlegloscSkierowanOd(int kierunek, Gracz gracz) {
+        if (kierunek == 0)
+            throw new IllegalArgumentException();
+        if (gracz == this)
+            return 0;
+        if (numer < gracz.numer) {
+            int zgodnaOdleglosc = gracz.numer - numer;
+            if (kierunek > 0)
+                return zgodnaOdleglosc;
+            return gra.liczbaGrczy() - zgodnaOdleglosc;
+        }
+        return gracz.odlegloscSkierowanOd(-kierunek, this);
     }
 
     /**
@@ -279,32 +314,6 @@ public abstract class Gracz {
      */
     void dobierz(Akcja coDobral) {
         akcje.dodaj(coDobral, 1);
-    }
-
-    /**
-     * Mierzy odległosć w danym kierunku do podanego gracza.
-     * @param kierunek dodatni oznacza odległośc na peawo, ujemny w lewo
-     * @param gracz gracz, do którego mierzymy odległość
-     * @return odległość od gracza mierząoną we wskazanym kierunku
-     */
-    private int odlegloscSkierowanOd(int kierunek, Gracz gracz) {
-        assert kierunek != 0;
-        if (gracz.gra != gra)
-            throw new IllegalArgumentException("gracze muszą byc w tej samej rozgrywce i obaj żywi");
-        if (gracz == this)
-            return 0;
-        kierunek = Integer.signum(kierunek);
-
-        int odleglosc = 0;
-        Gracz iter = this;
-        do {
-            ++odleglosc;
-            iter = przeskocz(iter, kierunek);
-        } while (iter != this && iter != gracz);
-
-        if (iter == gracz)
-            return odleglosc;
-        throw new Error("To się nie powinno zdażyć");
     }
 
     /**
