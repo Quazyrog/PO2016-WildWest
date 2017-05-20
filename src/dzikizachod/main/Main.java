@@ -20,7 +20,20 @@ public class Main {
 
     }
 
+    public static void demo2() {
+        System.out.println("Demo 2");
+        Gracz gracze[] = {new Szeryf(), new Bandyta(), new Bandyta(), new Bandyta()};
+
+        PulaAkcji pulaAkcji = new PulaAkcji();
+        pulaAkcji.dodaj(Akcja.STRZEL, 9);
+        pulaAkcji.dodaj(Akcja.DYNAMIT, 1);
+
+        Gra gra = new Gra();
+        gra.rozgrywka(gracze, pulaAkcji);
+
+    }
+
     public static void main(String args[]) {
-        demo();
+        demo2();
     }
 }

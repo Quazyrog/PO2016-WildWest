@@ -35,7 +35,7 @@ abstract public class Strategia implements IObserwator {
 
     @Override
     final public void patrzWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {
-        ogarnijWykonalAkcje(new StrategicznyWidokGracza(marionetka, ktoGra), a, new StrategicznyWidokGracza(marionetka, naKim));
+        ogarnijWykonalAkcje(ktoGra, a, naKim);
     }
 
     @Override

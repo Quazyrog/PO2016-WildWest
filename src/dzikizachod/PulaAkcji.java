@@ -40,7 +40,7 @@ public class PulaAkcji {
             throw new IllegalArgumentException("Nie można zabrać kart z puli");
 
         int dodane = akcja.obetnijDoLimitu(sciepy.ileTypu(akcja) + ile) - sciepy.ileTypu(akcja);
-        sciepy.dodaj(akcja, dodane);
+        talia.dodaj(akcja, dodane);
         return dodane;
     }
 
@@ -92,7 +92,7 @@ public class PulaAkcji {
         int ktora = rng.nextInt(talia.ileWszystkich());
         for (Akcja a : Akcja.values()) {
             ktora -= talia.ileTypu(a);
-            if (ktora <= 0)
+            if (ktora < 0 && talia.ileTypu(a) > 0)
                 return a;
         }
         throw new Error("talia.ileRoznych() nie zadziałało");

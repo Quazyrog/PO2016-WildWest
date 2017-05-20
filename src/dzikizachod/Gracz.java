@@ -215,7 +215,7 @@ public abstract class Gracz {
      * @return odległość od gracza mierząoną we wskazanym kierunku
      */
     public int odlegloscSkierowanOd(int kierunek, Gracz gracz) throws NieInteresujSieTrupemWyjatek {
-        if (pz == 0)
+        if (pz == 0 || gracz.pz() == 0)
             throw new NieInteresujSieTrupemWyjatek();
         if (kierunek == 0)
             throw new IllegalArgumentException();
