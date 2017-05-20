@@ -1,9 +1,8 @@
 package dzikizachod;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
+import java.util.*;
 
 /**
  * Reprezentacja całej gry
@@ -12,8 +11,30 @@ public class Gra { //TODO całość implementacji obsetwatorów
     private PulaAkcji pulaAkcji;
     private ArrayList<Gracz> gracze;
     private Random rng = new Random();
-    int liczbaBandytów;
-    Gracz szeryf;
+    private Set<IObserwator> obserwatorzy = new HashSet<>();
+    private int liczbaBandytów;
+    private Gracz szeryf;
+
+
+    /**
+     * Dodaje obserwatora rozgrywki.
+     * @param obserwator obserwator do dodania.
+     */
+    public void dodajObserwatora(IObserwator obserwator) {
+        if (obserwator == null)
+            throw new NullPointerException();
+        obserwatorzy.add(obserwator);
+    }
+
+    /**
+     * Usuwa obserwatora rozgrywki.
+     * @param obserwator obserwator do usunięcia.
+     */
+    public void usunObserwatora(IObserwator obserwator) {
+        if (obserwator == null)
+            throw new NullPointerException();
+        obserwatorzy.remove(obserwator);
+    }
 
     /**
      * Zwraca liczbę żywych grajacych
@@ -23,10 +44,20 @@ public class Gra { //TODO całość implementacji obsetwatorów
         return gracze.size();
     }
 
+    /**
+     * Rozgrywa grę z podanymi graczami i pulą akcji.
+     * @param gracze lista graczy
+     * @param pulaAkcji pula z akcjami
+     */
     public void rozgrywka(Gracz gracze[], PulaAkcji pulaAkcji) {
         rozgrywka(Arrays.asList(gracze), pulaAkcji);
     }
 
+    /**
+     * Rozgrywa grę z podanymi graczami i pulą akcji.
+     * @param gracze lista graczy
+     * @param pulaAkcji pula z akcjami
+     */
     public void rozgrywka(List gracze, PulaAkcji pulaAkcji) {
         if (pulaAkcji == null)
             throw new NullPointerException();
@@ -102,10 +133,18 @@ public class Gra { //TODO całość implementacji obsetwatorów
         //TODO ...
     }
 
+    /**
+     * Zwraca akcję z powrotem do puli.
+     * @param akcja
+     */
     void oddajAkcje(Akcja akcja) {
         pulaAkcji.odrzuc(akcja);
     }
 
+    /**
+     * Gracz informuje w ten sposób grę, że umarł.
+     * @param gracz
+     */
     void graczUmarl(Gracz gracz) {
         if (gracz.tozsamosc() == TozsamoscGracza.BANDYTA) {
             --liczbaBandytów;
@@ -123,6 +162,12 @@ public class Gra { //TODO całość implementacji obsetwatorów
         //TODO ...
     }
 
+    /**
+     * Zwraca gracza o podanym numerze, spośród żyjących graczy.
+     * Numery są ustalane po przetasowaniu graczy, a potem dodatkowo zmieniają się w trakcie gry.
+     * @param numer numer gracza
+     * @return gracza o numerze <code>numer</code>
+     */
     Gracz graczONumerze(int numer) {
         return gracze.get(numer);
     }
