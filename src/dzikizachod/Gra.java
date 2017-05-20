@@ -8,6 +8,8 @@ import java.util.*;
  * Reprezentacja całej gry
  */
 public class Gra { //TODO całość implementacji obsetwatorów
+    protected final int LICZBA_DOBIERANYCH_AKCJI = 5;
+
     private PulaAkcji pulaAkcji;
     private ArrayList<Gracz> gracze;
     private Random rng = new Random();
@@ -68,6 +70,23 @@ public class Gra { //TODO całość implementacji obsetwatorów
         this.pulaAkcji = pulaAkcji;
 
         przygotujRozgrywke();
+        bawcieSieDobrze("");
+    }
+
+    /**
+     * Rozgrywa grę w pętli.
+     * X) Bawcie się dobrze
+     */
+    protected void bawcieSieDobrze(String kto) {
+        assert kto.equals("");
+
+        Gracz grajacy = szeryf;
+        while (!czyKoniecGry()) {
+            for (int i = 0; i < LICZBA_DOBIERANYCH_AKCJI; ++i)
+                grajacy.dobierz(pulaAkcji.dobierz());
+            grajacy.graj();
+            grajacy = grajacy.przeskocz(1);
+        }
     }
 
     /**
