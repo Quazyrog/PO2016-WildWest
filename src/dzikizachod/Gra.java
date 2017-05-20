@@ -1,29 +1,45 @@
 package dzikizachod;
 
-import com.sun.corba.se.spi.activation.InvalidORBid;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-
 import java.util.*;
 
 /**
  * Reprezentacja całej gry
  */
-public class Gra { //TODO całość implementacji obsetwatorów
+public class Gra {
+    /** Ile ckcji gracz dobiera w ciągu tury */
     protected final int LICZBA_DOBIERANYCH_AKCJI = 5;
 
+    /** Pula akcji do gry */
     private PulaAkcji pulaAkcji;
+
+    /** RNG do użytku własnego */
     private Random rng = new Random();
 
+    /** Lista graczy w rozgrywce */
     private ArrayList<Gracz> gracze;
+
+    /** Liczba żywych bandytów w rozgrywce */
     private int liczbaBandytów;
+
+    /** Referencja do szeryfa */
     private Gracz szeryf;
 
+    /** Obserwatorzy rozgrywki */
     private Set<IObserwator> obserwatorzy = new HashSet<>();
+
+    /** Widoki wszystkich gracza, także martwych. Nie zmienia się w trakcie gry */
     private StrategicznyWidokGracza widokiGraczy[];
+
+    /** Widok gracza-szeryfa */
     private StrategicznyWidokGracza widokSzeryfa;
 
+    /** Referencja do właśnie grającego gracza. */
     private Gracz obecnyGracz;
-    private int numerTury;
+
+    /** Czy dynamit jest przerzucany */
+    private boolean dynamitIdzie;
+
+    /** Widok na właśnie grającego gracza. */
     private StrategicznyWidokGracza widokObecnegoGracza;
 
 
@@ -74,6 +90,7 @@ public class Gra { //TODO całość implementacji obsetwatorów
             throw new NullPointerException();
         if (gracze == null)
             throw new NullPointerException();
+
         this.gracze = new ArrayList<Gracz>(gracze.size());
         this.gracze.addAll(gracze);
         this.pulaAkcji = pulaAkcji;
@@ -166,7 +183,10 @@ public class Gra { //TODO całość implementacji obsetwatorów
         assert kto.equals("");
 
         obecnyGracz = szeryf;
-        numerTury = 0;
+        int numerTury = 0;
+        dynamitIdzie = false;
+
+        //Oglos poczatek gry
         for (IObserwator o : obserwatorzy)
             o.patrzPoczatekGry(widokiGraczy, widokSzeryfa, liczbaBandytów, gracze.size() - liczbaBandytów - 1);
 
@@ -176,22 +196,29 @@ public class Gra { //TODO całość implementacji obsetwatorów
                 for (IObserwator o : obserwatorzy)
                     o.patrzKolejnaTura(numerTury);
             }
-
-            widokObecnegoGracza = widokiGraczy[obecnyGracz.identyfikator()];
-            for (IObserwator o : obserwatorzy)
-                o.patrzRuchGracza(widokObecnegoGracza);
-
-            dajAkcje();
-            obecnyGracz.graj();
-            obecnyGracz = obecnyGracz.przeskocz(1);
-
-            for (IObserwator o : obserwatorzy)
-                o.patrzSkonczylTure(widokObecnegoGracza);
+            rozegrajTureGracza();
         }
 
         //Oglos koniec gry
         for (IObserwator o : obserwatorzy)
             o.patrzKoniecGry(szeryf.pz() > 0);
+    }
+
+    /**
+     * Fragment kodu rozgrywki odpowiedzialny za przeprowadzenie tury gracza
+     */
+    protected void rozegrajTureGracza() {
+        widokObecnegoGracza = widokiGraczy[obecnyGracz.identyfikator()];
+        for (IObserwator o : obserwatorzy)
+            o.patrzRuchGracza(widokObecnegoGracza);
+
+        dajAkcje();
+        rozstrzygnijDynamit();
+        obecnyGracz.graj();
+        obecnyGracz = obecnyGracz.przeskocz(1);
+
+        for (IObserwator o : obserwatorzy)
+            o.patrzSkonczylTure(widokObecnegoGracza);
     }
 
     protected void dajAkcje() {
@@ -208,10 +235,17 @@ public class Gra { //TODO całość implementacji obsetwatorów
         StrategicznyWidokGracza w = widokiGraczy[obecnyGracz.identyfikator()];
         for (IObserwator o : obserwatorzy)
             o.patrzNaDynamit(w, kabum);
+
+        if (kabum) {
+            obecnyGracz.dodajPZ(-3);
+            dynamitIdzie = false;
+        }
     }
 
     void uruchomDynamit() {
-        //TODO ...
+        if (dynamitIdzie)
+            throw new Error("Za dużo dynamitów");
+        dynamitIdzie = true;
     }
 
     /**
@@ -251,7 +285,7 @@ public class Gra { //TODO całość implementacji obsetwatorów
      * @param naKim gracz, na którym wykonano akcję (null w przypadku dynamitu)
      */
     void oglosWykonanieAkcji(Gracz kto, Akcja a, Gracz naKim) {
-
+        assert kto == obecnyGracz;
         StrategicznyWidokGracza wKto = widokiGraczy[kto.identyfikator()];
         StrategicznyWidokGracza wNaKim = naKim != null ? widokiGraczy[naKim.identyfikator()] : null;
         for (IObserwator o : obserwatorzy)
