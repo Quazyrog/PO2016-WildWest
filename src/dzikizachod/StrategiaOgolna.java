@@ -21,7 +21,7 @@ public abstract class StrategiaOgolna extends Strategia {
             StrategicznyWidokGracza iter = ja().przeskocz(kierunek);
             List<StrategicznyWidokGracza> znalezieni = new ArrayList<>();
 
-            for (int odleglosc = 1; odleglosc < ja().zasieg(); ++odleglosc) {
+            for (int odleglosc = 1; odleglosc <= ja().zasieg(); ++odleglosc) {
                 if (iter.tozsamosc() == kim)
                     znalezieni.add(iter);
                 iter = iter.przeskocz(kierunek);

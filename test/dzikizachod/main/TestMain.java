@@ -13,10 +13,10 @@ public class TestMain {
 
         Gracz gracze[] = {
                 new Szeryf(new StrategiaSzeryfaZliczajaca(rng)),
-                new PomocnikSzeryfa(new StrategiaPomocnikaSzeryfaDomyslna(rng)),
-                new PomocnikSzeryfa(new StrategiaPomocnikaSzeryfaDomyslna(rng)),
-                new Bandyta(new StrategiaBandytyCierpliwa(rng)),
-                new Bandyta(new StrategiaBandytySprytna(rng)),
+                new PomocnikSzeryfa(new StrategiaPomocnikaSzeryfaZliczajaca(rng)),
+                new PomocnikSzeryfa(new StrategiaPomocnikaSzeryfaZliczajaca(rng)),
+                new Bandyta(new StrategiaBandytyDomyslna(rng)),
+                new Bandyta(new StrategiaBandytyDomyslna(rng)),
                 new Bandyta(new StrategiaBandytyDomyslna(rng))
         };
 
