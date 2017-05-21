@@ -4,7 +4,7 @@ package dzikizachod;
  * Gracz typu Bandyta
  */
 public class Bandyta extends Gracz {
-    public Bandyta(Strategia kontroler) {
+    public Bandyta(StrategiaBandyty kontroler) {
         super(kontroler);
     }
 

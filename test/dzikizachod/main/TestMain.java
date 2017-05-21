@@ -15,8 +15,8 @@ public class TestMain {
                 new Szeryf(new StrategiaSzeryfaZliczajaca(rng)),
                 new PomocnikSzeryfa(new StrategiaPomocnikaSzeryfaDomyslna(rng)),
                 new PomocnikSzeryfa(new StrategiaPomocnikaSzeryfaDomyslna(rng)),
-                new Bandyta(new StrategiaBandytyDomyslna(rng)),
-                new Bandyta(new StrategiaBandytyDomyslna(rng)),
+                new Bandyta(new StrategiaBandytyCierpliwa(rng)),
+                new Bandyta(new StrategiaBandytySprytna(rng)),
                 new Bandyta(new StrategiaBandytyDomyslna(rng))
         };
 
@@ -66,6 +66,6 @@ public class TestMain {
     }
 
     public static void main(String args[]) {
-        trippleDemo(42);
+        debugDemo();
     }
 }

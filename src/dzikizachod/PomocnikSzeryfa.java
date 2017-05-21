@@ -4,7 +4,7 @@ package dzikizachod;
  * Gracz typu pomocnik szeryfa
  */
 public class PomocnikSzeryfa extends Gracz {
-    public PomocnikSzeryfa(Strategia kontroler) {
+    public PomocnikSzeryfa(StrategiaPomocnikaSzeryfa kontroler) {
         super(kontroler);
     }
 
