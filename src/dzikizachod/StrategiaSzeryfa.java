@@ -42,7 +42,7 @@ public abstract class StrategiaSzeryfa extends StrategiaOgolna {
 
 
     protected void dodajPaskude(StrategicznyWidokGracza paskuda) {
-        if (paskudniBandyci.contains(paskuda))
+        if (!paskudniBandyci.contains(paskuda))
             paskudniBandyci.add(paskuda);
     }
 

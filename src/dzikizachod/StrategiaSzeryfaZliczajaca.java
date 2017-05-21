@@ -76,4 +76,9 @@ public class StrategiaSzeryfaZliczajaca extends StrategiaSzeryfa {
     }
 
 
+    @Override
+    void graj() throws BladKonrtoleraWyjatek {
+        super.graj();
+        zwalczPaskudy();
+    }
 }
