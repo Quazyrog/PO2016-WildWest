@@ -1,15 +1,18 @@
 package dzikizachod;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 /**
  * Strategia dla szeryfa.
- * Utrzymuje listę graczy, którzy go zaatakowali.
+ * Utrzymuje listę graczy, którzy go zaatakowali. Utrzymuje listę paskud na, które go zaatakowały. Nic jednak nie stoi
+ * na przeszkodzie, aby dodawać do niej własne psakudy w podklasach. Trzeba natomiast wywoływac metodę patrzZabojstwo,
+ * aby usuwać paskudy.
  */
 public abstract class StrategiaSzeryfa extends StrategiaOgolna {
-    /** Lista żywych graczy, którzy zaatakowali tego gracza. */
-    protected ArrayList<StrategicznyWidokGracza> paskudniBandyci = new ArrayList<>();
+    /** Lista żywych graczy, którzy zaatakowali tego gracza (lub inaczej mu podpalki). */
+    protected Collection<StrategicznyWidokGracza> paskudniBandyci = new ArrayList<>();
 
     protected Random rng = new Random();
 
