@@ -38,17 +38,6 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
     @Override
     void graj() throws BladKonrtoleraWyjatek {
         super.graj();
-        if (ja().ileAkcji(Akcja.STRZEL) == 0)
-            return; //Smutny szeryf nie ma naboi
-
-        try {
-            zwalczPaskudy();
-            zwalczRandomy();
-        } catch (BladKonrtoleraWyjatek e) {
-            if (!ja().czyKoniecGry()) {
-                e.printStackTrace();
-                throw new Error("To się nie powinno zdażyc!", e);
-            }
-        }
+        zwalczRandomy();
     }
 }

@@ -6,7 +6,7 @@ import dzikizachod.*;
  */
 public class Main {
     public static void demo() {
-        Gracz gracze[] = {new Szeryf(), new PomocnikSzeryfa(), new PomocnikSzeryfa(), new Bandyta(), new Bandyta(), new Bandyta()};
+        Gracz gracze[] = {new Szeryf(new StrategiaSzeryfaZliczajaca()), new PomocnikSzeryfa(), new PomocnikSzeryfa(), new Bandyta(), new Bandyta(), new Bandyta()};
 
         PulaAkcji pulaAkcji = new PulaAkcji();
         pulaAkcji.dodaj(Akcja.ULECZ, 20);

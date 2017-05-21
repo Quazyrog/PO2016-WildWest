@@ -19,18 +19,25 @@ public abstract class StrategiaSzeryfa extends StrategiaOgolna {
 
     @Override
     public void patrzWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {
-        switch (a) {
-            case STRZEL:
-                if (naKim.equals(ja()) && !paskudniBandyci.contains(ktoGra))
-                    paskudniBandyci.add(ktoGra);
-                break;
-        }
+        if (a == Akcja.STRZEL && naKim.equals(ja()))
+            dodajPaskude(ktoGra);
     }
 
 
     @Override
     public void patrzZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {
-        paskudniBandyci.remove(ofiara);
+        usunPaskude(ofiara);
+    }
+
+
+    protected void usunPaskude(StrategicznyWidokGracza juzNiePaskuda) {
+        paskudniBandyci.remove(juzNiePaskuda);
+    }
+
+
+    protected void dodajPaskude(StrategicznyWidokGracza paskuda) {
+        if (paskudniBandyci.contains(paskuda))
+            paskudniBandyci.add(paskuda);
     }
 
 
