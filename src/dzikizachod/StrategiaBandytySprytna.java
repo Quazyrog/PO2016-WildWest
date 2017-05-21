@@ -18,6 +18,12 @@ public class StrategiaBandytySprytna extends StrategiaBandytyDomyslna {
     public StrategiaBandytySprytna() {}
 
     @Override
+    public void patrzKolejnaTura(int numerTury) {
+        if (numerTury == 1)
+            krewTowarzyszaNaMychRekach = false;
+    }
+
+    @Override
     void graj() throws BladKonrtoleraWyjatek {
         super.graj();
         if (bijSzeryfaJakMozna())
