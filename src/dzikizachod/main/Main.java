@@ -31,6 +31,7 @@ public class Main {
 
     public static void demo(long seed) {
         Random rng = new Random(seed);
+        Gracz.nasiono(seed);
 
         Gracz gracze[] = {
                 new Szeryf(new StrategiaSzeryfaZliczajaca(rng)),
@@ -52,7 +53,14 @@ public class Main {
         gra.rozgrywka(gracze, pulaAkcji);
     }
 
+
+    public static void debugDemo() {
+        long seed = System.currentTimeMillis();
+        System.err.println("Seed: " + seed);
+        demo(seed);
+    }
+
     public static void main(String args[]) {
-        demo(42);
+        debugDemo();
     }
 }
