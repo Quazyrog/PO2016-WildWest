@@ -6,14 +6,19 @@ package dzikizachod;
 public enum Akcja {
     /** Heal + 1 */
     ULECZ,
+
     /** Strzelenie w innego gracza */
     STRZEL,
+
     /** Zwiększenie zasiegu o 1 */
     ZASIEG_PLUS_JEDEN,
+
     /** Zwiększenie zasięgu o 2 */
     ZASIEG_PLUS_DWA,
+
     /** Rzucenie dynamitu */
     DYNAMIT;
+
 
     /**
      * Zwróć liczbę elementów w wyliczeniu
@@ -22,6 +27,7 @@ public enum Akcja {
     public static int liczbaIndeksow() {
         return Akcja.values().length;
     }
+
 
     /**
      * Obetnij liczbę akcji zgodnie z limitem na maksymalną liczbę akcji w talii
@@ -41,6 +47,7 @@ public enum Akcja {
         }
     }
 
+
     /**
      * Zwróć liczbę akcji, które mają zostać wtasowane do puli, po jej wyczerpaniu.
      * Pozwala to doprowadzić wprowadzić mechanikę, w której pewne karty są tylko częściowo (lub wcale nie są)
@@ -56,6 +63,7 @@ public enum Akcja {
                 return liczbaSciepow;
         }
     }
+
 
     /**
      * Zwróć indeks przyporządkowany danemu typowi akcji.

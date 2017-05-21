@@ -24,38 +24,47 @@ abstract public class Strategia implements IObserwator {
         widokSzeryfa = szeryf;
     }
 
+
     public void akcjaUlecz(StrategicznyWidokGracza cel) throws BladKonrtoleraWyjatek {
         marionetka.akcjaUlecz(cel.gracz);
     }
+
 
     public void akcjaStrzel(StrategicznyWidokGracza cel) throws BladKonrtoleraWyjatek {
         marionetka.akcjaStrzel(cel.gracz);
     }
 
+
     public void akcjaZasiegPlusJeden() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
         marionetka.akcjaZasiegPlusJeden();
     }
+
 
     public void akcjaZasiegPlusDwa() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
         marionetka.akcjaZasiegPlusDwa();
     }
 
+
     public void akcjaDynamit() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
         marionetka.akcjaDynamit();
     }
+
 
     final protected StrategicznyWidokGracza ja() {
         return mojWidok;
     }
 
+
     final protected StrategicznyWidokGracza szeryf() {
         return widokSzeryfa;
     }
+
 
     final void przypiszGracza(Gracz gracz) {
         marionetka = gracz;
         mojWidok = new StrategicznyWidokGracza(gracz, gracz);
     }
+
 
     /**
      * W tej metodzie strategia kontroluje gracza podczas jego tury.

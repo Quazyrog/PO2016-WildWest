@@ -8,9 +8,11 @@ public class PomocnikSzeryfa extends Gracz {
         super(kontroler);
     }
 
+
     public PomocnikSzeryfa() {
         super(new StrategiaPomocnikaSzeryfaDomyslna());
     }
+
 
     @Override
     public TozsamoscGracza tozsamosc() {

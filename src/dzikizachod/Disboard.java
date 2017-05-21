@@ -59,6 +59,7 @@ public class Disboard {
         obserwatorzy.add(obserwator);
     }
 
+
     /**
      * Usuwa obserwatora rozgrywki.
      * @param obserwator obserwator do usunięcia.
@@ -69,6 +70,7 @@ public class Disboard {
         obserwatorzy.remove(obserwator);
     }
 
+
     /**
      * Zwraca liczbę żywych grajacych
      * @return liczbę żywych grajacych
@@ -76,6 +78,7 @@ public class Disboard {
     public int liczbaGraczy() {
         return gracze.size();
     }
+
 
     /**
      * Rozgrywa grę z podanymi graczami i pulą akcji.
@@ -85,6 +88,7 @@ public class Disboard {
     public void rozgrywka(Gracz gracze[], PulaAkcji pulaAkcji) {
         rozgrywka(Arrays.asList(gracze), pulaAkcji);
     }
+
 
     /**
      * Rozgrywa grę z podanymi graczami i pulą akcji.
@@ -108,6 +112,7 @@ public class Disboard {
             g.skonczGrac();
     }
 
+
     /**
      * Wykonuje różnorakie operacje potrzebne przed przeprowadzeniem rozgrywki.
      * Przed wywołaniem, nalezy przypisac do pól obiektu kolekcje graczy.
@@ -118,6 +123,7 @@ public class Disboard {
         przygotujGraczy();
         przygotujWidokiGraczy();
     }
+
 
     /**
      * Tworzy widoki dla wszystkich graczy, które będą przekazywane obserwatorom gry.
@@ -134,6 +140,7 @@ public class Disboard {
                 widokSzeryfa = widokiGraczy[i];
         }
     }
+
 
     /**
      * Sprawdza tablice graczy: liczy bandytów i wyszukuje szeryfa.
@@ -154,6 +161,7 @@ public class Disboard {
             throw new IllegalArgumentException("Chudy! gdzie jesteś?!");
     }
 
+
     /**
      * Miesza kolejnośc graczy w tablicy.
      */
@@ -165,6 +173,7 @@ public class Disboard {
             gracze.set(i, tymczasowa);
         }
     }
+
 
     /**
      * Dla każdego gracz wywołuje na nim <code>przygotujDoGry()</code> z odpowiednimi parametrami.
@@ -182,6 +191,7 @@ public class Disboard {
         }
     }
 
+
     /**
      * Zwraca odpowiedź na pytanie
      * @return <code>false</code> kiey gra jeszcze trwa
@@ -189,6 +199,7 @@ public class Disboard {
     public boolean czyKoniecGry() {
         return liczbaBandytów == 0 || szeryf.pz() == 0 || numerTury > 42;
     }
+
 
     /**
      * Rozgrywa grę w pętli.
@@ -228,6 +239,7 @@ public class Disboard {
             o.patrzKoniecGry(zakonczenie);
     }
 
+
     /**
      * Fragment kodu rozgrywki odpowiedzialny za przeprowadzenie tury gracza
      */
@@ -245,6 +257,7 @@ public class Disboard {
             o.patrzSkonczylTure(widokObecnegoGracza);
     }
 
+
     protected void dajAkcje() {
         for (int i = 0; i < LICZBA_DOBIERANYCH_AKCJI; ++i) {
             Akcja a = pulaAkcji.dobierz();
@@ -253,6 +266,7 @@ public class Disboard {
             obecnyGracz.dobierz(a);
         }
     }
+
 
     protected void rozstrzygnijDynamit() {
         if (!dynamitIdzie)
@@ -273,6 +287,7 @@ public class Disboard {
         }
     }
 
+
     protected void zakonczRozgrywke() {
         for (IObserwator o : filtryObserwatorowStrategii)
             usunObserwatora(o);
@@ -290,11 +305,13 @@ public class Disboard {
         filtryObserwatorowStrategii.clear();
     }
 
+
     void uruchomDynamit() {
         if (dynamitIdzie)
             throw new Error("Za dużo dynamitów");
         dynamitIdzie = true;
     }
+
 
     /**
      * Zwraca akcję z powrotem do puli.
@@ -303,6 +320,7 @@ public class Disboard {
     void oddajAkcje(Akcja akcja) {
         pulaAkcji.odrzuc(akcja);
     }
+
 
     /**
      * Gracz informuje w ten sposób grę, że umarł.
@@ -329,6 +347,7 @@ public class Disboard {
         //(w funkcji przeskocz)
     }
 
+
     /**
      * Ogłasza wszystkim obserwatorom wykonanie akcji przez gracza.
      * Ta metoda jest wywoływana przez gracza wykonującego akcje.
@@ -343,6 +362,7 @@ public class Disboard {
         for (IObserwator o : obserwatorzy)
             o.patrzWykonalAkcje(wKto, a, wNaKim);
     }
+
 
     /**
      * Zwraca gracza o podanym numerze, spośród żyjących graczy.

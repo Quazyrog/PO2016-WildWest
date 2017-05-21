@@ -26,10 +26,12 @@ public class Wypisywacz implements IObserwator {
         out = output;
     }
 
+
     protected void zwiekszWciecie() {
         ++wielkoscWciecia;
         wciecie.append("  ");
     }
+
 
     protected void zmniejszWciecie() {
         if (wielkoscWciecia == 0)
@@ -37,6 +39,7 @@ public class Wypisywacz implements IObserwator {
         --wielkoscWciecia;
         wciecie.delete(wielkoscWciecia * 2, wielkoscWciecia * 2 + 2);
     }
+
 
     protected void wypluj(String s) {
         if (zrobWciecie) {
@@ -46,15 +49,18 @@ public class Wypisywacz implements IObserwator {
         out.print(s);
     }
 
+
     protected void wyplujln(String s) {
         wypluj(s);
         wyplujln();
     }
 
+
     protected void wyplujln() {
         out.println();
         zrobWciecie = true;
     }
+
 
     @Override
     public void patrzPoczatekGry(StrategicznyWidokGracza[] gracze, StrategicznyWidokGracza szeryf, int liczbaBandytów, int liczbaPomocników) {
@@ -65,6 +71,7 @@ public class Wypisywacz implements IObserwator {
         wyplujGraczy();
         zmniejszWciecie();
     }
+
 
     protected void wyplujGraczy() {
         wyplujln("Gracze:");
@@ -78,12 +85,14 @@ public class Wypisywacz implements IObserwator {
         zmniejszWciecie();
     }
 
+
     @Override
     public void patrzKolejnaTura(int numerTury) {
         zmniejszWciecie();
         wyplujln("\n** TURA " + numerTury);
         zwiekszWciecie();
     }
+
 
     @Override
     public void patrzRuchGracza(StrategicznyWidokGracza ktoGra) {
@@ -94,6 +103,7 @@ public class Wypisywacz implements IObserwator {
         wypisaneAkcjeDobrane = 0;
         wypisaneAkcjeWykonane = 0;
     }
+
 
     @Override
     public void patrzDobralAkcje(StrategicznyWidokGracza ktoGra, Akcja a) {
@@ -108,6 +118,7 @@ public class Wypisywacz implements IObserwator {
         ++wypisaneAkcjeDobrane;
     }
 
+
     @Override
     public void patrzNaDynamit(StrategicznyWidokGracza ktoGra, boolean wybuchl) {
         if (wybuchl)
@@ -115,6 +126,7 @@ public class Wypisywacz implements IObserwator {
         else
             wyplujln("Dynamit: PRZECHODZI DALEJ");
     }
+
 
     @Override
     public void patrzWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {
@@ -141,6 +153,7 @@ public class Wypisywacz implements IObserwator {
         ++wypisaneAkcjeWykonane;
     }
 
+
     @Override
     public void patrzSkonczylTure(StrategicznyWidokGracza ktoGra) {
         if (wypisaneAkcjeWykonane > 0)
@@ -152,6 +165,7 @@ public class Wypisywacz implements IObserwator {
         zmniejszWciecie();
     }
 
+
     @Override
     public void patrzZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {
         if (zabojca == null) {
@@ -161,6 +175,7 @@ public class Wypisywacz implements IObserwator {
             zmniejszWciecie();
         }
     }
+
 
     @Override
     public void patrzKoniecGry(Zakonczenie zakonczenie) {

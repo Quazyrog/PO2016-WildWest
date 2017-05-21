@@ -10,6 +10,8 @@ class BladKonrtoleraWyjatek extends Exception {
     }
 }
 
+
+
 /**
  * Wyjątek rzucany, kiedy gracz jest w zbyt dużej odległości, by wykonac akcję na celu.
  */
@@ -18,6 +20,8 @@ class PozaZasiegiemWyjatek extends BladKonrtoleraWyjatek {
         super("Gracz jest zbyt dalego, aby wykonac akcję");
     }
 }
+
+
 
 /**
  * Wyjątek rzucany, kiedy gracz nie posiada na ręce akcji, którą chce wykonać.
@@ -28,6 +32,8 @@ class BrakAkcjiWyjatek extends BladKonrtoleraWyjatek {
     }
 }
 
+
+
 /**
  * Rzucany, kiedy gracz próbuje wykonac akcję w nieswoim ruchu.
  */
@@ -36,6 +42,8 @@ class NieTwojRochWyjatek extends BladKonrtoleraWyjatek {
         super("Gracz nie może teraz wykonać akcji, bo to nie jego ruch");
     }
 }
+
+
 
 /**
  * Rzucany, gdy strategia spróbujezrobić coś, czego nie może.

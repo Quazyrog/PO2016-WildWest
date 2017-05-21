@@ -25,6 +25,7 @@ public class PulaAkcji {
     /** Generator liczb losowych do losowania kart */
     private Random rng = new Random();
 
+
     /**
      * Dodaj do puli podaną liczbę akcji danego typu.
      * Liczba akcji danego typu w puli jest ograniczona przez <c>Akcja.obetnijDoLimitu()</c>. Ponadto nie
@@ -44,6 +45,7 @@ public class PulaAkcji {
         return dodane;
     }
 
+
     /**
      * Dobiera losową kartę z talii.
      * Jeśli talia jest pusta, to wszystkie odrzucone karty zostaną przetasowane (z uwzględnieniem tego, że
@@ -60,6 +62,7 @@ public class PulaAkcji {
         return wylosowana;
     }
 
+
     /**
      * Odrzuca akcję do ściepów (kart do przetasowania)
      * @param sciep akcja przyporządkowana do odrzucanej karty
@@ -67,6 +70,7 @@ public class PulaAkcji {
     void odrzuc(Akcja sciep) {
         sciepy.dodaj(sciep, 1);
     }
+
 
     /**
      * Wtasowuje ściepy z powrotem do talii kart.
@@ -82,6 +86,7 @@ public class PulaAkcji {
         if (talia.ileWszystkich() == 0) //bo dynamit
             throw new RuntimeException("Talia jest pusta i nie ma czego przetasować");
     }
+
 
     /**
      * Losuje akcję z dostępnych w przetasowanej talii.

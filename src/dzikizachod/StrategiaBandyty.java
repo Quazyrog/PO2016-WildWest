@@ -9,6 +9,7 @@ import java.util.Random;
 public abstract class StrategiaBandyty extends StrategiaOgolna {
     protected Random rng = new Random();
 
+
     protected StrategicznyWidokGracza losowyPomocnikWZasieguNaLuku(int kierunek) {
         StrategicznyWidokGracza iter = ja().przeskocz(kierunek);
         ArrayList<StrategicznyWidokGracza> znalezieniPomocnicy = new ArrayList<>();
@@ -23,6 +24,7 @@ public abstract class StrategiaBandyty extends StrategiaOgolna {
             return null;
         return znalezieniPomocnicy.get(rng.nextInt(znalezieniPomocnicy.size()));
     }
+
 
     @Override
     void graj() throws BladKonrtoleraWyjatek {

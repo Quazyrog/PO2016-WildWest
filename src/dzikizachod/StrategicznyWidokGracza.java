@@ -7,6 +7,7 @@ public class StrategicznyWidokGracza {
     protected Gracz gracz;
     protected Gracz podgladacz;
 
+
     public StrategicznyWidokGracza(Gracz podgladajacy, Gracz podgladanyGracz) {
         if (podgladajacy == null)
             throw new NullPointerException();
@@ -16,13 +17,16 @@ public class StrategicznyWidokGracza {
         podgladacz = podgladajacy;
     }
 
+
     public StrategicznyWidokGracza(Gracz podgladajacy, StrategicznyWidokGracza podgladanyGracz) {
         this(podgladajacy, podgladanyGracz.gracz);
     }
 
+
     public StrategicznyWidokGracza przeskocz(int wKierunku) {
         return new StrategicznyWidokGracza(gracz, gracz.przeskocz(wKierunku));
     }
+
 
     /**
      * Zwraca być może utajnioną tożsamość gracza reprezentowanego przez ten obiekt.
@@ -44,59 +48,73 @@ public class StrategicznyWidokGracza {
         return TozsamoscGracza.NIEZNANA;
     }
 
+
     public int pz() {
         return gracz.pz();
     }
+
 
     public int maksymalnePZ() {
         return gracz.maksymalnePZ();
     }
 
+
     public int zasieg() {
         return gracz.zasieg();
     }
+
 
     public int numer() {
         return gracz.numer();
     }
 
+
     public int identyfikator() {
         return gracz.identyfikator();
     }
+
 
     public boolean czyKoniecGry() {
         return gracz.czyKoniecGry();
     }
 
+
     public int liczbaGraczy() {
         return gracz.liczbaGraczy();
     }
+
 
     public boolean czyWykonujeRuch() {
         return gracz.czyWykonujeRuch();
     }
 
+
     public StrategicznyWidokGracza dalekiSasiad(int odlegloscSkierowana) throws NieInteresujSieTrupemWyjatek {
         return new StrategicznyWidokGracza(gracz, gracz.dalekiSasiad(odlegloscSkierowana));
     }
+
 
     public int odlegloscOd(StrategicznyWidokGracza gracz) throws NieInteresujSieTrupemWyjatek {
         return this.gracz.odlegloscOd(gracz.gracz);
     }
 
+
     public int odlegloscIKierunekOd(StrategicznyWidokGracza gracz) throws NieInteresujSieTrupemWyjatek {
         return this.gracz.odlegloscIKierunekOd(gracz.gracz);
     }
 
+
     public int odlegloscSkierowanOd(int kierunek, StrategicznyWidokGracza gracz) throws NieInteresujSieTrupemWyjatek {
         return this.gracz.odlegloscSkierowanOd(kierunek, gracz.gracz);
     }
+
 
     public int ileAkcji(Akcja akcja) throws BladKonrtoleraWyjatek {
         if (podgladacz == gracz)
             return gracz.ileAkcji(akcja);
         throw new BladKonrtoleraWyjatek("Nie wolno podglądać akcji innych graczy");
     }
+
 
     @Override
     public boolean equals(Object o) {

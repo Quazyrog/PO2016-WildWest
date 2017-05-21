@@ -51,6 +51,7 @@ public abstract class Gracz {
         kontroler.przypiszGracza(this);
     }
 
+
     /**
      * Inicjuje gracza opodana strategią oraz ustawia mu losowo 3 lub 4 PZ
      * @param kontroler strategia kontrolujaca
@@ -58,6 +59,7 @@ public abstract class Gracz {
     public Gracz(Strategia kontroler) {
         this(kontroler, 3 + rng.nextInt(2));
     }
+
 
     /**
      * W zależności od znaku kierunku zwraca gracza po lewej lub prawej od podanego.
@@ -85,11 +87,13 @@ public abstract class Gracz {
         throw new Error("To się nie powinno zdażyć");
     }
 
+
     /**
      * —Kim jesteś? —Jestem wajsem.
      * @return zwraca prawdziwą tożsamość gracza
      */
     public abstract TozsamoscGracza tozsamosc();
+
 
     /**
      * Zmienia punkty życia gracza o podana liczbę.
@@ -105,6 +109,7 @@ public abstract class Gracz {
             umieram(zrodloAtaku);
     }
 
+
     /**
      * Zwraca obecną liczbę punktów życia.
      * @return liczbę punktów zycia
@@ -112,6 +117,7 @@ public abstract class Gracz {
     public int pz() {
         return pz;
     }
+
 
     /**
      * Zwraca liczbę maksymalnych punktów życia.
@@ -121,6 +127,7 @@ public abstract class Gracz {
         return limitPZ;
     }
 
+
     /**
      * Zwraca zasięg gracza
      * @return zasięg gracza
@@ -128,6 +135,7 @@ public abstract class Gracz {
     public int zasieg() {
         return zasieg;
     }
+
 
     /**
      * Zwraca identyfikator gracza.
@@ -138,6 +146,7 @@ public abstract class Gracz {
         return identyfikator;
     }
 
+
     /**
      * Zwraca numer gracza w toczącej się rozgrywce lub -1.
      * @return -1 gdy gracz nie gra, a jego numer w grze w przeciwnym wypadku
@@ -145,6 +154,7 @@ public abstract class Gracz {
     public int numer() {
         return numer;
     }
+
 
     /**
      * Delegacja <code>czyKoniecGry</code> z klasy gry
@@ -154,10 +164,12 @@ public abstract class Gracz {
         return gra.czyKoniecGry();
     }
 
+
     /** Zwraca liczbę żywych graczy biorących udział w rozgrywce */
     public int liczbaGraczy() {
         return gra.liczbaGraczy();
     }
+
 
     /**
      * Zwraca odpowiedź na pytanie ,,Czy gracz wykonuje teraz ruch?''
@@ -167,6 +179,7 @@ public abstract class Gracz {
     public boolean czyWykonujeRuch() {
         return wykonujeRuch && !czyKoniecGry();
     }
+
 
     /**
      * Zwraca gracza znajdującego się we wskazanej odległości na prawo lub lewo od tego gracza.
@@ -185,6 +198,7 @@ public abstract class Gracz {
         return gra.graczONumerze((gra.liczbaGraczy() + odlegloscSkierowana + numer) % gra.liczbaGraczy());
     }
 
+
     /**
      * Mierzy odległość pomiędzy tym graczem, a wskazanym w parametrze.
      * @param gracz gracz, do którego mierzymy odległość. Musi być żywy i brać udział w tej samej rozgrywce.
@@ -193,6 +207,7 @@ public abstract class Gracz {
     public int odlegloscOd(Gracz gracz) throws NieInteresujSieTrupemWyjatek {
         return Math.abs(odlegloscIKierunekOd(gracz));
     }
+
 
     /**
      * Mierzy odległość pomiędzy tym graczem, a wskazanym w parametrze; zwraca dodatkowo informację o kierunku
@@ -207,6 +222,7 @@ public abstract class Gracz {
             return zgodna;
         return -przeciwna;
     }
+
 
     /**
      * Mierzy odległosć w danym kierunku do podanego gracza.
@@ -232,6 +248,7 @@ public abstract class Gracz {
         return gracz.odlegloscSkierowanOd(-kierunek, this);
     }
 
+
     /**
      * Wykonaj akcję leczenia na celu o ile to możliwe.
      * Przyjmuje się, że jest możliwe, nawet jeśli cel ma maksymalną liczbę punktóœ życia.
@@ -248,6 +265,7 @@ public abstract class Gracz {
         gra.oglosWykonanieAkcji(this, Akcja.ULECZ, cel);
         cel.dodajPZ(1, this);
     }
+
 
     /**
      * Strzel do gracza, o ile to możliwe.
@@ -266,6 +284,7 @@ public abstract class Gracz {
         cel.dodajPZ(-1, this);
     }
 
+
     /**
      * Wykorzystuje akcję zwiększenia zasięgu.
      * @throws BrakAkcjiWyjatek kied gracz nie ma tej akcji
@@ -277,6 +296,7 @@ public abstract class Gracz {
         gra.oglosWykonanieAkcji(this, Akcja.ZASIEG_PLUS_JEDEN, this);
         zasieg += 1;
     }
+
 
     /**
      * Wykorzystuje akcję zwiększenia zasięgu o dwa.
@@ -290,6 +310,7 @@ public abstract class Gracz {
         zasieg += 2;
     }
 
+
     /**
      * Wykorzystuje akcję rzucenia dynamitu
      * @throws BrakAkcjiWyjatek ...
@@ -302,6 +323,7 @@ public abstract class Gracz {
         gra.uruchomDynamit();
     }
 
+
     /**
      * Zwraca liczbę akcji danego typu, jaki gracz ma do wykorzystania
      * @param akcja typ akcji, o którą pytamy
@@ -310,6 +332,7 @@ public abstract class Gracz {
     public int ileAkcji(Akcja akcja) {
         return akcje.ileTypu(akcja);
     }
+
 
     protected void umieram(Gracz zrodloAtaku) {
         gra.graczUmarl(this, zrodloAtaku);
@@ -323,9 +346,11 @@ public abstract class Gracz {
         }
     }
 
+
     Strategia startegia() {
         return kontroler;
     }
+
 
     /**
      * Wykonuje ruch gracza.
@@ -345,6 +370,7 @@ public abstract class Gracz {
         }
     }
 
+
     /**
      * Przypisuje gracza do rozgrywki.
      * @param gra obiekt przeprowadzajacyy rozgrywkę
@@ -362,6 +388,7 @@ public abstract class Gracz {
         pz = limitPZ;
     }
 
+
     /**
      * Gracz opuszcza rozgrywkę.
      */
@@ -372,6 +399,7 @@ public abstract class Gracz {
         numer = -1;
     }
 
+
     /**
      * Daje graczowi akcje na reke.
      * @param coDobral akacja do dobrania
@@ -380,12 +408,14 @@ public abstract class Gracz {
         akcje.dodaj(coDobral, 1);
     }
 
+
     /**
      * Zmienia numer gracza
      */
     void przenumeruj(int nowyNumer) {
         this.numer = nowyNumer;
     }
+
 
     /**
      * Odrzuca akcję z ręki (i ile tam jest) z powrotem na stos ściepów.

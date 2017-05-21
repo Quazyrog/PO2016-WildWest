@@ -12,29 +12,38 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty {
         }
     }
 
+
     @Override
     public void patrzKolejnaTura(int numerTury) {}
+
 
     @Override
     public void patrzKoniecGry(Zakonczenie zakonczenie) {}
 
+
     @Override
     public void patrzWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {}
+
 
     @Override
     public void patrzZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {}
 
+
     @Override
     public void patrzRuchGracza(StrategicznyWidokGracza ktoGra) {}
+
 
     @Override
     public void patrzDobralAkcje(StrategicznyWidokGracza ktoGra, Akcja a) {}
 
+
     @Override
     public void patrzNaDynamit(StrategicznyWidokGracza ktoGra, boolean wybuchl) {}
 
+
     @Override
     public void patrzSkonczylTure(StrategicznyWidokGracza ktoGra) {}
+
 
     protected void najazdNaSzeryfa() throws BladKonrtoleraWyjatek {
         int doSzeryfa = ja().odlegloscIKierunekOd(szeryf());
@@ -49,6 +58,7 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty {
                 throw new NieDaSieNicZrobicWyjatek();
         }
     }
+
 
     @Override
     void graj() throws BladKonrtoleraWyjatek {

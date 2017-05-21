@@ -5,20 +5,26 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
     @Override
     public void patrzKolejnaTura(int numerTury) {}
 
+
     @Override
     public void patrzKoniecGry(Zakonczenie zakonczenie) {}
+
 
     @Override
     public void patrzRuchGracza(StrategicznyWidokGracza ktoGra) {}
 
+
     @Override
     public void patrzDobralAkcje(StrategicznyWidokGracza ktoGra, Akcja a) {}
+
 
     @Override
     public void patrzNaDynamit(StrategicznyWidokGracza ktoGra, boolean wybuchl) {}
 
+
     @Override
     public void patrzSkonczylTure(StrategicznyWidokGracza ktoGra) {}
+
 
     protected void zwalczRandomy() throws BladKonrtoleraWyjatek {
         while (ja().ileAkcji(Akcja.STRZEL) > 0 && !ja().czyKoniecGry()) {
@@ -27,6 +33,7 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
             akcjaStrzel(ja().dalekiSasiad(polozenieWzgledneCelu));
         }
     }
+
 
     @Override
     void graj() throws BladKonrtoleraWyjatek {

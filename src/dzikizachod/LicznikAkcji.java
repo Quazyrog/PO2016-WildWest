@@ -11,6 +11,7 @@ class LicznikAkcji {
     /** Utrzymuje liczbę wszystkich przechowywanych akcji w sumie. */
     private int licznikAkcji = 0;
 
+
      /**
      * Zwraca liczbę akcji danego typu dostępnych w pudełku.
      * @param co typ akcji do policzenia
@@ -19,6 +20,7 @@ class LicznikAkcji {
     public int ileTypu(Akcja co) {
         return liczniki[co.indeks()];
     }
+
 
     /**
      * Zabierz n akcji.
@@ -35,6 +37,7 @@ class LicznikAkcji {
         return dobrane;
     }
 
+
     /**
      * Zabierz jedną akcję, jeżeli jest w pudełku.
      * @param co jakie akcje zabirać
@@ -48,6 +51,7 @@ class LicznikAkcji {
         return 0;
     }
 
+
     /**
      * Dodaj n akcji do pudełka.
      * @param co jakie akcje dodać
@@ -59,6 +63,7 @@ class LicznikAkcji {
         zmienLicznik(co, ile);
     }
 
+
     /**
      * Zwraca liczbę wszystkich przechowywanych akcji w sumie
      * @return liczbę wszystkich akcji
@@ -66,6 +71,7 @@ class LicznikAkcji {
     public int ileWszystkich() {
         return licznikAkcji;
     }
+
 
     /**
      * Zmienia licznik akcji, o delta.

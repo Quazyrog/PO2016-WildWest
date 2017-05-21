@@ -8,9 +8,11 @@ public class Szeryf extends Gracz {
         super(kontroler, 5);
     }
 
+
     public Szeryf() {
         super(new StrategiaSzeryfaDomyslna(), 5);
     }
+
 
     @Override
     public TozsamoscGracza tozsamosc() {

@@ -16,6 +16,7 @@ public abstract class StrategiaSzeryfa extends StrategiaOgolna {
 
     protected Random rng = new Random();
 
+
     @Override
     public void patrzWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim) {
         switch (a) {
@@ -26,10 +27,12 @@ public abstract class StrategiaSzeryfa extends StrategiaOgolna {
         }
     }
 
+
     @Override
     public void patrzZabojstwo(StrategicznyWidokGracza ofiara, StrategicznyWidokGracza zabojca) {
         paskudniBandyci.remove(ofiara);
     }
+
 
     protected ArrayList<StrategicznyWidokGracza> paskudyWZasiegu() {
         ArrayList<StrategicznyWidokGracza> wynik = new ArrayList<>();
@@ -44,6 +47,7 @@ public abstract class StrategiaSzeryfa extends StrategiaOgolna {
         }
         return wynik;
     }
+
 
     protected void zwalczPaskudy() throws BladKonrtoleraWyjatek {
         ArrayList<StrategicznyWidokGracza> paskudy = paskudyWZasiegu();

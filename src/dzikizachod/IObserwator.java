@@ -27,6 +27,7 @@ public interface IObserwator {
      */
     void patrzRuchGracza(StrategicznyWidokGracza ktoGra);
 
+
     /**
      * Wysyłane, kiedy grajacy gracz dobiera akcje
      * @param ktoGra grający
@@ -34,12 +35,14 @@ public interface IObserwator {
      */
     void patrzDobralAkcje(StrategicznyWidokGracza ktoGra, Akcja a);
 
+
     /**
      * Wysyłane po rozstrzygnięciu czy dynamit wybuchł.
      * @param ktoGra grający
      * @param wybuchl czy dynamit wybuchł
      */
     void patrzNaDynamit(StrategicznyWidokGracza ktoGra, boolean wybuchl);
+
 
     /**
      * Wysyłane, kiedy grający gracz wykona akcję.
@@ -52,6 +55,7 @@ public interface IObserwator {
      *              - w przypadku dynamitu, <code>null</code>
      */
     void patrzWykonalAkcje(StrategicznyWidokGracza ktoGra, Akcja a, StrategicznyWidokGracza naKim);
+
 
     /**
      * Wysyłane, kiedy grający gracz kończy swoją turę.
