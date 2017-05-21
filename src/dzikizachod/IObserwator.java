@@ -2,7 +2,7 @@ package dzikizachod;
 
 /**
  * Interfejs obserwatorów gry (taki listener tego co się dzieje).
- * Warto wiedzieć, że powiadomienia są wysyłane, zanim efekt zostanie nałożony.
+ * Warto wiedzieć, że powiadomienia są po nałożeniu efektu, za wyjątkiem dynamitu, który jest przed.
  */
 public interface IObserwator {
     /**

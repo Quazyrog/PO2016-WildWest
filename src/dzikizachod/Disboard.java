@@ -26,7 +26,7 @@ import java.util.*;
  */
 public class Disboard {
     /** Ile ckcji gracz dobiera w ciągu tury */
-    static protected final int LICZBA_DOBIERANYCH_AKCJI = 5;
+    static protected final int LIMIT_AKCJI = 5;
 
     /** Pula akcji do gry */
     private PulaAkcji pulaAkcji;
@@ -307,11 +307,11 @@ public class Disboard {
 
 
     protected void dajAkcje() {
-        for (int i = 0; i < LICZBA_DOBIERANYCH_AKCJI; ++i) {
+        while (obecnyGracz.ileWszystkichAkcji() < LIMIT_AKCJI) {
             Akcja a = pulaAkcji.dobierz();
+            obecnyGracz.dobierz(a);
             for (IObserwator o : obserwatorzy)
                 o.patrzDobralAkcje(widokObecnegoGracza, a);
-            obecnyGracz.dobierz(a);
         }
     }
 

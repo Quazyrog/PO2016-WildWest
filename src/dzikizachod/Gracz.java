@@ -276,8 +276,8 @@ public abstract class Gracz {
         if (!czyWykonujeRuch())
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.ULECZ);
-        gra.oglosWykonanieAkcji(this, Akcja.ULECZ, cel);
         cel.dodajPZ(1, this);
+        gra.oglosWykonanieAkcji(this, Akcja.ULECZ, cel);
     }
 
 
@@ -295,8 +295,8 @@ public abstract class Gracz {
         if (!czyWykonujeRuch())
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.STRZEL);
-        gra.oglosWykonanieAkcji(this, Akcja.STRZEL, cel);
         cel.dodajPZ(-1, this);
+        gra.oglosWykonanieAkcji(this, Akcja.STRZEL, cel);
     }
 
 
@@ -309,8 +309,8 @@ public abstract class Gracz {
         if (!czyWykonujeRuch())
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.ZASIEG_PLUS_JEDEN);
-        gra.oglosWykonanieAkcji(this, Akcja.ZASIEG_PLUS_JEDEN, this);
         zasieg += 1;
+        gra.oglosWykonanieAkcji(this, Akcja.ZASIEG_PLUS_JEDEN, this);
     }
 
 
@@ -323,8 +323,8 @@ public abstract class Gracz {
         if (!czyWykonujeRuch())
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.ZASIEG_PLUS_DWA);
-        gra.oglosWykonanieAkcji(this, Akcja.ZASIEG_PLUS_DWA, this);
         zasieg += 2;
+        gra.oglosWykonanieAkcji(this, Akcja.ZASIEG_PLUS_DWA, this);
     }
 
 
@@ -337,8 +337,8 @@ public abstract class Gracz {
         if (!czyWykonujeRuch())
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.DYNAMIT);
-        gra.oglosWykonanieAkcji(this, Akcja.DYNAMIT, null);
         gra.uruchomDynamit();
+        gra.oglosWykonanieAkcji(this, Akcja.DYNAMIT, null);
     }
 
 
@@ -351,6 +351,14 @@ public abstract class Gracz {
         return akcje.ileTypu(akcja);
     }
 
+
+    /**
+     * Zwraca liczbę wszystkich akcji na ręce gracza.
+     * @return liczbę wszystkich akcji na ręce
+     */
+    final public int ileWszystkichAkcji() {
+        return akcje.ileWszystkich();
+    }
 
     /**
      * Wywoływane, gdy gracz umiera.

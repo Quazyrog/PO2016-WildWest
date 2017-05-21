@@ -117,6 +117,11 @@ public class StrategicznyWidokGracza {
     }
 
 
+    public int ileWszystkichAkcji() {
+        return gracz.ileWszystkichAkcji();
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof StrategicznyWidokGracza))

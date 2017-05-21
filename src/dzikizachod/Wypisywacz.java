@@ -135,17 +135,15 @@ public class Wypisywacz implements IObserwator {
         zwiekszWciecie();
         wypisaneAkcjeDobrane = 0;
         wypisaneAkcjeWykonane = 0;
+        if (ktoGra.ileWszystkichAkcji() == Disboard.LIMIT_AKCJI)
+            wypiszWszystkieAkcje(ktoGra);
     }
 
 
     @Override
     public void patrzDobralAkcje(StrategicznyWidokGracza ktoGra, Akcja a) {
-        if (wypisaneAkcjeDobrane + 1 == Disboard.LICZBA_DOBIERANYCH_AKCJI) {
-            wypluj("Akcje: [");
+        if (ktoGra.ileWszystkichAkcji() == Disboard.LIMIT_AKCJI - 1)
             wypiszWszystkieAkcje(ktoGra);
-            wyplujln(a + "]");
-        }
-        ++wypisaneAkcjeDobrane;
     }
 
 
@@ -153,15 +151,21 @@ public class Wypisywacz implements IObserwator {
      * Wypisuje wszystkie akcje posiadane przez gracza.
      */
     protected void wypiszWszystkieAkcje(StrategicznyWidokGracza g) {
+        wypluj("Akcje: [");
+        StringBuilder sb = new StringBuilder();
         for (Akcja a : Akcja.values()) {
             try {
-                for (int i = 0; i < g.ileAkcji(a); ++i) {
-                    wypluj(a + ", ");
-                }
+                for (int i = 0; i < g.ileAkcji(a); ++i)
+                    sb.append(a).append(", ");
             } catch (BladKonrtoleraWyjatek e) {
                 e.printStackTrace();
             }
+
         }
+        sb.delete(sb.length() - 2, sb.length());
+        wypluj(sb.toString());
+        wyplujln("]");
+        wypisaneAkcjeDobrane = 5;
     }
 
 
