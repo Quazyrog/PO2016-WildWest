@@ -34,6 +34,9 @@ public class StrategiaBandytySprytna extends StrategiaBandytyDomyslna {
             if (najslabszy != null && najslabszy.pz() <= ja().ileAkcji(Akcja.STRZEL)) {
                 while (najslabszy.pz() > 0)
                     akcjaStrzel(najslabszy);
+            } else {
+                //Z forum, że niby tak ma być
+                super.graj();
             }
         }
     }
