@@ -13,8 +13,8 @@ import java.util.Random;
  * dostępnego typu. Oczywiście karty których jest więcej, są bardziej prawdopodobne.
  */
 public class PulaAkcji {
-    /** Czy można dodawać akcje, czyli czy nic nie zostało jeszcze dobrane */
-    private boolean moznaDodawac = true;
+    /** Karty do przetasowania, z których nie dobieramy */
+    private LicznikAkcji poczatkowe = new LicznikAkcji();
 
     /** Karty do przetasowania, z których nie dobieramy */
     private LicznikAkcji sciepy = new LicznikAkcji();
@@ -36,22 +36,28 @@ public class PulaAkcji {
     }
 
 
+    public void przywrocPoczatkowe() {
+        sciepy = new LicznikAkcji();
+        talia = new LicznikAkcji();
+        for (Akcja a : Akcja.values())
+            talia.dodaj(a, poczatkowe.ileTypu(a));
+    }
+
+
     /**
      * Dodaj do puli podaną liczbę akcji danego typu.
-     * Liczba akcji danego typu w puli jest ograniczona przez <c>Akcja.obetnijDoLimitu()</c>. Ponadto nie
-     * można dodawać akcji, kiedy jakaś została już dobrana.
+     * Liczba akcji danego typu w puli jest ograniczona przez <c>Akcja.obetnijDoLimitu()</c>. Akcje można dodawać po
+     * rozpoczęciu gry, ale zostanie to wzięte pod uwagę dopiero w następnej rozgrywcie z wykorzystaniem tej talii.
      * @param akcja typ dodawanych akcji
      * @param ile liczba dodawanych akcji
      * @return liczbę akcji dodanych do puli (może być mniejsza od <c>ile</c>)
      */
     public int dodaj(Akcja akcja, int ile) {
-        if (!moznaDodawac)
-            throw new IllegalStateException("Nie można dodawać kart po rozpoczęciu rozgrywki");
         if (ile <= 0)
             throw new IllegalArgumentException("Nie można zabrać kart z puli");
 
-        int dodane = akcja.obetnijDoLimitu(sciepy.ileTypu(akcja) + ile) - sciepy.ileTypu(akcja);
-        talia.dodaj(akcja, dodane);
+        int dodane = akcja.obetnijDoLimitu(poczatkowe.ileTypu(akcja) + ile) - poczatkowe.ileTypu(akcja);
+        poczatkowe.dodaj(akcja, dodane);
         return dodane;
     }
 
@@ -63,7 +69,6 @@ public class PulaAkcji {
      * @return wylosowaną z talii kartę
      */
     public Akcja dobierz() {
-        moznaDodawac = false;
         if (talia.ileWszystkich() == 0)
             przetasuj();
 

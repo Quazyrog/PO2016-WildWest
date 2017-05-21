@@ -123,6 +123,7 @@ public class Disboard {
      * Przed wywołaniem, nalezy przypisac do pól obiektu kolekcje graczy.
      */
     protected void przygotujRozgrywke() {
+        pulaAkcji.przywrocPoczatkowe();
         sprawdzTabliceGraczy();
         potasujGraczy();
         przygotujGraczy();

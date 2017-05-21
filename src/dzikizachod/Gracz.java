@@ -341,14 +341,7 @@ public abstract class Gracz {
 
     protected void umieram(Gracz zrodloAtaku) {
         gra.graczUmarl(this, zrodloAtaku);
-        for (Akcja a : Akcja.values()) {
-            try {
-                while (ileAkcji(a) > 0)
-                    odrzucAkcje(a);
-            } catch (BrakAkcjiWyjatek e) {
-                e.printStackTrace();
-            }
-        }
+        oddajWszystkieAkcje();
     }
 
 
@@ -432,4 +425,17 @@ public abstract class Gracz {
             throw new BrakAkcjiWyjatek();
         gra.oddajAkcje(akcja);
     }
+
+    
+    protected void oddajWszystkieAkcje() {
+        for (Akcja a : Akcja.values()) {
+            try {
+                while (ileAkcji(a) > 0)
+                    odrzucAkcje(a);
+            } catch (BrakAkcjiWyjatek e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
