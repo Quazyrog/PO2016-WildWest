@@ -1,5 +1,7 @@
 package dzikizachod;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -12,6 +14,24 @@ public abstract class StrategiaOgolna extends Strategia {
     }
 
     public StrategiaOgolna() {
+    }
+
+    protected List<StrategicznyWidokGracza> graczeWZasieguKtorzySa(TozsamoscGracza kim, int kierunek) {
+        if (kierunek != 0) {
+            StrategicznyWidokGracza iter = ja().przeskocz(kierunek);
+            List<StrategicznyWidokGracza> znalezieni = new ArrayList<>();
+
+            for (int odleglosc = 1; odleglosc < ja().zasieg(); ++odleglosc) {
+                if (iter.tozsamosc() == kim)
+                    znalezieni.add(iter);
+                iter = iter.przeskocz(kierunek);
+            }
+            return znalezieni;
+        }
+
+        List<StrategicznyWidokGracza> znalezieni = graczeWZasieguKtorzySa(kim, -1);
+        znalezieni.addAll(graczeWZasieguKtorzySa(kim, 1));
+        return znalezieni;
     }
 
     /**

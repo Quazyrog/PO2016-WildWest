@@ -1,6 +1,6 @@
 package dzikizachod;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -16,18 +16,22 @@ public abstract class StrategiaBandyty extends StrategiaOgolna {
 
 
     protected StrategicznyWidokGracza losowyPomocnikWZasieguNaLuku(int kierunek) {
-        StrategicznyWidokGracza iter = ja().przeskocz(kierunek);
-        ArrayList<StrategicznyWidokGracza> znalezieniPomocnicy = new ArrayList<>();
-
-        for (int odleglosc = 1; odleglosc < ja().zasieg(); ++odleglosc) {
-            if (iter.tozsamosc() == TozsamoscGracza.POMOCNIK_SZERYFA)
-                znalezieniPomocnicy.add(iter);
-            iter = iter.przeskocz(kierunek);
-        }
+        List<StrategicznyWidokGracza> znalezieniPomocnicy =
+                graczeWZasieguKtorzySa(TozsamoscGracza.POMOCNIK_SZERYFA, kierunek);
 
         if (znalezieniPomocnicy.size() == 0)
             return null;
         return znalezieniPomocnicy.get(rng.nextInt(znalezieniPomocnicy.size()));
+    }
+
+
+    protected boolean bijSzeryfaJakMozna() throws BladKonrtoleraWyjatek {
+        if (ja().odlegloscOd(szeryf()) <= ja().zasieg()) {
+            while (ja().ileAkcji(Akcja.STRZEL) > 0)
+                akcjaStrzel(szeryf());
+            return true;
+        }
+        return false;
     }
 
 

@@ -57,12 +57,8 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty {
 
 
     protected void najazdNaSzeryfa() throws BladKonrtoleraWyjatek {
-        int doSzeryfa = ja().odlegloscIKierunekOd(szeryf());
-
-        if (Math.abs(doSzeryfa) <= ja().zasieg()) {
-            while (ja().ileAkcji(Akcja.STRZEL) > 0)
-                akcjaStrzel(szeryf());
-        } else {
+        if (!bijSzeryfaJakMozna()) {
+            int doSzeryfa = ja().odlegloscIKierunekOd(szeryf());
             StrategicznyWidokGracza cel = losowyPomocnikWZasieguNaLuku(doSzeryfa);
             if (cel == null)
                 cel = losowyPomocnikWZasieguNaLuku(-doSzeryfa);
