@@ -74,6 +74,8 @@ class FiltrObserwatora implements IObserwator {
 
 
     protected StrategicznyWidokGracza wewnetrznyWidokGracza(StrategicznyWidokGracza pelnyWidok) {
-        return widokiGraczy[pelnyWidok.identyfikator()];
+        if (pelnyWidok != null)
+            return widokiGraczy[pelnyWidok.identyfikator()];
+        return null;
     }
 }
