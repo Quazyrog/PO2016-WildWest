@@ -1,7 +1,5 @@
 package dzikizachod;
 
-import java.util.ArrayList;
-import java.util.Random;
 
 public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
     @Override
@@ -9,6 +7,18 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
 
     @Override
     public void patrzKoniecGry(Zakonczenie zakonczenie) {}
+
+    @Override
+    public void patrzRuchGracza(StrategicznyWidokGracza ktoGra) {}
+
+    @Override
+    public void patrzDobralAkcje(StrategicznyWidokGracza ktoGra, Akcja a) {}
+
+    @Override
+    public void patrzNaDynamit(StrategicznyWidokGracza ktoGra, boolean wybuchl) {}
+
+    @Override
+    public void patrzSkonczylTure(StrategicznyWidokGracza ktoGra) {}
 
     protected void zwalczRandomy() throws BladKonrtoleraWyjatek {
         while (ja().ileAkcji(Akcja.STRZEL) > 0 && !ja().czyKoniecGry()) {

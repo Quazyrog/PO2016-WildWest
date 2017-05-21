@@ -313,7 +313,6 @@ public abstract class Gracz {
 
     protected void umieram(Gracz zrodloAtaku) {
         gra.graczUmarl(this, zrodloAtaku);
-        gra.usunObserwatora(kontroler);
         for (Akcja a : Akcja.values()) {
             try {
                 while (ileAkcji(a) > 0)
@@ -322,6 +321,10 @@ public abstract class Gracz {
                 e.printStackTrace();
             }
         }
+    }
+
+    Strategia startegia() {
+        return kontroler;
     }
 
     /**
@@ -357,7 +360,6 @@ public abstract class Gracz {
         this.numer = numer;
         this.identyfikator = numer;
         pz = limitPZ;
-        gra.dodajObserwatora(kontroler);
     }
 
     /**

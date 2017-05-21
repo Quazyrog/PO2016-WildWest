@@ -45,6 +45,9 @@ public class Disboard {
     /** Widok na właśnie grającego gracza. */
     private StrategicznyWidokGracza widokObecnegoGracza;
 
+    /** Lista obserwatorów dodanych przez graczy, które musza być usunięte po rozgrywce */
+    ArrayList<IObserwator> filtryObserwatorowStrategii = new ArrayList<>();
+
 
     /**
      * Dodaje obserwatora rozgrywki.
@@ -88,7 +91,7 @@ public class Disboard {
      * @param gracze lista graczy
      * @param pulaAkcji pula z akcjami
      */
-    public void rozgrywka(List gracze, PulaAkcji pulaAkcji) {
+    public void rozgrywka(List<Gracz> gracze, PulaAkcji pulaAkcji) {
         if (pulaAkcji == null)
             throw new NullPointerException();
         if (gracze == null)
@@ -100,6 +103,9 @@ public class Disboard {
 
         przygotujRozgrywke();
         bawcieSieDobrze("");
+        zakonczRozgrywke();
+        for (Gracz g : gracze)
+            g.skonczGrac();
     }
 
     /**
@@ -168,6 +174,12 @@ public class Disboard {
         for (int i = 1; i < gracze.size() - 1; ++i)
             gracze.get(i).przygotujDoGry(this, gracze.get(i - 1), gracze.get(i + 1), i);
         gracze.get(gracze.size() - 1).przygotujDoGry(this, gracze.get(gracze.size() - 2), gracze.get(0), gracze.size() - 1);
+
+        for (Gracz g : gracze) {
+            IObserwator filtr = new FiltrObserwatora(g.startegia(), g, gracze);
+            filtryObserwatorowStrategii.add(filtr);
+            dodajObserwatora(filtr);
+        }
     }
 
     /**
@@ -259,6 +271,23 @@ public class Disboard {
             }
             dynamitIdzie = false;
         }
+    }
+
+    protected void zakonczRozgrywke() {
+        for (IObserwator o : filtryObserwatorowStrategii)
+            usunObserwatora(o);
+
+        dynamitIdzie = false;
+        gracze = null;
+        liczbaBandytów = 0;
+        numerTury = 0;
+        obecnyGracz = null;
+        pulaAkcji = null;
+        szeryf = null;
+        widokiGraczy = null;
+        widokObecnegoGracza = null;
+        widokSzeryfa = null;
+        filtryObserwatorowStrategii.clear();
     }
 
     void uruchomDynamit() {

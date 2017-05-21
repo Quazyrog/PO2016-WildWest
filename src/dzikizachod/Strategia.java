@@ -24,18 +24,6 @@ abstract public class Strategia implements IObserwator {
         widokSzeryfa = szeryf;
     }
 
-    @Override
-    final public void patrzRuchGracza(StrategicznyWidokGracza ktoGra) {}
-
-    @Override
-    final public void patrzDobralAkcje(StrategicznyWidokGracza ktoGra, Akcja a) {}
-
-    @Override
-    final public void patrzNaDynamit(StrategicznyWidokGracza ktoGra, boolean wybuchl) {}
-
-    @Override
-    final public void patrzSkonczylTure(StrategicznyWidokGracza ktoGra) {}
-
     public void akcjaUlecz(StrategicznyWidokGracza cel) throws BladKonrtoleraWyjatek {
         marionetka.akcjaUlecz(cel.gracz);
     }
