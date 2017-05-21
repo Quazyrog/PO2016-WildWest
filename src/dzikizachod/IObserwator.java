@@ -1,7 +1,8 @@
 package dzikizachod;
 
 /**
- * Interfejs obserwatorów gry (taki listener tego co się dzieje)
+ * Interfejs obserwatorów gry (taki listener tego co się dzieje).
+ * Warto wiedzieć, że powiadomienia są wysyłane, zanim efekt zostanie nałożony.
  */
 public interface IObserwator {
     /**

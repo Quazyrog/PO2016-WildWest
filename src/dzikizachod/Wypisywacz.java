@@ -111,7 +111,7 @@ public class Wypisywacz implements IObserwator {
         zwiekszWciecie();
         for (StrategicznyWidokGracza g : gracze) {
             if (g.pz() > 0)
-                wyplujln(g.identyfikator() + ": " + g.tozsamosc() + "(liczba żyć: " + g.pz() + ")");
+                wyplujln(g.identyfikator() + ": " + g.tozsamosc() + " (liczba żyć: " + g.pz() + ")");
             else
                 wyplujln(g.identyfikator() + ": X (" + g.tozsamosc() + ")");
         }
@@ -131,7 +131,7 @@ public class Wypisywacz implements IObserwator {
     public void patrzRuchGracza(StrategicznyWidokGracza ktoGra) {
         if (ktoGra.tozsamosc() != TozsamoscGracza.SZERYF)
             wyplujln();
-        wyplujln("GRACZ " + ktoGra.identyfikator() + "(" + ktoGra.tozsamosc() + "):");
+        wyplujln("GRACZ " + ktoGra.identyfikator() + " (" + ktoGra.tozsamosc() + "):");
         zwiekszWciecie();
         wypisaneAkcjeDobrane = 0;
         wypisaneAkcjeWykonane = 0;
@@ -140,15 +140,28 @@ public class Wypisywacz implements IObserwator {
 
     @Override
     public void patrzDobralAkcje(StrategicznyWidokGracza ktoGra, Akcja a) {
-        //FIXME to nie ma być lista DOBRANYCH akcji
-        if (wypisaneAkcjeDobrane == 0) {
-            wypluj("Akcje: [" + a);
-        } else if (wypisaneAkcjeDobrane + 1 == Disboard.LICZBA_DOBIERANYCH_AKCJI) {
-            wyplujln(", " + a + "]");
-        } else {
-            wypluj(", " + a);
+        if (wypisaneAkcjeDobrane + 1 == Disboard.LICZBA_DOBIERANYCH_AKCJI) {
+            wypluj("Akcje: [");
+            wypiszWszystkieAkcje(ktoGra);
+            wyplujln(a + "]");
         }
         ++wypisaneAkcjeDobrane;
+    }
+
+
+    /**
+     * Wypisuje wszystkie akcje posiadane przez gracza.
+     */
+    protected void wypiszWszystkieAkcje(StrategicznyWidokGracza g) {
+        for (Akcja a : Akcja.values()) {
+            try {
+                for (int i = 0; i < g.ileAkcji(a); ++i) {
+                    wypluj(a + ", ");
+                }
+            } catch (BladKonrtoleraWyjatek e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
