@@ -9,6 +9,10 @@ import java.util.Random;
  * aby usuwać paskudy.
  */
 public abstract class StrategiaSzeryfa extends StrategiaOgolna {
+    /**
+     * Podczas losowań strategia powinna się posługiwac tym generatorem liczb losowych.
+     * @param rng RGN do użycia przez strategię
+     */
     public StrategiaSzeryfa(Random rng) {
         super(rng);
     }

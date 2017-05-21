@@ -3,14 +3,32 @@ package dzikizachod;
 import java.util.List;
 
 /**
- * Created by saphir on 21/05/17.
+ * Obserwator Disboardu, który przekazuje infromacje dalej do strategii kierującej danym graczem.
+ * Celem tej klasy jest pośredniczenie w wymianie informacji pomiędzy strategią, a Disboardem. Disboard wysyła
+ * do wszystkich obserwatorów komunikaty dające im pełną możliwość sprawdzania stanu graczy w grze, co byłoby
+ * niedopuszczalne w wypadku strategii. Tak klasa ogranicza informacje zawarte w komunikatach i przekazuje je dalej do
+ * strategii sterującej graczem.
  */
 class FiltrObserwatora implements IObserwator {
+    /** Gracz, do którego strategii przekazywane są informacje */
     private Gracz perspektywa;
+
+    /** Strategia sterująca tymże graczem */
     private IObserwator docelowy;
+
+    /** Widoki wszystkich graczy z perspektywy danego gracza. To one są przekazywane w komunikatach wysyłanych do
+     * strategii zamiast oryginalnych widoków podawanych przez Disboard. */
     StrategicznyWidokGracza[] widokiGraczy;
 
 
+    /**
+     * Tworzy nowy filtr dla obserwatora sterującego graczem.
+     * @param docelowy strategia-obserwator sterujący graczem (może byc także zwyczajny obserwator, ale obecnie nie
+     *                 jest to stosowane). Tam są przekazywane dalej komunikaty od Disboardu
+     * @param prespektywa gracz, którym steruje obserwator (lub z którego widzi obserwator). Używany jako podglądający
+     *                    do tworzenia widoków przekazywanych dalej
+     * @param gracze wszyscy gracze, zaczynajacy grę
+     */
     public FiltrObserwatora(IObserwator docelowy, Gracz prespektywa, List<Gracz> gracze) {
         this.docelowy = docelowy;
         this.perspektywa = prespektywa;
@@ -73,6 +91,13 @@ class FiltrObserwatora implements IObserwator {
     }
 
 
+    /**
+     * Zwraca zawężony widok odpowiadajacy podanemu lub <code>null</code>
+     * @param pelnyWidok pełny widok, przekazany przez Disboard
+     * @return Jeśli <code>pelnyWidok != null</code>:
+     *         <code>{@link StrategicznyWidokGracza}(pelnyWidok.podgladacz, pelnyWidok.gracz)</code>
+     *         albo <code>null</code>
+     */
     protected StrategicznyWidokGracza wewnetrznyWidokGracza(StrategicznyWidokGracza pelnyWidok) {
         if (pelnyWidok != null)
             return widokiGraczy[pelnyWidok.identyfikator()];

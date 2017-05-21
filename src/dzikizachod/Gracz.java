@@ -4,8 +4,11 @@ import java.util.Random;
 
 /**
  * Abstrakcyjna klasa reprezętująca gracza.
+ * Wchodzi w interakcje z innymi graczami, bez pomocy disboardu i generalnie jest od niego zależny tylko podczas gry.
+ * Ma dużo metod ostatecznych, aby nie dało się zrobić oszukiwanych graczy.
  */
 public abstract class Gracz {
+    /** RNG używany do rozdawania losowych ograniczeń na HP */
     private static Random rng = new Random();
 
     /** Limit punktów życia gracza */
@@ -75,7 +78,7 @@ public abstract class Gracz {
      * @param wKierunku kierunek, oznaczający lewego sąsiada (kierunek ujemny) lub prawego (dodatni); nie może być 0
      * @return <c>odGracza.poLewej</c> gdy <c>kierunek < 0</c>; <c>odGracza.poPrawej</c> gdy <c>kierunek > 0</c>
      */
-    public Gracz przeskocz(int wKierunku) {
+    final public Gracz przeskocz(int wKierunku) {
         if (wKierunku == 0) {
             throw new IllegalArgumentException();
         }
@@ -102,11 +105,15 @@ public abstract class Gracz {
 
     /**
      * Zmienia punkty życia gracza o podana liczbę.
-     * Punkty życia nie spadną do wartości mniejszej niż 0.
+     * Punkty życia nie spadną do wartości mniejszej niż 0. W wypadku śmierci gracza, zostanie o tym powiadomiony
+     * Disboard, a akcje gracza zwrócone do puli. Nie można tego wywołać, gdy gra się nie toczy.
      * @param delta liczba dodana do punktów życia
      * @param zrodloAtaku gracz, który uleczyl lub zaatakował; <code>null</code> w przypadku dynamitu
+     * @throws NieInteresujSieTrupemWyjatek kiedy ten gracz jest już martwy
      */
-    public void dodajPZ(int delta, Gracz zrodloAtaku) throws BladKonrtoleraWyjatek {
+    final public void dodajPZ(int delta, Gracz zrodloAtaku) throws BladKonrtoleraWyjatek {
+        if (czyKoniecGry())
+            throw new IllegalStateException("Gra musi się toczyć, aby modyfikowac PZ");
         if (pz == 0)
             throw new NieInteresujSieTrupemWyjatek();
         pz = Math.max(0, Math.min(limitPZ, pz + delta));
@@ -119,7 +126,7 @@ public abstract class Gracz {
      * Zwraca obecną liczbę punktów życia.
      * @return liczbę punktów zycia
      */
-    public int pz() {
+    final public int pz() {
         return pz;
     }
 
@@ -128,7 +135,7 @@ public abstract class Gracz {
      * Zwraca liczbę maksymalnych punktów życia.
      * @return maksymalną liczbę punktów życia
      */
-    public int maksymalnePZ() {
+    final public int maksymalnePZ() {
         return limitPZ;
     }
 
@@ -137,7 +144,7 @@ public abstract class Gracz {
      * Zwraca zasięg gracza
      * @return zasięg gracza
      */
-    public int zasieg() {
+    final public int zasieg() {
         return zasieg;
     }
 
@@ -147,7 +154,7 @@ public abstract class Gracz {
      * Jest to stały numer, nadany na początku rozgrywki.
      * @return identyfikator gracza
      */
-    public int identyfikator() {
+    final public int identyfikator() {
         return identyfikator;
     }
 
@@ -156,7 +163,7 @@ public abstract class Gracz {
      * Zwraca numer gracza w toczącej się rozgrywce lub -1.
      * @return -1 gdy gracz nie gra, a jego numer w grze w przeciwnym wypadku
      */
-    public int numer() {
+    final public int numer() {
         return numer;
     }
 
@@ -165,13 +172,13 @@ public abstract class Gracz {
      * Delegacja <code>czyKoniecGry</code> z klasy gry
      * @return <code>true</code>, kiedy któraś ze stron już wygrała; <code>false</code> w.p.p.
      */
-    public boolean czyKoniecGry() {
+    final public boolean czyKoniecGry() {
         return gra.czyKoniecGry();
     }
 
 
     /** Zwraca liczbę żywych graczy biorących udział w rozgrywce */
-    public int liczbaGraczy() {
+    final public int liczbaGraczy() {
         return gra.liczbaGraczy();
     }
 
@@ -181,7 +188,7 @@ public abstract class Gracz {
      * Kiedy gra zakończy się w trakcie tury gracza, to gracz nie wykonuje już ruchów po jej zakończeniu.
      * @return <code>true</code> podczas ruchu tego gracza; <code>false</code> poza ruchem
      */
-    public boolean czyWykonujeRuch() {
+    final public boolean czyWykonujeRuch() {
         return wykonujeRuch && !czyKoniecGry();
     }
 
@@ -195,7 +202,7 @@ public abstract class Gracz {
      *                            mierzenia (ujemny -> na lewo; dodatni -> na prawo). Zerowy oznacza tego gracza.
      * @return gracza znajdującego się we wskazanej odległości na prawo lub lewo od tego gracza
      */
-    public Gracz dalekiSasiad(int odlegloscSkierowana) throws NieInteresujSieTrupemWyjatek {
+    final public Gracz dalekiSasiad(int odlegloscSkierowana) throws NieInteresujSieTrupemWyjatek {
         if (pz == 0)
             throw new NieInteresujSieTrupemWyjatek();
         if (Math.abs(odlegloscSkierowana) >= gra.liczbaGraczy())
@@ -209,7 +216,7 @@ public abstract class Gracz {
      * @param gracz gracz, do którego mierzymy odległość. Musi być żywy i brać udział w tej samej rozgrywce.
      * @return odległość tego gracza od podanego
      */
-    public int odlegloscOd(Gracz gracz) throws NieInteresujSieTrupemWyjatek {
+    final public int odlegloscOd(Gracz gracz) throws NieInteresujSieTrupemWyjatek {
         return Math.abs(odlegloscIKierunekOd(gracz));
     }
 
@@ -220,7 +227,7 @@ public abstract class Gracz {
      * @return liczbę całkowita o module równym odległości do wskazanego gracza, której znak zależy od kierunku jej
      * mierzenia (dodatni -- zgodnie z kierunkiem gry, ujemny -- przeciwnie do niefgo)
      */
-    public int odlegloscIKierunekOd(Gracz gracz) throws NieInteresujSieTrupemWyjatek {
+    final public int odlegloscIKierunekOd(Gracz gracz) throws NieInteresujSieTrupemWyjatek {
         int przeciwna = odlegloscSkierowanOd(-1, gracz);
         int zgodna = odlegloscSkierowanOd(1, gracz);
         if (zgodna <= przeciwna)
@@ -235,7 +242,7 @@ public abstract class Gracz {
      * @param gracz gracz, do którego mierzymy odległość
      * @return odległość od gracza mierząoną we wskazanym kierunku
      */
-    public int odlegloscSkierowanOd(int kierunek, Gracz gracz) throws NieInteresujSieTrupemWyjatek {
+    final public int odlegloscSkierowanOd(int kierunek, Gracz gracz) throws NieInteresujSieTrupemWyjatek {
         if (pz == 0 || gracz.pz() == 0)
             throw new NieInteresujSieTrupemWyjatek();
         if (kierunek == 0)
@@ -260,8 +267,10 @@ public abstract class Gracz {
      * @param cel gracz do uleczania (teg lub sąsiad)
      * @throws PozaZasiegiemWyjatek kiedy cel jest poza zasięgiem leczenia
      * @throws BrakAkcjiWyjatek kiedy gracz nie ma tej akcji na ręce
+     * @throws NieTwojRochWyjatek kiedy ten gracz nie może się teraz ruszyć
+     * @throws NieInteresujSieTrupemWyjatek kiedy akcja miałaby wykonac się na martwum graczu
      */
-    public void akcjaUlecz(Gracz cel) throws BladKonrtoleraWyjatek {
+    final public void akcjaUlecz(Gracz cel) throws BladKonrtoleraWyjatek {
         if (cel != this && cel != przeskocz(-1) && cel != przeskocz(1))
             throw new PozaZasiegiemWyjatek();
         if (!czyWykonujeRuch())
@@ -277,9 +286,10 @@ public abstract class Gracz {
      * @param cel gracz, do którego mierzymy
      * @throws PozaZasiegiemWyjatek kiedy cel znajduje się poza zasięgiem
      * @throws BrakAkcjiWyjatek kiedy gracz nie ma tej akcji na ręce
+     * @throws NieTwojRochWyjatek kiedy ten gracz nie może się teraz ruszyć
      * @throws NieInteresujSieTrupemWyjatek kiedy strzelisz do trupa
      */
-    public void akcjaStrzel(Gracz cel) throws BladKonrtoleraWyjatek {
+    final public void akcjaStrzel(Gracz cel) throws BladKonrtoleraWyjatek {
         if (odlegloscOd(cel) > zasieg)
             throw new PozaZasiegiemWyjatek();
         if (!czyWykonujeRuch())
@@ -293,8 +303,9 @@ public abstract class Gracz {
     /**
      * Wykorzystuje akcję zwiększenia zasięgu.
      * @throws BrakAkcjiWyjatek kied gracz nie ma tej akcji
+     * @throws NieTwojRochWyjatek kiedy ten gracz nie może się teraz ruszyć
      */
-    public void akcjaZasiegPlusJeden() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
+    final public void akcjaZasiegPlusJeden() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
         if (!czyWykonujeRuch())
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.ZASIEG_PLUS_JEDEN);
@@ -306,8 +317,9 @@ public abstract class Gracz {
     /**
      * Wykorzystuje akcję zwiększenia zasięgu o dwa.
      * @throws BrakAkcjiWyjatek gdy nie ma akcji
+     * @throws NieTwojRochWyjatek kiedy ten gracz nie może się teraz ruszyć
      */
-    public void akcjaZasiegPlusDwa() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
+    final public void akcjaZasiegPlusDwa() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
         if (!czyWykonujeRuch())
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.ZASIEG_PLUS_DWA);
@@ -318,9 +330,10 @@ public abstract class Gracz {
 
     /**
      * Wykorzystuje akcję rzucenia dynamitu
-     * @throws BrakAkcjiWyjatek ...
+     * @throws BrakAkcjiWyjatek ..
+     * @throws NieTwojRochWyjatek kiedy ten gracz nie może się teraz ruszyć.
      */
-    public void akcjaDynamit() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
+    final public void akcjaDynamit() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
         if (!czyWykonujeRuch())
             throw new NieTwojRochWyjatek();
         odrzucAkcje(Akcja.DYNAMIT);
@@ -334,17 +347,26 @@ public abstract class Gracz {
      * @param akcja typ akcji, o którą pytamy
      * @return liczbę akcji typu <code>akcja</code>
      */
-    public int ileAkcji(Akcja akcja) {
+    final public int ileAkcji(Akcja akcja) {
         return akcje.ileTypu(akcja);
     }
 
 
+    /**
+     * Wywoływane, gdy gracz umiera.
+     * Oddaje akcje do puli i ogłasza tę tragedię w Disboardzie.
+     * @param zrodloAtaku
+     */
     protected void umieram(Gracz zrodloAtaku) {
         gra.graczUmarl(this, zrodloAtaku);
         oddajWszystkieAkcje();
     }
 
 
+    /**
+     * Zwraca strategię kontrolującą gracza.
+     * @return strategię kontrolującą gracza
+     */
     Strategia startegia() {
         return kontroler;
     }
@@ -352,6 +374,8 @@ public abstract class Gracz {
 
     /**
      * Wykonuje ruch gracza.
+     * Na ten czas kontrolę przejmuje sterująca strategia. Jeżeli popełni błąd, który spowoduje rzucenie wyjątku
+     * <code>{@link BladKonrtoleraWyjatek}</code>, to zostanie on tu złapany, a ruch gracza uzanny za wykonany.
      */
     void graj() {
         try {
@@ -409,6 +433,9 @@ public abstract class Gracz {
 
     /**
      * Zmienia numer gracza
+     * Numer gracza odpowiada jego indeksowy w tablicy w Disboardzie i jest używany do obliczania odległości
+     * i dalekich sąsiadów
+     * @param nowyNumer nowy numer gracza
      */
     void przenumeruj(int nowyNumer) {
         this.numer = nowyNumer;
@@ -426,7 +453,10 @@ public abstract class Gracz {
         gra.oddajAkcje(akcja);
     }
 
-    
+
+    /**
+     * Odrzuca wszystkie akcjie, jakie gracz miał na ręce.
+     */
     protected void oddajWszystkieAkcje() {
         for (Akcja a : Akcja.values()) {
             try {

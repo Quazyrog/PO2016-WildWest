@@ -7,6 +7,10 @@ import java.util.Random;
  * Klasa abstrakcyjna na strategię bandyty
  */
 public abstract class StrategiaBandyty extends StrategiaOgolna {
+    /**
+     * Podczas losowań strategia powinna się posługiwac tym generatorem liczb losowych.
+     * @param rng RGN do użycia przez strategię
+     */
     public StrategiaBandyty(Random rng) {
         super(rng);
     }
@@ -15,6 +19,11 @@ public abstract class StrategiaBandyty extends StrategiaOgolna {
     public StrategiaBandyty() {}
 
 
+    /**
+     * Zwrca wszystkich pomocników w zasiegu mierzonym w podanym kierunku.
+     * @param kierunek kierunek, jak w <code>{@link StrategiaOgolna#graczeWZasieguKtorzySa(TozsamoscGracza, int)}</code>
+     * @return pomocników szeryfa w zasięgu mierzonym w podanym kierunku
+     */
     protected StrategicznyWidokGracza losowyPomocnikWZasieguNaLuku(int kierunek) {
         List<StrategicznyWidokGracza> znalezieniPomocnicy =
                 graczeWZasieguKtorzySa(TozsamoscGracza.POMOCNIK_SZERYFA, kierunek);
@@ -25,6 +34,10 @@ public abstract class StrategiaBandyty extends StrategiaOgolna {
     }
 
 
+    /**
+     * O ile to możliwe, wywala magazynek w szeryfa
+     * @return <code>true</code>, kiedy było to możliwe
+     */
     protected boolean bijSzeryfaJakMozna() throws BladKonrtoleraWyjatek {
         if (ja().odlegloscOd(szeryf()) <= ja().zasieg()) {
             while (ja().ileAkcji(Akcja.STRZEL) > 0)

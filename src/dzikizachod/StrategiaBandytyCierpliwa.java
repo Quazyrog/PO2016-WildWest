@@ -6,6 +6,10 @@ import java.util.Random;
  * Cierpliwa strategia bandyty
  */
 public class StrategiaBandytyCierpliwa extends StrategiaBandyty {
+    /**
+     * Podczas losowań strategia powinna się posługiwac tym generatorem liczb losowych.
+     * @param rng RGN do użycia przez strategię
+     */
     public StrategiaBandytyCierpliwa(Random rng) {
         super(rng);
     }

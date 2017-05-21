@@ -4,9 +4,14 @@ package dzikizachod;
 import java.util.Random;
 
 public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
+    /** Zliczacz wykorzystywany przez tę strategię */
     private StrategicznyZliczacz zliczacz = new StrategicznyZliczacz(ja(), rng, this::akcjaStrzel);
 
 
+    /**
+     * Podczas losowań strategia powinna się posługiwac tym generatorem liczb losowych.
+     * @param rng RGN do użycia przez strategię
+     */
     public StrategiaSzeryfaDomyslna(Random rng) {
         super(rng);
     }
@@ -54,6 +59,9 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
     }
 
 
+    /**
+     * Strzela do losowych graczy w zasięgu
+     */
     protected void zwalczRandomy() throws BladKonrtoleraWyjatek {
         while (ja().ileAkcji(Akcja.STRZEL) > 0 && !ja().czyKoniecGry()) {
             int zasiegRandomowania = Math.min(ja().zasieg(), ja().liczbaGraczy() - 1);

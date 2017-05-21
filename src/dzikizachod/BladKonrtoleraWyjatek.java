@@ -36,6 +36,7 @@ class BrakAkcjiWyjatek extends BladKonrtoleraWyjatek {
 
 /**
  * Rzucany, kiedy gracz próbuje wykonac akcję w nieswoim ruchu.
+ * Jest także zostac rzucony, gdy strategia wykona ruch po końcu gry.
  */
 class NieTwojRochWyjatek extends BladKonrtoleraWyjatek {
     NieTwojRochWyjatek() {

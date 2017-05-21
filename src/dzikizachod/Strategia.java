@@ -8,7 +8,9 @@ import java.util.Random;
  * Zawiera całość implementacji, której konkretne strategie powinny używać do komunikowania się ze wszystkimi
  * elementami gry.
  *
- * Pozwala
+ * Pozwala podklasom sterowac graczem oraz odpytywac go oraz innych graczy o ich stan.
+ *
+ * Jedna instancja może kontrolowac dokładnie jednego gracza.
  */
 abstract public class Strategia implements IObserwator {
     protected Random rng = new Random();
@@ -23,11 +25,18 @@ abstract public class Strategia implements IObserwator {
     private StrategicznyWidokGracza widokSzeryfa;
 
 
+    /**
+     * Podczas losowań strategia powinna się posługiwac tym generatorem liczb losowych.
+     * @param rng RGN do użycia przez strategię
+     */
     public Strategia(Random rng) {
         this.rng = rng;
     }
 
 
+    /**
+     * Strategia stworzy sobie własny RNG.
+     */
     public Strategia() {
         this(new Random());
     }
@@ -39,42 +48,71 @@ abstract public class Strategia implements IObserwator {
     }
 
 
+    /**
+     * Delegacja metody z kontrolowanego gracza
+     */
     public void akcjaUlecz(StrategicznyWidokGracza cel) throws BladKonrtoleraWyjatek {
         marionetka.akcjaUlecz(cel.gracz);
     }
 
 
+    /**
+     * Delegacja metody z kontrolowanego gracza
+     */
     public void akcjaStrzel(StrategicznyWidokGracza cel) throws BladKonrtoleraWyjatek {
         marionetka.akcjaStrzel(cel.gracz);
     }
 
 
+    /**
+     * Delegacja metody z kontrolowanego gracza
+     */
     public void akcjaZasiegPlusJeden() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
         marionetka.akcjaZasiegPlusJeden();
     }
 
 
+    /**
+     * Delegacja metody z kontrolowanego gracza
+     */
     public void akcjaZasiegPlusDwa() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
         marionetka.akcjaZasiegPlusDwa();
     }
 
 
+    /**
+     * Delegacja metody z kontrolowanego gracza
+     */
     public void akcjaDynamit() throws BrakAkcjiWyjatek, NieTwojRochWyjatek {
         marionetka.akcjaDynamit();
     }
 
 
+    /**
+     * Zwraca widok na kontrolowanego gracza
+     * @return widok na kontrolowanego gracza
+     */
     final protected StrategicznyWidokGracza ja() {
         return mojWidok;
     }
 
 
+    /**
+     * Zwraca widok na szeryfa
+     * @return widok na szeryfa
+     */
     final protected StrategicznyWidokGracza szeryf() {
         return widokSzeryfa;
     }
 
 
+    /**
+     * Przypisuje strategii gracza, którego będzie kontrolować
+     * @param gracz gracz do kontrolowania
+     */
     final void przypiszGracza(Gracz gracz) {
+        if (marionetka != null)
+            throw new IllegalStateException("Tak strategia już kontroluje gracza");
         marionetka = gracz;
         mojWidok = new StrategicznyWidokGracza(gracz, gracz);
     }

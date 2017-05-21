@@ -8,6 +8,7 @@ import java.util.Random;
  * Do listy paskud z ogólnej strategii dodatkowo dodaje graczy, którzy zabili więcej pomocników niż bandytów.
  */
 public class StrategiaSzeryfaZliczajaca extends StrategiaSzeryfa {
+    /** Zliczacz używany przez te strategię */
     ZaawansowanyStrategicznyZliczacz zliczacz;
 
     public StrategiaSzeryfaZliczajaca(Random rng) {

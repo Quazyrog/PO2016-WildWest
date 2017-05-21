@@ -3,7 +3,26 @@ package dzikizachod;
 import java.util.*;
 
 /**
- * Reprezentacja całej gry
+ * Reprezentacja całej gry; i to jest dobre miejsce, żeby opisać jak generalnie gra jest zorganizowana.
+ *
+ * Disboard jest całym światem gry i klasa odpowiedzialną za jej przeprowadzenie. W imię separacji UI i logiki,
+ * Disboard sam z siebie nic nie wypisuje. Potrafi natomiast przekazywać informacje o przebiegu gry do obiektów
+ * implementujących <code>IObserwator</code>. Wypisywacz, który implementuje ten interfejs jest odpowiedzialny za
+ * wypisywanie komunikatów o przebiegu gry. Strategie równiez go implementują i w ten sposób same śledzą przebieg gry.
+ *
+ * Disboard tylko przeprowadza grę, ale to gracze sami wykonują swoje działania. W związku z tym, na ogół akcje takie
+ * jak strzelanie nie angażują Disboardu (poza faktem konieczności rozgłoszenia komunikatu).
+ *
+ * Jest jeszcze jedna ważna kwestia. W celu ułatwienia debugowania można większości z klas w pakiecie przy inicjalizacji
+ * podać instancję zmiennej random, którą mają wykorzystywać. To pozwala na odtworzenie wielokrotnie takiego zamego
+ * przebiegu gry.
+ *
+ * Disboard jest areną wielu wydarzeń, tak więc pojedynczą instancję tej klasy można wykorzystac do rozegrania wielu
+ * gier, ale nie równocześnie.
+ *
+ * @see IObserwator
+ * @see Wypisywacz
+ * @see Gracz
  */
 public class Disboard {
     /** Ile ckcji gracz dobiera w ciągu tury */
@@ -49,6 +68,10 @@ public class Disboard {
     ArrayList<IObserwator> filtryObserwatorowStrategii = new ArrayList<>();
 
 
+    /**
+     * Stwarza Disboard, który korzysta z podanego generatora liczb losowych
+     * @param rng generator liczb losowych do wykorzystania
+     */
     public Disboard(Random rng) {
         this.rng = rng;
     }
@@ -56,7 +79,11 @@ public class Disboard {
 
     /**
      * Dodaje obserwatora rozgrywki.
+     * Obserwator będzie otrzymywał komunikaty o jej przebiegu. Raz dodany, może będzie śledzić wiele rozgrywek tak
+     * długo, aż zostanie usunięty. Strategie graczy są automatycznie dodawane na początku rozgrywki i usuwane
+     * po jej zakończeniu i nie należy ich dodawac przy pomocy tej funkcji.
      * @param obserwator obserwator do dodania.
+     * @see Disboard#usunObserwatora(IObserwator)
      */
     public void dodajObserwatora(IObserwator obserwator) {
         if (obserwator == null)
@@ -67,7 +94,9 @@ public class Disboard {
 
     /**
      * Usuwa obserwatora rozgrywki.
+     * Nie będzie już utrzymywac komunikatów o jej przebiegu. Jeśli nie był wcześnie dodany, to nic się ni stanie.
      * @param obserwator obserwator do usunięcia.
+     * @see Disboard#usunObserwatora(IObserwator)
      */
     public void usunObserwatora(IObserwator obserwator) {
         if (obserwator == null)
@@ -77,10 +106,13 @@ public class Disboard {
 
 
     /**
-     * Zwraca liczbę żywych grajacych
+     * Zwraca liczbę żywych graczy
+     * Zwraca liczbę żywych graczy biorących udział w toczącej się rozgrywce.
      * @return liczbę żywych grajacych
      */
     public int liczbaGraczy() {
+        if (gracze == null)
+            throw new IllegalStateException("Obecnie w Świecie Disboardu nie dzieje się nic ciekawego (gra się nie toczy)");
         return gracze.size();
     }
 
@@ -135,6 +167,7 @@ public class Disboard {
      * Tworzy widoki dla wszystkich graczy, które będą przekazywane obserwatorom gry.
      * Dba o to, aby na jednego gracza zawsze przypadał jeden widok. Każdy widok jest tworzony tak, aby udzielić pełnej
      * informacji o graczu (podglądający gracza jest graczem podglądanym).
+     * Należy jednak pamiętać, że strategie korzystają z własnych widoków o ograniczonych uprawnieniach.
      */
     private void przygotujWidokiGraczy() {
         widokiGraczy = new StrategicznyWidokGracza[gracze.size()];
@@ -183,6 +216,7 @@ public class Disboard {
 
     /**
      * Dla każdego gracz wywołuje na nim <code>przygotujDoGry()</code> z odpowiednimi parametrami.
+     * W związku z tym musi być wywołane po tasowaniu graczy.
      */
     protected void przygotujGraczy() {
         gracze.get(0).przygotujDoGry(this, gracze.get(gracze.size() - 1), gracze.get(1), 0);
@@ -199,16 +233,24 @@ public class Disboard {
 
 
     /**
-     * Zwraca odpowiedź na pytanie
+     * Zwraca odpowiedź na pytanie ,,Czy gra już się zakpńczyła''
+     * Gra jest uznana za zakończoną, kiedy (zachodzi dowolny):
+     *   - żadna gra sie nie toczy
+     *   - wszyscy bandyci nie żyją
+     *   - szeryf nie żyje
+     *   - dobiegła końca 42 runda
      * @return <code>false</code> kiey gra jeszcze trwa
      */
     public boolean czyKoniecGry() {
+        if (gracze == null)
+            return true;
         return liczbaBandytów == 0 || szeryf.pz() == 0 || numerTury > 42;
     }
 
 
     /**
      * Rozgrywa grę w pętli.
+     * Musi być naturalnie wywołane po całości funkcji inicjalizujących.
      * X) Bawcie się dobrze
      */
     protected void bawcieSieDobrze(String kto) {
@@ -247,7 +289,7 @@ public class Disboard {
 
 
     /**
-     * Fragment kodu rozgrywki odpowiedzialny za przeprowadzenie tury gracza
+     * Fragment kodu rozgrywki odpowiedzialny za przeprowadzenie tury gracza.
      */
     protected void rozegrajTureGracza() {
         widokObecnegoGracza = widokiGraczy[obecnyGracz.identyfikator()];
@@ -274,6 +316,10 @@ public class Disboard {
     }
 
 
+    /**
+     * Sprawdza, czy dynamit przechodzi przez grę i jeśli tak, to rozstrzyga jego efekt.
+     * Choć pozbycie się tego ograniczenia byłoby raczej proste, to może być tylko jeden dynamit w grze.
+     */
     protected void rozstrzygnijDynamit() {
         if (!dynamitIdzie)
             return;
@@ -294,6 +340,11 @@ public class Disboard {
     }
 
 
+    /**
+     * Wywołane po zakończeniu gry.
+     * Informuje wszystkich graczy o zakończeniu gry. Resetuje stan Disboardu do tego sprzed rozpoczęcia gry
+     * (oprócz RNG rzecz jasna).
+     */
     protected void zakonczRozgrywke() {
         for (IObserwator o : filtryObserwatorowStrategii)
             usunObserwatora(o);
@@ -312,6 +363,9 @@ public class Disboard {
     }
 
 
+    /**
+     * Rozpoczyna przerzucanie dynamitu.
+     */
     void uruchomDynamit() {
         if (dynamitIdzie)
             throw new Error("Za dużo dynamitów");
@@ -321,7 +375,7 @@ public class Disboard {
 
     /**
      * Zwraca akcję z powrotem do puli.
-     * @param akcja
+     * @param akcja akcja do odłożenia do puli
      */
     void oddajAkcje(Akcja akcja) {
         pulaAkcji.odrzuc(akcja);
@@ -330,6 +384,8 @@ public class Disboard {
 
     /**
      * Gracz informuje w ten sposób grę, że umarł.
+     * Gra dalej informuje o tym wszystkie strategie i zmniejsza pulkę graczy grających. Zmniejsza także ich numery (ale
+     * nie identyfikatory), aby po usunięciu martwego gracza dalej odpowiadały ich indeksom w tablicy graczy.
      * @param gracz nieboszczyk
      */
     void graczUmarl(Gracz gracz, Gracz zrodloAtaku) {

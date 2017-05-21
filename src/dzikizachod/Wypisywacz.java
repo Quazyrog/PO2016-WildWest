@@ -8,13 +8,25 @@ import java.io.PrintStream;
  * bodaj nie robi.
  */
 public class Wypisywacz implements IObserwator {
+    /** Strumien, na który wypisywane sa komunikaty */
     private PrintStream out;
+
+    /** Widoki wszystkich graczy, jacy zaczynali grę */
     private StrategicznyWidokGracza gracze[];
 
+    /** Jaki duże ma być wcięcie przed wypisywanymi komunikatami */
     private int wielkoscWciecia = 0;
+
+    /** Czy trzeba zrobic wcięcie przy najbliższym wypisaniu */
     boolean zrobWciecie = true;
+
+    /** Napis bedący wcięciem */
     private StringBuilder wciecie = new StringBuilder();
+
+    /** Liczba akcji wypisanych dobranych przez obecnego gracza */
     private int wypisaneAkcjeDobrane;
+
+    /** Licazba wypisanych akcji wykonanych przez obecnego gracza */
     private int wypisaneAkcjeWykonane;
 
 
@@ -27,12 +39,19 @@ public class Wypisywacz implements IObserwator {
     }
 
 
+    /**
+     * Zwiększa wcięcie (o dwie spacje, czyli jeden poziom wcięcia
+     */
     protected void zwiekszWciecie() {
         ++wielkoscWciecia;
         wciecie.append("  ");
     }
 
 
+    /**
+     * Zmniejsza wcięcia o jeden poziom wcięcia.
+     * Nie jest w stanie zmniejszyć wcięcia poniżej zera i wtedy zwyczajnie nic nie zrobi.
+     */
     protected void zmniejszWciecie() {
         if (wielkoscWciecia == 0)
             return;
@@ -41,6 +60,10 @@ public class Wypisywacz implements IObserwator {
     }
 
 
+    /**
+     * Wypisuje napis, dodając wciecie w razie potrzeby.
+     * @param s napis
+     */
     protected void wypluj(String s) {
         if (zrobWciecie) {
             out.print(wciecie);
@@ -50,12 +73,19 @@ public class Wypisywacz implements IObserwator {
     }
 
 
+    /**
+     * Wypisuje napis, dodając wcięcie w razie potrzeby i przechodzido następnego wiersza.
+     * @param s naspi
+     */
     protected void wyplujln(String s) {
         wypluj(s);
         wyplujln();
     }
 
 
+    /**
+     * Przechodzi do następnego wiersza.
+     */
     protected void wyplujln() {
         out.println();
         zrobWciecie = true;
@@ -73,6 +103,9 @@ public class Wypisywacz implements IObserwator {
     }
 
 
+    /**
+     * Wypisuje graczy w oczekiwanym formacie.
+     */
     protected void wyplujGraczy() {
         wyplujln("Gracze:");
         zwiekszWciecie();

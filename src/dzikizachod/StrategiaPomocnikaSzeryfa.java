@@ -6,6 +6,10 @@ import java.util.Random;
  * Ogólna strategia pomocnikmów szeryfa
  */
 public abstract class StrategiaPomocnikaSzeryfa extends StrategiaOgolna {
+    /**
+     * Podczas losowań strategia powinna się posługiwac tym generatorem liczb losowych.
+     * @param rng RGN do użycia przez strategię
+     */
     public StrategiaPomocnikaSzeryfa(Random rng) {
         super(rng);
     }

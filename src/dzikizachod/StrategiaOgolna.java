@@ -9,6 +9,9 @@ import java.util.Random;
  * W swojej metodzie <code>graj()</code> robi tylko to, co jest wspólne dla wszystkich graczy.
  */
 public abstract class StrategiaOgolna extends Strategia {
+    /**
+     * @param rng RNG wykorzystywane przez strategię
+     */
     public StrategiaOgolna(Random rng) {
         super(rng);
     }
@@ -16,6 +19,16 @@ public abstract class StrategiaOgolna extends Strategia {
     public StrategiaOgolna() {
     }
 
+    /**
+     * Wyszukuje wszystkich graczy od danej tożsamości, znajdujących się w zasięgu mierzonym w podanym kierunku.
+     * Należy zauważyć, że jeżeli dany gracz nie jest bandyta, to z jego perspektywy wszyscy poza nim samym i szeryfem
+     * są niewiadomo kim.
+     * @param kim jakiej tożsamości graczy szukamy
+     * @param kierunek dodatni oznacza kierunek zgodny z kierunkiem rozgrywki; ujemny oznmacza przeciwny; zero oznacza
+     *                 wyszukiwanie w obu kierunkach
+     * @return Listę wszystkich graczy w zasięgu mierzonym w podanym kierunku, którzy spełniają
+     * <code>g.tozsamosc() == kim</code>
+     */
     protected List<StrategicznyWidokGracza> graczeWZasieguKtorzySa(TozsamoscGracza kim, int kierunek) {
         if (kierunek != 0) {
             StrategicznyWidokGracza iter = ja().przeskocz(kierunek);

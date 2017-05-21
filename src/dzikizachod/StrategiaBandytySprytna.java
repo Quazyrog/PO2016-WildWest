@@ -7,9 +7,14 @@ import java.util.Random;
  * Sprytna strategia bandyty
  */
 public class StrategiaBandytySprytna extends StrategiaBandytyDomyslna {
+    /** Czy w tej grze już wkupiłem się w łaski */
     private boolean krewTowarzyszaNaMychRekach = false;
 
 
+    /**
+     * Podczas losowań strategia powinna się posługiwac tym generatorem liczb losowych.
+     * @param rng RGN do użycia przez strategię
+     */
     public StrategiaBandytySprytna(Random rng) {
         super(rng);
     }

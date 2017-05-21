@@ -2,6 +2,7 @@ package dzikizachod;
 
 /**
  * Proxy dostępu do gracza, które pozawala tylko na odczytywanie jego stanu, bez modyfikacji.
+ * Widok może być dodatkowo ograniczony tak, aby udzielał informacji dostępnych dla podanego gracza.
  */
 public class StrategicznyWidokGracza {
     protected Gracz gracz;

@@ -26,16 +26,27 @@ public class PulaAkcji {
     private Random rng;
 
 
+    /**
+     * Tworzy pulę akcji używającą podanego generatora liczb losowych
+     * @param rng
+     */
     public PulaAkcji(Random rng) {
         this.rng = rng;
     }
 
 
+    /**
+     * Tworzy pulę akcji korzystającą z nowo utworzonego generatora liczb losowych.
+     */
     public PulaAkcji() {
         this(new Random());
     }
 
 
+    /**
+     * Ustawia stan talii na taki, jaki był przed rozpoczęciem gry.
+     * W tali będą znajdowac się tylko te akcje i w dokładnie takiej ilości, jak zostały dodane.
+     */
     public void przywrocPoczatkowe() {
         sciepy = new LicznikAkcji();
         talia = new LicznikAkcji();

@@ -56,6 +56,9 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty {
     public void patrzSkonczylTure(StrategicznyWidokGracza ktoGra) {}
 
 
+    /**
+     * Strzela w szeryfa, a jak nie to w jakiegokolwiek pomocnika, preferując tych na krótszym łuku do szeryfa.
+     */
     protected void najazdNaSzeryfa() throws BladKonrtoleraWyjatek {
         if (!bijSzeryfaJakMozna()) {
             int doSzeryfa = ja().odlegloscIKierunekOd(szeryf());

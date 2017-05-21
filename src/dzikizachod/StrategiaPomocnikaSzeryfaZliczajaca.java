@@ -6,6 +6,7 @@ import java.util.Random;
  * Zliczająca strategia pomocnika szeryfa
  */
 public class StrategiaPomocnikaSzeryfaZliczajaca extends StrategiaPomocnikaSzeryfa {
+    /** Zliczacz wykorzystywany przez tę strategię */
     ZaawansowanyStrategicznyZliczacz zliczacz;
 
 

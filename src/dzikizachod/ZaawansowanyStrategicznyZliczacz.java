@@ -6,6 +6,8 @@ import java.util.TreeMap;
 
 /**
  * Ten strategiczny zliczacz dodatkowo utrzymuje tych, którzy zabili więcej pomocników, niż bandytów.
+ *
+ * Jest to poprostu zliczacz wykorzystywany przez strategie zliczajace.
  */
 public class ZaawansowanyStrategicznyZliczacz extends StrategicznyZliczacz {
     private Map<Integer, Integer> licznikZuuaaa = new TreeMap<>();
