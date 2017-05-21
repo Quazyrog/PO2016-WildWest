@@ -6,7 +6,13 @@ import java.util.Random;
  * Domyślna strategia pomocnika szeryfa
  */
 public class StrategiaPomocnikaSzeryfaDomyslna extends StrategiaPomocnikaSzeryfa {
-    private Random rng = new Random();
+    public StrategiaPomocnikaSzeryfaDomyslna(Random rng) {
+        super(rng);
+    }
+
+
+    public StrategiaPomocnikaSzeryfaDomyslna() {}
+
 
     @Override
     public void patrzKolejnaTura(int numerTury) {}

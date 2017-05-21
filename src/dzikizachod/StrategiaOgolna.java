@@ -1,10 +1,19 @@
 package dzikizachod;
 
+import java.util.Random;
+
 /**
  * Ogólna strategia każdego gracza.
  * W swojej metodzie <code>graj()</code> robi tylko to, co jest wspólne dla wszystkich graczy.
  */
 public abstract class StrategiaOgolna extends Strategia {
+    public StrategiaOgolna(Random rng) {
+        super(rng);
+    }
+
+    public StrategiaOgolna() {
+    }
+
     /**
      * Ogólna metoda graj, zawierająca wspólne elementy strategii.
      * Najpierw zwiększa zasięg, tak długo jak może. Później leczy się, o ile może i to potrzebne.

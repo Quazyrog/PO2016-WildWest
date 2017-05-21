@@ -1,7 +1,17 @@
 package dzikizachod;
 
 
+import java.util.Random;
+
 public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
+    public StrategiaSzeryfaDomyslna(Random rng) {
+        super(rng);
+    }
+
+
+    public StrategiaSzeryfaDomyslna() {}
+
+
     @Override
     public void patrzKolejnaTura(int numerTury) {}
 

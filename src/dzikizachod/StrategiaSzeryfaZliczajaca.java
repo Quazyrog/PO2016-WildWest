@@ -2,6 +2,7 @@ package dzikizachod;
 
 
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 /**
@@ -10,6 +11,15 @@ import java.util.TreeMap;
  */
 public class StrategiaSzeryfaZliczajaca extends StrategiaSzeryfa {
     Map<Integer, Integer> licznikZuuaaa = new TreeMap<>();
+
+
+    public StrategiaSzeryfaZliczajaca(Random rng) {
+        super(rng);
+    }
+
+
+    public StrategiaSzeryfaZliczajaca() {}
+
 
     @Override
     public void patrzKolejnaTura(int numerTury) {}

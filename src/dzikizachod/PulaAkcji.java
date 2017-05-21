@@ -23,7 +23,17 @@ public class PulaAkcji {
     private LicznikAkcji talia = new LicznikAkcji();
 
     /** Generator liczb losowych do losowania kart */
-    private Random rng = new Random();
+    private Random rng;
+
+
+    public PulaAkcji(Random rng) {
+        this.rng = rng;
+    }
+
+
+    public PulaAkcji() {
+        this(new Random());
+    }
 
 
     /**

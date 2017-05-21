@@ -39,6 +39,11 @@ public abstract class Gracz {
     private boolean wykonujeRuch;
 
 
+    public static void nasiono(long n) {
+        rng = new Random(n);
+    }
+
+
     /**
      * Inicjuje gracza opodana strategią oraz ustawia mu liczbę punktów życia
      * @param kontroler strategia kontrolujaca

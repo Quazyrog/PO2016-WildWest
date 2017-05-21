@@ -14,7 +14,13 @@ public abstract class StrategiaSzeryfa extends StrategiaOgolna {
     /** Lista żywych graczy, którzy zaatakowali tego gracza (lub inaczej mu podpalki). */
     protected Collection<StrategicznyWidokGracza> paskudniBandyci = new ArrayList<>();
 
-    protected Random rng = new Random();
+
+    public StrategiaSzeryfa(Random rng) {
+        super(rng);
+    }
+
+
+    public StrategiaSzeryfa() {}
 
 
     @Override

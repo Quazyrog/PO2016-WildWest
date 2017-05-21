@@ -7,7 +7,12 @@ import java.util.Random;
  * Klasa abstrakcyjna na strategię bandyty
  */
 public abstract class StrategiaBandyty extends StrategiaOgolna {
-    protected Random rng = new Random();
+    public StrategiaBandyty(Random rng) {
+        super(rng);
+    }
+
+
+    public StrategiaBandyty() {}
 
 
     protected StrategicznyWidokGracza losowyPomocnikWZasieguNaLuku(int kierunek) {

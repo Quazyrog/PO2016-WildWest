@@ -1,6 +1,8 @@
 package dzikizachod;
 
 
+import java.util.Random;
+
 /**
  * Strategia kontrolująca gracza.
  * Zawiera całość implementacji, której konkretne strategie powinny używać do komunikowania się ze wszystkimi
@@ -9,6 +11,8 @@ package dzikizachod;
  * Pozwala
  */
 abstract public class Strategia implements IObserwator {
+    protected Random rng = new Random();
+
     /** Gracz kontrolowany przez tę strategię. */
     private Gracz marionetka;
 
@@ -17,6 +21,16 @@ abstract public class Strategia implements IObserwator {
 
     /** Szeryf */
     private StrategicznyWidokGracza widokSzeryfa;
+
+
+    public Strategia(Random rng) {
+        this.rng = rng;
+    }
+
+
+    public Strategia() {
+        this(new Random());
+    }
 
 
     @Override

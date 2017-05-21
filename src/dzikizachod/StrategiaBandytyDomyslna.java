@@ -1,6 +1,8 @@
 package dzikizachod;
 
 
+import java.util.Random;
+
 /**
  * Domyślna strategia bandyty.
  * Dąży do ubicia szeryfa.
@@ -10,6 +12,15 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty {
         NieDaSieNicZrobicWyjatek() {
             super("Nie da się nic zrobić");
         }
+    }
+
+
+    public StrategiaBandytyDomyslna(Random rng) {
+        super(rng);
+    }
+
+
+    public StrategiaBandytyDomyslna() {
     }
 
 

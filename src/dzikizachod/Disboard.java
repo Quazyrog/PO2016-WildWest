@@ -13,7 +13,7 @@ public class Disboard {
     private PulaAkcji pulaAkcji;
 
     /** RNG do użytku własnego */
-    private Random rng = new Random();
+    private Random rng;
 
     /** Lista graczy w rozgrywce */
     private ArrayList<Gracz> gracze;
@@ -47,6 +47,11 @@ public class Disboard {
 
     /** Lista obserwatorów dodanych przez graczy, które musza być usunięte po rozgrywce */
     ArrayList<IObserwator> filtryObserwatorowStrategii = new ArrayList<>();
+
+
+    public Disboard(Random rng) {
+        this.rng = rng;
+    }
 
 
     /**
